@@ -1,0 +1,634 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <!-- Primary SEO Meta Tags -->
+    <title>DP RAJA | Fastest Live Results, Today Final Ank & Market Updates</title>
+    <meta name="title" content="DP RAJA | Fastest Live Results, Today Final Ank & Market Updates">
+    <meta name="description" content="Check fastest DP Raja live results, today final ank, time bazar, kalyan, panel charts, and live market updates with instant verification.">
+    <meta name="keywords" content="dp raja, dpraja, final ank, time bazar, kalyan live, panel chart, jodi chart">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://dpraja.com/">
+
+    <!-- Open Graph / WhatsApp / Social -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://dpraja.com/">
+    <meta property="og:title" content="DP RAJA | Fastest Live Results & Market Updates">
+    <meta property="og:description" content="Get instant live results, today final ank, and daily market updates on DP RAJA.">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="DP RAJA | Fastest Live Results & Market Updates">
+    <meta name="twitter:description" content="Instant live results and daily market updates on DP RAJA.">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap');
+
+        :root {
+            --primary-bg: #FDFBF7;
+            --accent-gold: #D97706;
+            --live-red: #B91C1C;
+            --live-teal-bg: #F7F4EC;
+            --accent-yellow: #B91C1C;
+        }
+
+        body {
+            background-color: #FDFBF7;
+            background-image: linear-gradient(180deg, #FDFBF7 0%, #F4EFE6 100%);
+            color: #1E293B;
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            -webkit-text-size-adjust: 100%;
+            text-size-adjust: 100%;
+        }
+
+        header {
+            background: linear-gradient(180deg, #1E293B 0%, #0F172A 100%);
+            padding: 15px 10px;
+            text-align: center;
+            border-bottom: 3px solid #B91C1C;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* SEO H1 Reset */
+        h1.site-brand {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 900;
+            font-size: 32px;
+            letter-spacing: 3px;
+            background: linear-gradient(135deg, #F59E0B, #D97706, #B45309);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 10px rgba(245,158,11,0.2);
+            display: inline-block;
+        }
+
+        /* Pulse Animation for Live Status */
+        @keyframes pulse-red {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(185, 28, 28, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(185, 28, 28, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(185, 28, 28, 0); }
+        }
+
+        .live-pulse {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background: #B91C1C;
+            border-radius: 50%;
+            margin-right: 8px;
+            animation: pulse-red 2s infinite;
+        }
+
+        .market-individual-row:active {
+            transform: scale(0.98);
+            transition: transform 0.1s ease;
+        }
+
+        .loading-spinner { font-size: 12px; font-weight: 900; animation: blink 1.5s infinite; }
+        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+
+        .tight-box { 
+            margin: 1px auto !important; 
+            width: 98%; 
+            max-width: 100%; 
+        }
+
+        .marquee-container {
+            overflow: hidden;
+            white-space: nowrap;
+            background: #1E293B;
+            padding: 6px 0;
+            width: 100%;
+        }
+
+        .marquee-content {
+            display: inline-block;
+            white-space: nowrap;
+            animation: marquee-scroll 25s linear infinite;
+            font-weight: bold;
+            color: #FDFBF7;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+        }
+
+        @keyframes marquee-scroll {
+            0% { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(-50%, 0, 0); }
+        }
+
+        #topNoticeBoardContainer {
+            padding: 15px 10px;
+        }
+        #topNoticeBoardContainer .notice-title {
+            font-size: 22px;
+            margin-bottom: 8px;
+        }
+        #topNoticeBoardContainer .notice-body {
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 600px) {
+            #topNoticeBoardContainer {
+                padding: 8px 6px !important;
+                border-width: 1.5px !important;
+            }
+            #topNoticeBoardContainer .notice-title {
+                font-size: 16px !important;
+                margin-bottom: 4px !important;
+            }
+            #topNoticeBoardContainer .notice-body {
+                font-size: 11.5px !important;
+                line-height: 1.35 !important;
+            }
+        }
+    </style>
+
+    <!-- JSON-LD Structured Data Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "@id": "https://dpraja.com/#website",
+          "url": "https://dpraja.com/",
+          "name": "DP RAJA",
+          "description": "Fastest live results, today final ank, panel charts, and live market updates.",
+          "publisher": {
+            "@id": "https://dpraja.com/#organization"
+          },
+          "inLanguage": "en-US"
+        },
+        {
+          "@type": "Organization",
+          "@id": "https://dpraja.com/#organization",
+          "name": "DP RAJA",
+          "url": "https://dpraja.com/",
+          "logo": "https://dpraja.com/images/logo.png",
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "email": "dpraja1@hotmail.com",
+            "contactType": "customer support"
+          }
+        },
+        {
+          "@type": "WebPage",
+          "@id": "https://dpraja.com/#webpage",
+          "url": "https://dpraja.com/",
+          "name": "DP RAJA | Fastest Live Results, Today Final Ank & Market Updates",
+          "isPartOf": {
+            "@id": "https://dpraja.com/#website"
+          },
+          "about": {
+            "@id": "https://dpraja.com/#organization"
+          },
+          "description": "Check fastest DP Raja live results, today final ank, time bazar, kalyan, panel charts, and live market updates with instant verification."
+        }
+      ]
+    }
+    </script>
+</head>
+<body>
+
+    <div class="marquee-container">
+        <div class="marquee-content">
+            WELCOME TO DPRAJA.COM -- 100% ORIGINAL WEBSITE &nbsp;&nbsp;&nbsp;&nbsp; ❖ &nbsp;&nbsp;&nbsp;&nbsp; FASTEST LIVE SATTA MATKA UPDATES &nbsp;&nbsp;&nbsp;&nbsp; ❖ &nbsp;&nbsp;&nbsp;&nbsp; WELCOME TO DPRAJA.COM -- 100% ORIGINAL WEBSITE &nbsp;&nbsp;&nbsp;&nbsp; ❖ &nbsp;&nbsp;&nbsp;&nbsp;
+        </div>
+    </div>
+
+    <header>
+        <h1 class="site-brand">DPRAJA.COM</h1>
+        <div style="color: #CBD5E1; font-size: 11px; font-weight: bold; letter-spacing: 2px; text-transform: uppercase; margin-top: 3px;">
+            ✨ Official Live Satta Matka Results Portal ✨
+        </div>
+    </header>
+
+    <!-- TODAY FINAL ANK -->
+    <div class="tight-box" style="background: #FFFFFF; padding: 8px 10px; border-radius: 12px; border: 2.5px solid #B91C1C; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); text-align: center; margin-top: 1px !important;">
+        <div id="liveDateDisplay" style="color: #475569; font-size: 12px; font-weight: bold; margin-bottom: 0px; line-height: 1; letter-spacing: 1px;"></div>
+        <h2 style="color: #1E293B; font-weight: 900; font-size: 22px; text-transform: uppercase; margin-top: 2px; margin-bottom: 8px; line-height: 1.1; letter-spacing: 1.5px;">❖ ● Today Final Ank ● ❖</h2>
+        <div style="display: flex; justify-content: center; gap: 15px;">
+            <div style="background: #F8F6F0; padding: 8px 24px; border-radius: 6px; border: 1.5px solid #E2E8F0; box-shadow: 0 2px 5px rgba(0,0,0,0.05); flex: 1; max-width: 120px;">
+                <div style="color: #1E293B; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px;">Puna</div>
+                <div style="color: #B91C1C; font-size: 18px; font-weight: 900;" th:text="${punaFinal}"></div>
+            </div>
+            <div style="background: #F8F6F0; padding: 8px 24px; border-radius: 6px; border: 1.5px solid #E2E8F0; box-shadow: 0 2px 5px rgba(0,0,0,0.05); flex: 1; max-width: 120px;">
+                <div style="color: #1E293B; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px;">Kalyan</div>
+                <div style="color: #B91C1C; font-size: 18px; font-weight: 900;" th:text="${kalyanFinal}"></div>
+            </div>
+            <div style="background: #F8F6F0; padding: 8px 24px; border-radius: 6px; border: 1.5px solid #E2E8F0; box-shadow: 0 2px 5px rgba(0,0,0,0.05); flex: 1; max-width: 120px;">
+                <div style="color: #1E293B; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px;">Main</div>
+                <div style="color: #B91C1C; font-size: 18px; font-weight: 900;" th:text="${mainFinal}"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const dateOptions = { day: '2-digit', month: 'short', year: 'numeric' };
+        const today = new Date().toLocaleDateString('en-IN', dateOptions);
+        document.getElementById('liveDateDisplay').innerText = today;
+    </script>
+
+    <!-- GOLDEN ANK -->
+    <div class="tight-box" style="background: linear-gradient(to bottom, #FDF5E6, #F5E6C8); padding: 6px 10px; border-radius: 12px; text-align: center; border: 2px solid #D97706; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); margin-top: 1px !important;">
+        <div style="font-weight: 900; font-size: 22px; text-transform: uppercase; margin-bottom: 0px; line-height: 1.1; letter-spacing: 1.5px; color: #1E293B;">✨ Golden Ank ✨</div>
+        <div style="font-size: 28px; font-weight: 900; color: #B91C1C; line-height: 1; margin-top: 2px;" th:text="${goldenAnkValue}">5-4-7-0</div>
+    </div>
+
+    <!-- LIVE RESULTS SECTION -->
+    <div class="tight-box" style="background: #FFFFFF; border-radius: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); overflow: hidden; border: 2px solid #B91C1C; margin-top: 1px !important;">
+        
+        <div style="background: #B91C1C; color: #FFFFFF; padding: 6px; font-weight: 900; text-align: center; text-transform: uppercase; font-size: 22px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+            <span class="live-pulse" style="margin-right: 0;"></span> ⚡ FASTEST LIVE UPDATES ⚡
+        </div>        
+        
+        <div th:each="game, iterStat : ${liveResults}" th:if="${game != null}" style="padding-top: 5px; padding-bottom: 5px;">
+            <div style="color: #1E293B; font-family: 'Arial', sans-serif; font-weight: bold; font-style: italic; text-transform: uppercase; text-align: center; font-size: 26px; margin-bottom: 0px; line-height: 1; letter-spacing: 0.5px;" th:text="${game.gameName}"></div>
+            
+            <div th:data-live-market="${#strings.toUpperCase(game.gameName)}" style="text-align: center; margin-bottom: 4px; margin-top: 4px; font-family: 'Arial', sans-serif; font-weight: bold; color: #B91C1C; font-size: 24px; line-height: 1; letter-spacing: 1px;">
+                <div th:if="${#strings.isEmpty(game.openPanel) or game.openPanel == '-' or game.openPanel == '***'}">
+                    <span style="animation: blink 1.5s infinite;">Loading...</span>
+                </div>
+                <div th:if="${!#strings.isEmpty(game.openPanel) and game.openPanel != '-' and game.openPanel != '***' and (#strings.isEmpty(game.closePanel) or game.closePanel == '-' or game.closePanel == '***')}">
+                    <span th:text="${game.openPanel}"></span><span th:if="${!#strings.isEmpty(game.openAnk)}" th:text="'-' + ${game.openAnk}"></span><span th:if="${#strings.isEmpty(game.openAnk) and !#strings.isEmpty(game.jodi)}" th:text="'-' + ${#strings.substring(game.jodi, 0, (game.jodi.length() > 1 ? 1 : game.jodi.length()))}"></span>
+                </div>
+                <div th:if="${!#strings.isEmpty(game.closePanel) and game.closePanel != '-' and game.closePanel != '***'}">
+                    <span th:text="${game.openPanel} + '-' + ${game.jodi} + '-' + ${game.closePanel}"></span>
+                </div>
+            </div>
+
+            <div th:if="${!iterStat.last}" style="height: 8px; border: 1.5px solid #CBD5E1; border-top: none; border-radius: 0 0 15px 15px; margin: 8px 15px 6px 15px;"></div>
+        </div>
+        
+        <div th:if="${#lists.isEmpty(liveResults)}" style="padding: 15px; text-align: center; color: #1E293B; font-family: 'Arial', sans-serif; font-weight: bold; font-style: italic; font-size: 16px;">⏳ Waiting for live results...</div>
+    </div>
+
+    <!-- TOP NOTICE BOARD -->
+    <div th:if="${!topNoticeHidden}" id="topNoticeBoardContainer" class="tight-box" style="background: #FFFFFF; border-radius: 12px; border: 2.5px solid #1E293B; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); text-align: center; margin-top: 1px !important; margin-bottom: 0px !important;">
+        <div class="notice-title" style="color: #1E293B; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px;">📢 NOTICE BOARD 📢</div>
+        <div class="notice-body" style="color: #334155; font-weight: bold; white-space: pre-wrap; text-align: center; word-wrap: break-word; padding: 0 10px;" th:text="${topNoticeContent}">No new notice.</div>
+    </div>
+
+    <!-- MARKET LIST WITH INTEGRATED BANNER -->
+    <div class="market-list-container" style="margin: 1px auto 0px auto !important; width: 98%; max-width: 100%; border-radius: 25px; border: 2px solid #B91C1C; box-shadow: 0 4px 12px rgba(0,0,0,0.08); overflow: hidden; background: #FFFFFF;">
+        <div style="background: #B91C1C; color: #FFFFFF; padding: 6px; font-weight: 900; text-align: center; text-transform: uppercase; font-size: 22px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+            <span class="live-pulse" style="margin-right: 0;"></span> SATTA MATKA RESULT
+        </div>
+        
+        <div th:each="game, gameStat : ${allResults}" th:if="${game != null}" 
+             th:style="'padding: 15px 15px 0px 15px; background-color: ' + (${game.marketColor != null and game.marketColor != '' and game.marketColor != '#1a7e7a'} ? ${game.marketColor} : '#F7F4EC') + ';'">
+            
+            <div th:text="${game.gameName}" style="text-align: center; font-family:'Arial', sans-serif; font-weight: bold; font-style: italic;text-transform: uppercase; color: #1E293B; font-size: 24px; margin-bottom: 6px; line-height: 1; letter-spacing: 0.5px;"></div>
+            
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0; margin-bottom: 1px;">
+                <a th:href="@{'/jodi-chart?name=' + ${game.gameName}}" style="background: #1E293B; color: white; padding: 6px 14px; border-radius: 0 15px 15px 0; text-decoration: none; font-size: 13px; font-weight: bold; margin-left: -15px; display: inline-block;">JODI</a>
+                
+                <div th:data-market="${#strings.toUpperCase(game.gameName)}" style="display: inline-block; font-family: 'Arial', sans-serif; font-weight: bold; color: #B91C1C; font-size: 24px; line-height: 1; letter-spacing: 1px; border: 1.5px solid #1E293B; border-radius: 50px; padding: 6px 20px; background: #FFFFFF;">
+                    <span th:text="${(game.openPanel ?: '***') + '-' + (game.jodi ?: '**') + '-' + (game.closePanel ?: '***')}"></span>
+                </div>
+                
+                <a th:href="@{'/panel-chart?name=' + ${game.gameName}}" style="background: #1E293B; color: white; padding: 6px 14px; border-radius: 15px 0 0 15px; text-decoration: none; font-size: 13px; font-weight: bold; margin-right: -15px; display: inline-block;">PANEL</a>
+            </div>
+            
+            <div style="margin-top: 1px; margin-bottom: 1px; display: flex; justify-content: center;">
+                <div style="display: flex; justify-content: center; gap: 30px; text-align: center; font-family: 'Arial', sans-serif; font-size: 14px; font-weight: bold; color: #475569; opacity: 0.9; white-space: nowrap; line-height: 1;">
+                    <div style="white-space: nowrap;" th:text="${game.openTime ?: '00:00'}"></div>
+                    <div style="white-space: nowrap;" th:text="${game.closeTime ?: '00:00'}"></div>
+                </div>
+            </div>
+            
+            <div th:if="${!gameStat.last}" style="height: 8px; border: 1.5px solid #CBD5E1; border-top: none; border-radius: 0 0 15px 15px; margin: 1px 0px 0px 0px;"></div>
+            <div th:if="${gameStat.last}" style="height: 15px;"></div>
+        </div>
+    </div>
+
+    <!-- MIDDLE NOTICE BOARD -->
+    <div th:if="${!middleNoticeHidden}" class="tight-box" style="background: #FFFFFF; border: 1px solid #CBD5E1; padding: 12px 10px; border-radius: 10px; text-align: center; margin-top: 1px !important; margin-bottom: 0px !important;">
+        <div style="color: #1E293B; font-size: 14px; font-weight: bold; line-height: 1.6; white-space: pre-wrap; word-wrap: break-word; padding: 0 10px;" th:text="${middleNoticeContent}">For Advertisement & Inquiries: dpraja1@hotmail.com</div>
+    </div>
+
+    <!-- STANDALONE CONTACT US BUTTON -->
+    <div class="tight-box" style="text-align: center; margin-top: 1px !important; margin-bottom: 0px !important; background: transparent; border: none; padding: 0;">
+        <a th:href="'mailto:' + ${contactEmail != null ? contactEmail : 'dpraja1@hotmail.com'}" 
+           th:data-email="${contactEmail != null ? contactEmail : 'dpraja1@hotmail.com'}"
+           onclick="openContactEmail(event, this)" 
+           style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: linear-gradient(135deg, #1E293B, #0F172A); color: #FFFFFF; font-weight: 900; font-size: 15px; text-transform: uppercase; padding: 12px 30px; border-radius: 30px; text-decoration: none; border: 2px solid #B91C1C; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); width: 80%; max-width: 320px; transition: transform 0.2s, box-shadow 0.2s;">
+            ✉️ CONTACT US
+        </a>
+    </div>
+
+    <!-- FREE ANK SECTION -->
+    <div class="tight-box" style="background: linear-gradient(90deg, #B91C1C, #D97706); padding: 6px; border-radius: 8px; text-align: center; margin-top: 1px !important; margin-bottom: 0px !important;">
+        <h3 style="margin:0; font-weight:900; color:white; font-size: 14px;">Free Ank</h3>
+        <div style="font-size: 10px; font-weight:bold; color:white;">** Date : <span th:text="${#temporals.format(currentDate, 'dd-MM-yyyy')}"></span> **</div>
+    </div>
+
+    <div class="tight-box" style="display: flex; justify-content: center; gap: 5px; margin-top: 1px !important; margin-bottom: 0px !important;">
+        <div th:each="ank : ${allFreeAnks}" style="border: 2px solid #B91C1C; border-radius: 6px; background: #FFFFFF; width: 32%; text-align: center; overflow: hidden;">
+            <div style="background: #1E293B; color: white; font-size: 9px; font-weight: 900; padding: 2px 0; text-transform: uppercase;" th:text="${ank.name}">Market</div>
+            <div style="color: #B91C1C; font-weight: 900; font-size: 14px; padding: 5px 0;" th:text="${ank.finalAnk}">0-0-0</div>
+        </div>
+    </div>
+    
+    <!-- DAILY GAME ZONE SECTION -->
+    <div class="tight-box" style="background: #F7F4EC; border: 1px solid #CBD5E1; border-radius: 12px; padding: 15px 10px; margin-top: 1px !important; margin-bottom: 0px !important; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+        <div style="text-align: center; margin-bottom: 15px;">
+            <div style="color: #1E293B; font-weight: 900; font-size: 22px; letter-spacing: 2px; margin-bottom: 3px;">❖ ● DAILY GAME ZONE ● ❖</div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <a href="/all-market-free-fix" style="text-decoration: none; background: #FFFFFF; border: 1.5px solid #1E293B; box-shadow: 0 2px 6px rgba(0,0,0,0.05); border-radius: 8px; padding: 12px 5px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; transition: 0.2s;">
+                <div style="color: #1E293B; font-weight: 900; font-size: 15px; text-transform: uppercase; letter-spacing: 0.5px;">❖ All Market Free Fix Game ❖</div>
+            </a>
+            <a href="/matka-jodi-count" style="text-decoration: none; background: #FFFFFF; border: 1.5px solid #1E293B; box-shadow: 0 2px 6px rgba(0,0,0,0.05); border-radius: 8px; padding: 12px 5px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; transition: 0.2s;">
+                <div style="color: #1E293B; font-weight: 900; font-size: 15px; text-transform: uppercase; letter-spacing: 0.5px;">❖ Matka Jodi Count Chart ❖</div>
+            </a>
+            <a href="/dhanvarsha-daily-fix" style="text-decoration: none; background: #FFFFFF; border: 1.5px solid #1E293B; box-shadow: 0 2px 6px rgba(0,0,0,0.05); border-radius: 8px; padding: 12px 5px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; transition: 0.2s;">
+                <div style="color: #1E293B; font-weight: 900; font-size: 15px; text-transform: uppercase; letter-spacing: 0.5px;">❖ Daily Fix OTC ❖</div>
+            </a>
+            <a href="/matka-jodi-family" style="text-decoration: none; background: #FFFFFF; border: 1.5px solid #1E293B; box-shadow: 0 2px 6px rgba(0,0,0,0.05); border-radius: 8px; padding: 12px 5px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; transition: 0.2s;">
+                <div style="color: #1E293B; font-weight: 900; font-size: 15px; text-transform: uppercase; letter-spacing: 0.5px;">❖ Matka Jodi Family Chart ❖</div>
+            </a>
+            <a href="/penal-count-chart" style="text-decoration: none; background: #FFFFFF; border: 1.5px solid #1E293B; box-shadow: 0 2px 6px rgba(0,0,0,0.05); border-radius: 8px; padding: 12px 5px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; transition: 0.2s;">
+                <div style="color: #1E293B; font-weight: 900; font-size: 15px; text-transform: uppercase; letter-spacing: 0.5px;">❖ Penal Count Chart ❖</div>
+            </a>
+            <a href="/penal-total-chart" style="text-decoration: none; background: #FFFFFF; border: 1.5px solid #1E293B; box-shadow: 0 2px 6px rgba(0,0,0,0.05); border-radius: 8px; padding: 12px 5px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; transition: 0.2s;">
+                <div style="color: #1E293B; font-weight: 900; font-size: 15px; text-transform: uppercase; letter-spacing: 0.5px;">❖ Penal Total Chart ❖</div>
+            </a>
+            <a href="/all-220-card-list" style="text-decoration: none; background: #FFFFFF; border: 1.5px solid #1E293B; box-shadow: 0 2px 6px rgba(0,0,0,0.05); border-radius: 8px; padding: 12px 5px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; transition: 0.2s;">
+                <div style="color: #1E293B; font-weight: 900; font-size: 15px; text-transform: uppercase; letter-spacing: 0.5px;">❖ All 220 Card List ❖</div>
+            </a>
+            <a href="/matka-final-number-trick" style="text-decoration: none; background: #FFFFFF; border: 1.5px solid #1E293B; box-shadow: 0 2px 6px rgba(0,0,0,0.05); border-radius: 8px; padding: 12px 5px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; transition: 0.2s;">
+                <div style="color: #1E293B; font-weight: 900; font-size: 15px; text-transform: uppercase; letter-spacing: 0.5px;">❖ Matka Final Number ❖</div>
+            </a>
+        </div>
+    </div>
+
+    <!-- UPLOADED PAPERS (CHART PAPERS) -->
+    <div class="tight-box" style="background: #F7F4EC; padding: 15px; border-radius: 12px; border: 1px solid #CBD5E1; margin-bottom: 12px;">
+        <div style="text-align: center; margin-bottom: 15px; margin-top: 5px;">
+            <div style="color: #1E293B; font-weight: 900; font-size: 22px; letter-spacing: 2px; text-transform: uppercase;">❖ ● Paper Chart ● ❖</div>
+        </div>
+        
+        <div style="display: flex; justify-content: center; gap: 15px; margin-bottom: 15px;">
+            <div onclick="filterPapers('WEEKLY')" id="tabWeeklyPaper" style="flex: 1; max-width: 200px; background: #1E293B; color: white; border: 1.5px solid #1E293B; border-radius: 8px; padding: 12px 5px; font-weight: 900; font-size: 16px; text-transform: uppercase; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                Weekly Paper
+            </div>
+            <div onclick="filterPapers('DAILY')" id="tabDailyPaper" style="flex: 1; max-width: 200px; background: #B91C1C; color: white; border: 1.5px solid #B91C1C; border-radius: 8px; padding: 12px 5px; font-weight: 900; font-size: 16px; text-transform: uppercase; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                Daily Paper
+            </div>
+        </div>
+
+        <div id="papersContainer" style="display: flex; flex-wrap: wrap; gap: 12px; justify-content: center;">
+            <div th:each="paper : ${papers}" class="paper-item" th:data-type="${paper.type}" style="display: none; text-align: center; background: #FFFFFF; padding: 10px; border-radius: 10px; border: 1.5px solid #CBD5E1; width: 45%; max-width: 280px; box-sizing: border-box; transition: transform 0.2s;">
+                <p th:text="${paper.title}" style="color: #1E293B; font-weight: bold; font-size: 13px; margin: 0 0 8px 0; text-transform: uppercase; letter-spacing: 0.5px;"></p>
+                <img th:src="@{${#strings.startsWith(paper.imageUrl, '/') ? paper.imageUrl : '/' + paper.imageUrl}}" th:alt="${paper.title} + ' Satta Matka Chart Paper'" style="width: 100%; border-radius: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);" />
+            </div>
+            <div id="noPapersMessage" style="display: none; color: #1E293B; font-style: italic; font-size: 15px; font-weight: bold; padding: 20px; text-align: center; width: 100%;">
+                No papers uploaded in this category.
+            </div>
+        </div>
+    </div>
+
+    <!-- ALL MARKET WEEKLY OPEN TO CLOSE SECTION -->
+    <div class="tight-box" style="background: #F7F4EC; padding: 10px; border-radius: 8px; margin-bottom: 10px; border: 1px solid #CBD5E1; text-align: center;">
+        <div style="color: #1E293B; font-weight: 900; font-size: 22px; text-transform: uppercase; margin-bottom: 2px; letter-spacing: 1px;">
+            ✨ DPRAJA NET WEEKLY ✨<br>💎 ALL MARKET 💎
+        </div>
+
+        <div id="weeklyRange" style="color: #B91C1C; font-size: 18px; font-weight: bold; margin-bottom: 12px; letter-spacing: 1px;"></div>
+
+        <div style="display: flex; justify-content: space-between; gap: 8px;">
+            <div style="flex: 1;">
+                <div onclick="toggleWeekChart('ankChartContent')" style="background: #B91C1C; color: white; padding: 12px 5px; border-radius: 8px; cursor: pointer; font-weight: 900; font-size: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border: 1px solid #B91C1C;">
+                    ANK CHART
+                </div>
+            </div>
+            <div style="flex: 1;">
+                <div onclick="toggleWeekChart('jodiChartContent')" style="background: #1E293B; color: white; padding: 12px 5px; border-radius: 8px; cursor: pointer; font-weight: 900; font-size: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border: 1px solid #1E293B;">
+                    JODI CHART
+                </div>
+            </div>
+            <div style="flex: 1;">
+                <div onclick="toggleWeekChart('pattiChartContent')" style="background: #D97706; color: white; padding: 12px 5px; border-radius: 8px; cursor: pointer; font-weight: 900; font-size: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border: 1px solid #D97706;">
+                    PATTI CHART
+                </div>
+            </div>
+        </div>
+
+        <div id="ankChartContent" style="display: none; background: #FFFFFF; color: #1E293B; margin-top: 10px; padding: 15px; border-radius: 8px; font-weight: bold; font-size: 18px; border: 2px solid #B91C1C; white-space: pre-wrap; text-align: center;" th:text="${weeklyChart.ankChart}"></div>
+        <div id="jodiChartContent" style="display: none; background: #FFFFFF; color: #1E293B; margin-top: 10px; padding: 15px; border-radius: 8px; font-weight: bold; font-size: 18px; border: 2px solid #1E293B; white-space: pre-wrap; text-align: center;" th:text="${weeklyChart.jodiChart}"></div>
+        <div id="pattiChartContent" style="display: none; background: #FFFFFF; color: #1E293B; margin-top: 10px; padding: 15px; border-radius: 8px; font-weight: bold; font-size: 18px; border: 2px solid #D97706; white-space: pre-wrap; text-align: center;" th:text="${weeklyChart.pattiChart}"></div>
+    </div>
+
+    <!-- COMBINED CHARTS SECTION -->
+    <div class="tight-box" style="background: #F7F4EC; padding: 10px; border-radius: 8px; margin-top: 1px !important; margin-bottom: 0px !important; border: 1px solid #CBD5E1;">
+        <div style="color: #1E293B; font-family: 'Arial', sans-serif; font-weight: 900; font-size: 22px; text-transform: uppercase; text-align: center; margin-bottom: 15px; letter-spacing: 1px;">
+            📊 ALL MARKET JODI AND PANEL CHART 📊
+        </div>		
+        <div th:each="game : ${allResults}" style="display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 10px; padding: 6px 10px; margin: 4px 0; background: #FFFFFF; border-radius: 6px; border: 1px solid #CBD5E1;">
+            <a th:href="@{/jodi-chart(name=${game.gameName})}" style="background: #1E293B; color: white; padding: 4px 12px; border-radius: 15px; text-decoration: none; font-size: 13px; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">JODI</a>
+            <div style="color: #1E293B; font-weight: bold; font-size: 18px; text-transform: uppercase; font-family: 'Arial', sans-serif; text-align: center;" th:text="${game.gameName}"></div>
+            <a th:href="@{/panel-chart(name=${game.gameName})}" style="background: #1E293B; color: white; padding: 4px 12px; border-radius: 15px; text-decoration: none; font-size: 13px; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">PANEL</a>
+        </div>
+    </div>
+
+    <!-- BOTTOM NOTICE BOARD -->
+    <div th:if="${!bottomNoticeHidden}" class="tight-box" style="background: #FFFFFF; padding: 15px 10px; border-radius: 12px; border: 2.5px solid #1E293B; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); text-align: center; margin-top: 1px !important; margin-bottom: 0px !important;">
+        <div style="color: #1E293B; font-weight: 900; font-size: 22px; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 1.5px;">📢 NOTICE BOARD 📢</div>
+        <div style="color: #334155; font-size: 14px; font-weight: bold; line-height: 1.6; white-space: pre-wrap; text-align: center; word-wrap: break-word; padding: 0 10px;" th:text="${bottomNoticeContent}">No new notice.</div>
+    </div>
+
+    <!-- FOOTER NAV -->
+    <div style="margin-top: 8px !important; margin-bottom: 8px !important; text-align: center; display: flex; justify-content: center; align-items: center; gap: 12px;">
+        <a href="/" class="btn btn-sm btn-danger fw-bold px-3">HOME</a>
+        <a th:href="'mailto:' + ${contactEmail != null ? contactEmail : 'dpraja1@hotmail.com'}" 
+           th:data-email="${contactEmail != null ? contactEmail : 'dpraja1@hotmail.com'}"
+           onclick="openContactEmail(event, this)" 
+           class="btn btn-sm btn-dark fw-bold px-3">
+           ✉️ CONTACT US
+        </a>
+    </div>
+
+    <button style="background: #1E293B; color: #FFFFFF; padding: 8px 12px; border-radius: 50px; position: fixed; bottom: 10px; right: 10px; z-index: 999; border:none; font-size: 12px; font-weight:bold;" onclick="location.reload()">REFRESH ↻</button>
+
+    <!-- UI Scripts -->
+    <script>
+        let currentActiveType = null;
+
+        function filterPapers(type) {
+            const items = document.querySelectorAll('.paper-item');
+            const noMsg = document.getElementById('noPapersMessage');
+            const tabWeekly = document.getElementById('tabWeeklyPaper');
+            const tabDaily = document.getElementById('tabDailyPaper');
+
+            if (currentActiveType === type) {
+                currentActiveType = null;
+                items.forEach(item => { item.style.display = 'none'; });
+                noMsg.style.display = 'none';
+                resetTabStyle(tabWeekly);
+                resetTabStyle(tabDaily);
+                return;
+            }
+
+            currentActiveType = type;
+            let count = 0;
+            items.forEach(item => {
+                const paperType = item.getAttribute('data-type');
+                if (paperType && paperType.toUpperCase() === type.toUpperCase()) {
+                    item.style.display = 'block';
+                    count++;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+
+            noMsg.style.display = (count === 0) ? 'block' : 'none';
+
+            if (type === 'WEEKLY') {
+                setActiveStyle(tabWeekly);
+                resetTabStyle(tabDaily);
+            } else {
+                setActiveStyle(tabDaily);
+                resetTabStyle(tabWeekly);
+            }
+        }
+
+        function setActiveStyle(tab) {
+            tab.style.transform = 'scale(1.05)';
+            tab.style.border = '2px solid #D97706';
+            tab.style.boxShadow = '0 0 15px rgba(217, 119, 6, 0.3)';
+        }
+
+        function resetTabStyle(tab) {
+            tab.style.transform = 'scale(1)';
+            tab.style.border = '1.5px solid #CBD5E1';
+            tab.style.boxShadow = '0 4px 6px rgba(0,0,0,0.05)';
+        }
+
+        function setWeeklyDate() {
+            const today = new Date();
+            const currentDay = today.getDay();
+            const distanceToMonday = today.getDate() - currentDay + (currentDay === 0 ? -6 : 1);
+            
+            const monday = new Date(today.setDate(distanceToMonday));
+            const saturday = new Date(monday.getTime());
+            saturday.setDate(monday.getDate() + 5);
+
+            function formatDate(dateObj) {
+                return dateObj.getDate().toString().padStart(2, '0') + '/' +
+                       (dateObj.getMonth() + 1).toString().padStart(2, '0') + '/' +
+                       dateObj.getFullYear();
+            }
+
+            document.getElementById('weeklyRange').innerText = formatDate(monday) + ' TO ' + formatDate(saturday);
+        }
+
+        function toggleWeekChart(chartId) {
+            const allCharts = ['ankChartContent', 'jodiChartContent', 'pattiChartContent'];
+            allCharts.forEach(id => {
+                if (id !== chartId) document.getElementById(id).style.display = 'none';
+            });
+
+            const selectedChart = document.getElementById(chartId);
+            selectedChart.style.display = (selectedChart.style.display === 'none' || selectedChart.style.display === '') ? 'block' : 'none';
+        }
+
+        function openContactEmail(event, element) {
+            event.preventDefault();
+            var targetEmail = (element && element.getAttribute('data-email')) ? element.getAttribute('data-email') : 'dpraja1@hotmail.com';
+            var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            if (isMobile) {
+                window.location.href = 'mailto:' + targetEmail;
+            } else {
+                window.open('https://mail.google.com/mail/?view=cm&fs=1&to=' + targetEmail, '_blank');
+            }
+        }
+
+        setWeeklyDate();
+    </script>
+
+    <!-- Live Polling Script -->
+    <script>
+    (function() {
+        const API_KEY = "key_2c8841af9a924861"; 
+        const API_ENDPOINT = `https://result-hub-api.onrender.com/api/v1/live?apiKey=${API_KEY}`;
+
+        function formatResult(str) {
+            if (!str || str.trim() === "" || str.trim() === "-" || str.trim() === "***-**-***" || str.trim().toLowerCase() === "loading...") {
+                return "Loading...";
+            }
+            let s = str.trim();
+            if (s.endsWith("-***")) {
+                s = s.substring(0, s.length - 4);
+            } else if (s.endsWith("-*")) {
+                s = s.substring(0, s.length - 2);
+            }
+            if (s === "" || s === "-" || s === "***") {
+                return "Loading...";
+            }
+            return s;
+        }
+
+        async function syncLiveBoard() {
+            try {
+                const response = await fetch(API_ENDPOINT, {
+                    method: "GET",
+                    headers: { "Accept": "application/json" }
+                });
+
+                if (!response.ok) return;
+                const data = await response.json();
+
+                data.forEach(item => {
+                    if (!item.marketName) return;
+
+                    const raw = (item.resultDisplay || "").trim();
+                    const hasOpenResult = raw && !raw.startsWith("***") && raw !== "-" && raw !== "***-**-***" && raw.toLowerCase() !== "loading...";
+
+                    const liveTargets = document.querySelectorAll(`[data-live-market="${item.marketName}"]`);
+                    liveTargets.forEach(el => {
+                        if (!hasOpenResult) {
+                            el.innerHTML = '<span style="animation: blink 1.5s infinite;">Loading...</span>';
+                        } else {
+                            el.textContent = formatResult(raw);
+                        }
+                    });
+
+                    if (raw && raw !== "-" && raw !== "***-**-***" && raw.toLowerCase() !== "loading...") {
+                        const marketTargets = document.querySelectorAll(`[data-market="${item.marketName}"]`);
+                        marketTargets.forEach(el => {
+                            const currentText = el.textContent ? el.textContent.trim() : "";
+                            const formatted = formatResult(raw);
+                            if (formatted.startsWith("***-*") && currentText && !currentText.startsWith("***-*") && currentText !== "Loading...") {
+                                return;
+                            }
+                            el.textContent = formatted;
+                        });
+                    }
+                });
+            } catch (error) {
+                console.error("Result Hub live sync error:", error);
+            }
+        }
+
+        syncLiveBoard();
+        setInterval(syncLiveBoard, 15000);
+    })();
+    </script>
+</body>
+</html>

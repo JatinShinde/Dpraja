@@ -1,0 +1,48 @@
+<!-- Dynamic Client-Facing Market Card Snippet -->
+<div th:fragment="marketCard(market)" class="market-card-wrapper" th:if="${market != null and market.active}">
+    
+    <!-- Dynamic Market Card Container -->
+    <div class="market-card shadow-sm p-3 mb-3 text-center" 
+         th:style="${market.getComputedStyle()}">
+        
+        <!-- Header Stripe Banner -->
+        <div class="market-stripe p-1 fw-bold fs-6 text-uppercase mb-2 text-white rounded d-flex align-items-center justify-content-center gap-2"
+             th:style="'background-color: ' + ${market.headerStripeColor}">
+            
+            <!-- Live Status Pulsing Indicator -->
+            <span class="live-pulse-dot" 
+                  th:style="'display: inline-block; width: 10px; height: 10px; border-radius: 50%; background-color: ' + ${market.livePulseColor}"></span>
+            
+            <span th:text="${market.tagline}">FASTEST LIVE UPDATES</span>
+        </div>
+
+        <!-- Market Title -->
+        <div class="market-title font-weight-bold fs-3 text-uppercase" 
+             th:style="'color: ' + ${market.titleColor}" 
+             th:text="${market.marketName}">
+            KALYAN
+        </div>
+
+        <!-- Formatted Result Numbers -->
+        <div class="market-result font-weight-bold fs-2 my-2" 
+             th:style="'color: ' + ${market.numberColor}" 
+             th:text="${market.getFormattedResultString()}">
+            123-45-678
+        </div>
+
+        <!-- Action Row (JODI Button, Timings, PANEL Button) -->
+        <div class="d-flex justify-content-between align-items-center mt-3">
+            <a th:href="@{'/jodi-chart?name=' + ${market.marketName}}" 
+               class="btn btn-sm btn-dark px-3 py-1 fw-bold">JODI</a>
+
+            <div class="small fw-bold" th:style="'color: ' + ${market.subtitleColor}">
+                <span th:text="${market.openTime}">10:00</span> - <span th:text="${market.closeTime}">12:00</span>
+            </div>
+
+            <a th:href="@{'/panel-chart?name=' + ${market.marketName}}" 
+               class="btn btn-sm btn-dark px-3 py-1 fw-bold">PANEL</a>
+        </div>
+
+    </div>
+
+</div>

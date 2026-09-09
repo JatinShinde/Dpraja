@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>DP RAJA - Admin Dashboard</title>
+
+    <!-- Font Awesome 6.5.0 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/admin-style.css}">
+
+    <style>
+        body {
+            background-color: #FDFBF7;
+            font-family: 'Helvetica Neue', Roboto, Arial, sans-serif;
+            color: #1E293B;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Top Horizontal Navbar */
+        .navbar-custom {
+            background-color: #1E293B;
+            padding: 12px 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 3px solid #B91C1C;
+            flex-wrap: wrap;
+            gap: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        .brand-logo {
+            font-size: 24px;
+            font-weight: 900;
+            color: #FFFFFF;
+            letter-spacing: 2px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .nav-menu {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            align-items: center;
+        }
+        .nav-link-custom {
+            color: #FFFFFF;
+            text-decoration: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+        .nav-link-custom:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+            color: #FFFFFF;
+        }
+        .nav-link-custom.active {
+            background-color: #B91C1C;
+            color: #FFFFFF;
+            font-weight: 700;
+        }
+
+        .right_col {
+            margin-left: 0 !important;
+            padding: 20px;
+            background: #FDFBF7;
+            min-height: calc(100vh - 65px);
+        }
+
+        .section-box-admin {
+            background: #fff;
+            border: 1px solid #E2E8F0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+        }
+        .section-title-admin {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1E293B;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #B91C1C;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- DPRAJA Horizontal Top Navigation Bar -->
+    <div class="navbar-custom">
+        <a th:href="@{/admin}" class="brand-logo"><i class="fa-solid fa-crown text-warning me-1"></i>DPRAJA</a>
+        
+        <div class="nav-menu">
+            <a th:href="@{/admin?section=home}" class="nav-link-custom" th:classappend="${currentSection == 'home' || currentSection == null ? 'active' : ''}">Home</a>
+            <a th:href="@{/admin?section=create-game}" class="nav-link-custom" th:classappend="${currentSection == 'create-game' ? 'active' : ''}">Add Matka Game</a>
+            <a th:href="@{/admin?section=market-list}" class="nav-link-custom" th:classappend="${currentSection == 'market-list' ? 'active' : ''}">Market List</a>
+            <a th:href="@{/admin?section=market-edit}" class="nav-link-custom" th:classappend="${currentSection == 'market-edit' ? 'active' : ''}">Market Edit</a>
+            <a th:href="@{/admin?section=market-timing}" class="nav-link-custom" th:classappend="${currentSection == 'market-timing' ? 'active' : ''}">Pre/Post Time</a>
+            <a th:href="@{/admin?section=matka-result}" class="nav-link-custom" th:classappend="${currentSection == 'matka-result' ? 'active' : ''}">Matka Result</a>
+            <a th:href="@{/admin?section=weekly-chart}" class="nav-link-custom" th:classappend="${currentSection == 'weekly-chart' || currentSection == 'weekly-update' ? 'active' : ''}">Weekly Prediction</a>
+            <a th:href="@{/admin?section=daily-chart}" class="nav-link-custom" th:classappend="${currentSection == 'daily-chart' ? 'active' : ''}">Daily Chart</a>
+            <a th:href="@{/admin?section=chart-update}" class="nav-link-custom" th:classappend="${currentSection == 'chart-update' ? 'active' : ''}">Chart Update</a>
+            <a th:href="@{/admin?section=page-update}" class="nav-link-custom" th:classappend="${currentSection == 'page-update' || currentSection == 'notice' ? 'active' : ''}">Page update</a>
+            <a th:href="@{/admin?section=golden-ank}" class="nav-link-custom" th:classappend="${currentSection == 'golden-ank' ? 'active' : ''}">Golden Ank</a>
+            <a th:href="@{/admin?section=free-ank}" class="nav-link-custom" th:classappend="${currentSection == 'free-ank' ? 'active' : ''}">Free Ank</a>
+            <a th:href="@{/admin?section=change-password}" class="nav-link-custom" th:classappend="${currentSection == 'change-password' ? 'active' : ''}">Change Password</a>
+            <a th:href="@{/logout}" class="nav-link-custom text-warning fw-bold"><i class="fa fa-sign-out me-1"></i> Logout</a>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="right_col" role="main">
+        <div class="container-fluid">
+
+            <!-- Success Alert Notification -->
+            <div th:if="${param.success != null || successMsg != null}" class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="fa-solid fa-circle-check me-2"></i> Changes saved successfully!
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- 1. HOME / DEFAULT DASHBOARD SECTION -->
+            <!-- ========================================== -->
+            <div th:if="${currentSection == 'home' || currentSection == null}">
+                <div class="section-box-admin">
+                    <div class="section-title-admin">
+                        <i class="fa-solid fa-fire text-danger"></i> Live Market Results & Quick Result Declaration
+                    </div>
+
+                    <!-- Add New Market Game Quick Form -->
+                    <form th:action="@{/admin/create-game}" method="post" class="row g-2 mb-4 bg-light p-3 rounded border">
+                        <div class="col-md-3">
+                            <input type="text" name="gameName" class="form-control form-control-sm" placeholder="Market Name (e.g. KALYAN)" required>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="text" name="openTime" class="form-control form-control-sm" placeholder="Open Time (e.g. 04:00 PM)">
+                        </div>
+                        <div class="col-md-2">
+                            <input type="text" name="closeTime" class="form-control form-control-sm" placeholder="Close Time (e.g. 06:00 PM)">
+                        </div>
+                        <div class="col-md-3">
+                            <input type="text" name="marketDays" class="form-control form-control-sm" placeholder="Market Days (e.g. Mon,Tue,Wed,Thu,Fri,Sat)">
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-sm btn-dark w-100 fw-bold"><i class="fa-solid fa-plus"></i> Add Market</button>
+                        </div>
+                    </form>
+
+                    <!-- Results Table -->
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover align-middle mb-0">
+                            <thead>
+                                <tr style="background-color: #1E293B; color: white;">
+                                    <th>Market Name</th>
+                                    <th>Result (OpenPatti - Jodi - ClosePatti)</th>
+                                    <th>Open Time</th>
+                                    <th>Close Time</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="game : ${allResults}">
+                                    <form th:action="@{/admin/update-game-result}" method="post">
+                                        <input type="hidden" name="id" th:value="${game.id}">
+                                        <td>
+                                            <strong th:text="${game.gameName}">SRIDEVI</strong>
+                                        </td>
+                                        <td>
+                                            <input type="text" name="openPanel" class="form-control form-control-sm fw-bold text-center text-danger" 
+                                                   th:value="${(game.openPanel ?: '***') + '-' + (game.jodi ?: '**') + '-' + (game.closePanel ?: '***')}" required>
+                                        </td>
+                                        <td>
+                                            <input type="text" name="openTime" class="form-control form-control-sm" th:value="${game.openTime}" style="width: 110px;">
+                                        </td>
+                                        <td>
+                                            <input type="text" name="closeTime" class="form-control form-control-sm" th:value="${game.closeTime}" style="width: 110px;">
+                                        </td>
+                                        <td>
+                                            <button type="submit" class="btn btn-sm btn-dark fw-bold">
+                                                <i class="fa-solid fa-save"></i> Save & Settle
+                                            </button>
+                                        </td>
+                                    </form>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Customer Wallet & Bids Overview -->
+                <div class="section-box-admin">
+                    <div class="section-title-admin">
+                        <i class="fa-solid fa-wallet text-success"></i> Customer Wallet & Bids Overview
+                    </div>
+
+                    <div class="row g-2 mb-4 bg-light p-3 rounded border">
+                        <div class="col-md-4">
+                            <input type="text" id="adminDepositMobile" class="form-control form-control-sm" placeholder="Customer Mobile Number">
+                        </div>
+                        <div class="col-md-4">
+                            <input type="number" id="adminDepositAmount" class="form-control form-control-sm" placeholder="Amount (₹)">
+                        </div>
+                        <div class="col-md-4">
+                            <button type="button" class="btn btn-sm btn-success w-100 fw-bold" onclick="submitAdminDeposit()"><i class="fa-solid fa-coins me-1"></i> Deposit Funds</button>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover align-middle mb-0">
+                            <thead>
+                                <tr style="background-color: #1E293B; color: white;">
+                                    <th>Bid ID</th>
+                                    <th>Mobile</th>
+                                    <th>Market</th>
+                                    <th>Session</th>
+                                    <th>Type / Target #</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>Payout Won</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="b : ${allBids}">
+                                    <td>#<span th:text="${b.id}">1</span></td>
+                                    <td th:text="${b.mobile}">9876543210</td>
+                                    <td th:text="${b.gameName}">SRIDEVI</td>
+                                    <td><span class="badge bg-secondary" th:text="${b.gameSession}">OPEN</span></td>
+                                    <td th:text="${b.bidType + ' (#' + b.bidNumber + ')'}">SINGLE (#5)</td>
+                                    <td>₹<span th:text="${b.amount}">100</span></td>
+                                    <td>
+                                        <span th:if="${b.status == 'PENDING'}" class="badge bg-warning text-dark">PENDING</span>
+                                        <span th:if="${b.status == 'WON'}" class="badge bg-success">WON</span>
+                                        <span th:if="${b.status == 'LOST'}" class="badge bg-danger">LOST</span>
+                                    </td>
+                                    <td>
+                                        <span th:if="${b.status == 'WON'}" class="text-success fw-bold" th:text="'+₹' + ${b.payoutAmount}">+₹950</span>
+                                        <span th:if="${b.status != 'WON'}">-</span>
+                                    </td>
+                                </tr>
+                                <tr th:if="${#lists.isEmpty(allBids)}">
+                                    <td colspan="8" class="text-center text-muted py-3">No customer bids placed yet.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- 2. ADD MATKA GAME SECTION -->
+            <!-- ========================================== -->
+            <div th:if="${currentSection == 'create-game'}">
+                <div class="section-box-admin">
+                    <div class="section-title-admin">
+                        <i class="fa-solid fa-plus-circle text-primary"></i> Add New Matka Game Market
+                    </div>
+                    <form th:action="@{/admin/create-game}" method="post" class="p-3 border rounded bg-light">
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-4">
+                                <label class="form-label fw-bold">Market Game Name</label>
+                                <input type="text" name="gameName" class="form-control" placeholder="e.g. KALYAN NIGHT" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-bold">Open Time</label>
+                                <input type="text" name="openTime" class="form-control" placeholder="e.g. 09:30 PM">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-bold">Close Time</label>
+                                <input type="text" name="closeTime" class="form-control" placeholder="e.g. 11:30 PM">
+                            </div>
+                        </div>
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-3">
+                                <label class="form-label fw-bold">Serial Sequence #</label>
+                                <input type="number" name="serialNo" class="form-control" value="1">
+                            </div>
+                            <div class="col-md-5">
+                                <label class="form-label fw-bold">Market Days (Display String)</label>
+                                <input type="text" name="marketDays" class="form-control" placeholder="e.g. Mon,Tue,Wed,Thu,Fri,Sat">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-bold">Market Badge Color</label>
+                                <input type="color" name="marketColor" class="form-control form-control-color w-100" value="#B91C1C">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold d-block">Active Days of Week</label>
+                            <div class="form-check form-check-inline" th:each="day : ${#strings.arraySplit('Sun,Mon,Tue,Wed,Thu,Fri,Sat', ',')}">
+                                <input class="form-check-input" type="checkbox" name="days" th:value="${day}" checked>
+                                <label class="form-check-label" th:text="${day}">Sun</label>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-dark fw-bold px-4"><i class="fa-solid fa-check me-1"></i> Create Market Game</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- 3. MARKET LIST SECTION -->
+            <!-- ========================================== -->
+            <div th:if="${currentSection == 'market-list'}">
+                <div class="section-box-admin">
+                    <div class="section-title-admin">
+                        <i class="fa-solid fa-list-check text-info"></i> All Configured Market Games List
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped align-middle mb-0">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Serial #</th>
+                                    <th>Game Name</th>
+                                    <th>Open Time</th>
+                                    <th>Close Time</th>
+                                    <th>Market Days</th>
+                                    <th>Color</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="g : ${allResults}">
+                                    <td th:text="${g.id}">1</td>
+                                    <td th:text="${g.serialNo}">1</td>
+                                    <td><strong th:text="${g.gameName}">KALYAN</strong></td>
+                                    <td th:text="${g.openTime}">04:00 PM</td>
+                                    <td th:text="${g.closeTime}">06:00 PM</td>
+                                    <td th:text="${g.marketDays}">Mon-Sat</td>
+                                    <td>
+                                        <span class="badge" th:style="'background-color:' + (${g.marketColor} ?: '#1E293B')" th:text="${g.marketColor} ?: '#1E293B'">#1E293B</span>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex gap-1">
+                                            <form th:action="@{'/admin/delete-market/' + ${g.id}}" method="post" onsubmit="return confirm('Delete this market?');">
+                                                <button type="submit" class="btn btn-sm btn-danger"><i class="fa-solid fa-trash"></i> Delete</button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- 3B. MARKET EDIT (DROPDOWN SELECT & ALL FIELDS) -->
+            <!-- ========================================== -->
+            <div th:if="${currentSection == 'market-edit'}">
+                <div class="section-box-admin">
+                    <div class="section-title-admin">
+                        <i class="fa-solid fa-sliders text-danger"></i> Complete Market Edit (Select Market From Dropdown)
+                    </div>
+                    <p class="text-muted small">Choose any market from the dropdown menu to edit all details including timing, results, box color, and display days.</p>
+                    
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Select Market to Edit:</label>
+                        <select id="marketEditSelect" class="form-select form-select-lg fw-bold" onchange="switchEditMarketPanel(this.value)">
+                            <option th:each="g, iterStat : ${allResults}" 
+                                    th:value="${g.id}" 
+                                    th:selected="${iterStat.first}"
+                                    th:text="${g.gameName} + ' (' + (${g.openTime} ?: 'N/A') + ' - ' + (${g.closeTime} ?: 'N/A') + ')'">
+                                KALYAN (04:00 PM - 06:00 PM)
+                            </option>
+                        </select>
+                    </div>
+
+                    <div th:each="g, iterStat : ${allResults}" 
+                         th:id="'market-edit-panel-' + ${g.id}" 
+                         class="market-edit-panel p-4 border rounded bg-light mb-3" 
+                         th:style="${iterStat.first ? 'display: block;' : 'display: none;'}">
+                        
+                        <form th:action="@{/admin/update-market}" method="post">
+                            <input type="hidden" name="id" th:value="${g.id}">
+                            <input type="hidden" name="redirectSection" value="market-edit">
+
+                            <h5 class="fw-bold text-dark border-bottom pb-2 mb-3">
+                                Editing Market: <span class="text-danger" th:text="${g.gameName}">KALYAN</span>
+                            </h5>
+
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-4">
+                                    <label class="form-label fw-bold">Market Name</label>
+                                    <input type="text" name="gameName" class="form-control fw-bold" th:value="${g.gameName}" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label fw-bold">Open Time</label>
+                                    <input type="text" name="openTime" class="form-control" th:value="${g.openTime}">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label fw-bold">Close Time</label>
+                                    <input type="text" name="closeTime" class="form-control" th:value="${g.closeTime}">
+                                </div>
+                            </div>
+
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-3">
+                                    <label class="form-label fw-bold">Open Patti</label>
+                                    <input type="text" name="openPanel" class="form-control text-center" th:value="${g.openPanel}">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label fw-bold">Open Ank</label>
+                                    <input type="text" name="openAnk" class="form-control text-center fw-bold text-danger" th:value="${g.openAnk != null && !g.openAnk.isEmpty() ? g.openAnk : (g.jodi != null && g.jodi.length() >= 1 ? g.jodi.substring(0, 1) : '')}">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label fw-bold">Close Ank</label>
+                                    <input type="text" name="closeAnk" class="form-control text-center fw-bold text-danger" th:value="${g.closeAnk != null && !g.closeAnk.isEmpty() ? g.closeAnk : (g.jodi != null && g.jodi.length() >= 2 ? g.jodi.substring(1, 2) : '')}">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label fw-bold">Close Patti</label>
+                                    <input type="text" name="closePanel" class="form-control text-center" th:value="${g.closePanel}">
+                                </div>
+                            </div>
+
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-3">
+                                    <label class="form-label fw-bold">Serial Sequence #</label>
+                                    <input type="number" name="serialNo" class="form-control" th:value="${g.serialNo}">
+                                </div>
+                                <div class="col-md-5">
+                                    <label class="form-label fw-bold">Market Days (Display String)</label>
+                                    <input type="text" name="marketDays" class="form-control" th:value="${g.marketDays}" placeholder="e.g. Mon,Tue,Wed,Thu,Fri,Sat">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label fw-bold">Box Badge Color</label>
+                                    <input type="color" name="marketColor" class="form-control form-control-color w-100" th:value="${g.marketColor ?: '#B91C1C'}">
+                                </div>
+                            </div>
+
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-3">
+                                    <label class="form-label fw-bold">Open Pre-Time (Min)</label>
+                                    <input type="number" name="openPreTime" class="form-control" th:value="${g.openPreTime}">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label fw-bold">Open Post-Time (Min)</label>
+                                    <input type="number" name="openPostTime" class="form-control" th:value="${g.openPostTime}">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label fw-bold">Close Pre-Time (Min)</label>
+                                    <input type="number" name="closePreTime" class="form-control" th:value="${g.closePreTime}">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label fw-bold">Close Post-Time (Min)</label>
+                                    <input type="number" name="closePostTime" class="form-control" th:value="${g.closePostTime}">
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label fw-bold d-block">Active Days of Week</label>
+                                <div class="form-check form-check-inline" th:each="day : ${#strings.arraySplit('Sun,Mon,Tue,Wed,Thu,Fri,Sat', ',')}">
+                                    <input class="form-check-input" type="checkbox" name="days" th:value="${day}" th:checked="${g.daysOfWeek != null && g.daysOfWeek.contains(day)}">
+                                    <label class="form-check-label" th:text="${day}">Sun</label>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-dark btn-lg fw-bold px-4">
+                                <i class="fa-solid fa-save me-1"></i> Save Changes For <span th:text="${g.gameName}">KALYAN</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- 3C. PRE / POST TIME CONTROL SECTION -->
+            <!-- ========================================== -->
+            <div th:if="${currentSection == 'market-timing'}">
+                <div class="section-box-admin">
+                    <div class="section-title-admin">
+                        <i class="fa-solid fa-clock text-warning"></i> Market Pre & Post Time Cutoff Controls
+                    </div>
+                    <p class="text-muted small">Configure when each market enters and remains in the live section relative to its Open and Close times.</p>
+
+                    <div class="table-responsive mb-4">
+                        <table class="table table-bordered table-hover align-middle mb-0">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Market Name</th>
+                                    <th>Open Time</th>
+                                    <th>Open Pre-Time (Min)</th>
+                                    <th>Open Post-Time (Min)</th>
+                                    <th>Close Time</th>
+                                    <th>Close Pre-Time (Min)</th>
+                                    <th>Close Post-Time (Min)</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="game : ${allResults}">
+                                    <form th:action="@{/admin/saveTiming}" method="post">
+                                        <input type="hidden" name="id" th:value="${game.id}">
+                                        <td><strong th:text="${game.gameName}">KALYAN</strong></td>
+                                        <td><span th:text="${game.openTime}">04:00 PM</span></td>
+                                        <td><input type="number" name="openPreTime" class="form-control form-control-sm text-center" th:value="${game.openPreTime}"></td>
+                                        <td><input type="number" name="openPostTime" class="form-control form-control-sm text-center" th:value="${game.openPostTime}"></td>
+                                        <td><span th:text="${game.closeTime}">06:00 PM</span></td>
+                                        <td><input type="number" name="closePreTime" class="form-control form-control-sm text-center" th:value="${game.closePreTime}"></td>
+                                        <td><input type="number" name="closePostTime" class="form-control form-control-sm text-center" th:value="${game.closePostTime}"></td>
+                                        <td>
+                                            <button type="submit" class="btn btn-sm btn-success fw-bold">
+                                                <i class="fa-solid fa-save"></i> Save Timing
+                                            </button>
+                                        </td>
+                                    </form>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- 4. MATKA RESULT & TIMING CUTOFF SECTION -->
+            <!-- ========================================== -->
+            <div th:if="${currentSection == 'matka-result'}">
+                <div class="section-box-admin">
+                    <div class="section-title-admin">
+                        <i class="fa-solid fa-trophy text-warning"></i> Matka Result Declaration & Timing Controls
+                    </div>
+                    <div class="table-responsive mb-4">
+                        <table class="table table-bordered table-hover align-middle mb-0">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Market Name</th>
+                                    <th>Open Patti</th>
+                                    <th>Open Ank</th>
+                                    <th>Close Ank</th>
+                                    <th>Close Patti</th>
+                                    <th>Open Time</th>
+                                    <th>Close Time</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="game : ${allResults}">
+                                    <form th:action="@{/admin/update-game-result}" method="post">
+                                        <input type="hidden" name="id" th:value="${game.id}">
+                                        <td><strong th:text="${game.gameName}">KALYAN</strong></td>
+                                        <td><input type="text" name="openPanel" class="form-control form-control-sm text-center" th:value="${game.openPanel}"></td>
+                                        <td><input type="text" name="openAnk" class="form-control form-control-sm text-center fw-bold text-danger" th:value="${game.openAnk != null && !game.openAnk.isEmpty() ? game.openAnk : (game.jodi != null && game.jodi.length() >= 1 ? game.jodi.substring(0, 1) : '*')}" style="width: 70px;"></td>
+                                        <td><input type="text" name="closeAnk" class="form-control form-control-sm text-center fw-bold text-danger" th:value="${game.closeAnk != null && !game.closeAnk.isEmpty() ? game.closeAnk : (game.jodi != null && game.jodi.length() >= 2 ? game.jodi.substring(1, 2) : '*')}" style="width: 70px;"></td>
+                                        <td><input type="text" name="closePanel" class="form-control form-control-sm text-center" th:value="${game.closePanel}"></td>
+                                        <td><input type="text" name="openTime" class="form-control form-control-sm" th:value="${game.openTime}"></td>
+                                        <td><input type="text" name="closeTime" class="form-control form-control-sm" th:value="${game.closeTime}"></td>
+                                        <td><button type="submit" class="btn btn-sm btn-success fw-bold"><i class="fa-solid fa-save"></i> Save</button></td>
+                                    </form>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- 5. WEEKLY CHART SECTION -->
+            <!-- ========================================== -->
+            <div th:if="${currentSection == 'weekly-chart' || currentSection == 'weekly-update'}">
+                <div class="section-box-admin">
+                    <div class="section-title-admin">
+                        <i class="fa-solid fa-calendar-week text-primary"></i> Weekly Prediction Updates
+                    </div>
+                    <form th:action="@{/admin/update-weekly-charts}" method="post" class="p-3 border rounded bg-light">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Weekly Ank Chart</label>
+                            <textarea name="ankChart" class="form-control" rows="4" th:text="${weeklyChart.ankChart}" placeholder="Enter Weekly Ank data..."></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Weekly Jodi Chart</label>
+                            <textarea name="jodiChart" class="form-control" rows="4" th:text="${weeklyChart.jodiChart}" placeholder="Enter Weekly Jodi data..."></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Weekly Patti Chart</label>
+                            <textarea name="pattiChart" class="form-control" rows="4" th:text="${weeklyChart.pattiChart}" placeholder="Enter Weekly Patti data..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-dark fw-bold"><i class="fa-solid fa-save me-1"></i> Update Weekly Charts</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- 6. VIP CHART / PAPERS SECTION -->
+            <!-- ========================================== -->
+            <div th:if="${currentSection == 'vip-chart'}">
+                <div class="section-box-admin">
+                    <div class="section-title-admin">
+                        <i class="fa-solid fa-star text-warning"></i> VIP Chart & Paper Management
+                    </div>
+                    <form th:action="@{/admin/add-paper}" method="post" enctype="multipart/form-data" class="p-3 border rounded bg-light mb-4">
+                        <input type="hidden" name="type" value="VIP">
+                        <div class="row g-3 align-items-center">
+                            <div class="col-md-5">
+                                <input type="text" name="title" class="form-control" placeholder="VIP Chart Title (e.g. VIP DHANVARSHA)" required>
+                            </div>
+                            <div class="col-md-5">
+                                <input type="file" name="file" class="form-control" required>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="submit" class="btn btn-dark w-100 fw-bold"><i class="fa-solid fa-upload"></i> Upload</button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="row g-3">
+                        <div class="col-md-4" th:each="p : ${allPapers}" th:if="${p.type == 'VIP'}">
+                            <div class="card h-100 shadow-sm">
+                                <img th:src="${p.imageUrl}" class="card-img-top" style="max-height: 220px; object-fit: contain;">
+                                <div class="card-body text-center">
+                                    <h6 class="card-title fw-bold" th:text="${p.title}">VIP Chart Title</h6>
+                                    <form th:action="@{/admin/delete-paper}" method="post" class="mt-2">
+                                        <input type="hidden" name="id" th:value="${p.id}">
+                                        <button type="submit" class="btn btn-sm btn-danger w-100"><i class="fa-solid fa-trash"></i> Delete Paper</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- 7. FAMILY CHART SECTION -->
+            <!-- ========================================== -->
+            <div th:if="${currentSection == 'family-chart'}">
+                <div class="section-box-admin">
+                    <div class="section-title-admin">
+                        <i class="fa-solid fa-sitemap text-danger"></i> Family Chart & Matrix Shortcuts
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <div class="p-3 border rounded bg-light text-center">
+                                <h5>Matka Jodi Family</h5>
+                                <p class="text-muted small">View & manage Jodi family calculation tables.</p>
+                                <a th:href="@{/matka-jodi-family}" class="btn btn-sm btn-dark">Open Page →</a>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="p-3 border rounded bg-light text-center">
+                                <h5>Penal Count Chart</h5>
+                                <p class="text-muted small">Panel count tracking matrix.</p>
+                                <a th:href="@{/penal-count-chart}" class="btn btn-sm btn-dark">Open Page →</a>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="p-3 border rounded bg-light text-center">
+                                <h5>Penal Total Chart</h5>
+                                <p class="text-muted small">Panel total sum matrix charts.</p>
+                                <a th:href="@{/penal-total-chart}" class="btn btn-sm btn-dark">Open Page →</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- 8. DAILY CHART SECTION -->
+            <!-- ========================================== -->
+            <div th:if="${currentSection == 'daily-chart'}">
+                <div class="section-box-admin">
+                    <div class="section-title-admin">
+                        <i class="fa-solid fa-calendar-day text-success"></i> Daily Chart Paper Management
+                    </div>
+                    <form th:action="@{/admin/add-paper}" method="post" enctype="multipart/form-data" class="p-3 border rounded bg-light mb-4">
+                        <input type="hidden" name="type" value="DAILY">
+                        <div class="row g-3 align-items-center">
+                            <div class="col-md-5">
+                                <input type="text" name="title" class="form-control" placeholder="Daily Paper Title (e.g. DAILY FIX PAPER)" required>
+                            </div>
+                            <div class="col-md-5">
+                                <input type="file" name="file" class="form-control" required>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="submit" class="btn btn-dark w-100 fw-bold"><i class="fa-solid fa-upload"></i> Upload</button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="row g-3">
+                        <div class="col-md-4" th:each="p : ${allPapers}" th:if="${p.type == 'DAILY'}">
+                            <div class="card h-100 shadow-sm">
+                                <img th:src="${p.imageUrl}" class="card-img-top" style="max-height: 220px; object-fit: contain;">
+                                <div class="card-body text-center">
+                                    <h6 class="card-title fw-bold" th:text="${p.title}">Daily Chart Title</h6>
+                                    <form th:action="@{/admin/delete-paper}" method="post" class="mt-2">
+                                        <input type="hidden" name="id" th:value="${p.id}">
+                                        <button type="submit" class="btn btn-sm btn-danger w-100"><i class="fa-solid fa-trash"></i> Delete Paper</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- 9. SPECIAL WEEKLY SECTION -->
+            <!-- ========================================== -->
+            <div th:if="${currentSection == 'special-weekly'}">
+                <div class="section-box-admin">
+                    <div class="section-title-admin">
+                        <i class="fa-solid fa-gem text-info"></i> Special Weekly Chart Papers
+                    </div>
+                    <form th:action="@{/admin/add-paper}" method="post" enctype="multipart/form-data" class="p-3 border rounded bg-light mb-4">
+                        <input type="hidden" name="type" value="SPECIAL">
+                        <div class="row g-3 align-items-center">
+                            <div class="col-md-5">
+                                <input type="text" name="title" class="form-control" placeholder="Special Weekly Title" required>
+                            </div>
+                            <div class="col-md-5">
+                                <input type="file" name="file" class="form-control" required>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="submit" class="btn btn-dark w-100 fw-bold"><i class="fa-solid fa-upload"></i> Upload</button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="row g-3">
+                        <div class="col-md-4" th:each="p : ${allPapers}" th:if="${p.type == 'SPECIAL'}">
+                            <div class="card h-100 shadow-sm">
+                                <img th:src="${p.imageUrl}" class="card-img-top" style="max-height: 220px; object-fit: contain;">
+                                <div class="card-body text-center">
+                                    <h6 class="card-title fw-bold" th:text="${p.title}">Special Paper</h6>
+                                    <form th:action="@{/admin/delete-paper}" method="post" class="mt-2">
+                                        <input type="hidden" name="id" th:value="${p.id}">
+                                        <button type="submit" class="btn btn-sm btn-danger w-100"><i class="fa-solid fa-trash"></i> Delete Paper</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- 10. CHART UPDATE SECTION -->
+            <!-- ========================================== -->
+            <div th:if="${currentSection == 'chart-update'}">
+                <div class="section-box-admin">
+                    <div class="section-title-admin">
+                        <i class="fa-solid fa-clock-rotate-left text-primary"></i> Historical Chart Result Updates
+                    </div>
+                    <p class="text-muted">Select a market to update past chart history records:</p>
+                    <div class="list-group">
+                        <a th:each="g : ${allResults}" th:href="@{'/jodi-chart?name=' + ${g.gameName}}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                            <span class="fw-bold" th:text="${g.gameName}">KALYAN</span>
+                            <span class="badge bg-dark rounded-pill">View Chart →</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- 11. PAGE UPDATE / NOTICE SECTION -->
+            <!-- ========================================== -->
+            <div th:if="${currentSection == 'page-update' || currentSection == 'notice'}">
+                <div class="section-box-admin">
+                    <div class="section-title-admin">
+                        <i class="fa-solid fa-bullhorn text-danger"></i> Page Updates & Website Notices
+                    </div>
+
+                    <!-- Contact Us Email Form -->
+                    <div class="p-3 border rounded bg-light mb-3">
+                        <h6 class="fw-bold text-dark border-bottom pb-2 mb-3">
+                            <i class="fa-solid fa-envelope text-primary me-1"></i> Update Contact Us Email
+                        </h6>
+                        <form th:action="@{/admin/update-contact-email}" method="post">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Contact Email Address (used for direct Gmail links)</label>
+                                <input type="email" name="email" class="form-control" 
+                                       th:value="${contactEmailRecord != null ? contactEmailRecord.content : 'dpraja1@hotmail.com'}" required>
+                            </div>
+                            <button type="submit" class="btn btn-dark btn-sm fw-bold"><i class="fa-solid fa-save"></i> Save Email</button>
+                        </form>
+                    </div>
+
+                    <!-- Top Notice Form -->
+                    <form th:action="@{/admin/update-notice}" method="post" class="p-3 border rounded bg-light mb-3">
+                        <input type="hidden" name="id" value="4">
+                        <label class="form-label fw-bold">Top Website Notice Banner</label>
+                        <textarea name="content" class="form-control mb-2" rows="3" th:text="${topNotice != null ? topNotice.content : ''}"></textarea>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" name="hidden" th:checked="${topNotice != null && topNotice.hidden}">
+                            <label class="form-check-label">Hide Top Notice from User View</label>
+                        </div>
+                        <button type="submit" class="btn btn-dark btn-sm fw-bold"><i class="fa-solid fa-save"></i> Save Top Notice</button>
+                    </form>
+
+                    <!-- Middle Notice Form -->
+                    <form th:action="@{/admin/update-notice}" method="post" class="p-3 border rounded bg-light mb-3">
+                        <input type="hidden" name="id" value="12">
+                        <label class="form-label fw-bold">Middle Notice (Advertisement)</label>
+                        <textarea name="content" class="form-control mb-2" rows="2" th:text="${middleNotice != null ? middleNotice.content : ''}"></textarea>
+                        <button type="submit" class="btn btn-dark btn-sm fw-bold"><i class="fa-solid fa-save"></i> Save Middle Notice</button>
+                    </form>
+
+                    <!-- Bottom Notice Form -->
+                    <form th:action="@{/admin/update-notice}" method="post" class="p-3 border rounded bg-light">
+                        <input type="hidden" name="id" value="11">
+                        <label class="form-label fw-bold">Bottom Disclaimer Notice</label>
+                        <textarea name="content" class="form-control mb-2" rows="2" th:text="${bottomNotice != null ? bottomNotice.content : ''}"></textarea>
+                        <button type="submit" class="btn btn-dark btn-sm fw-bold"><i class="fa-solid fa-save"></i> Save Bottom Notice</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- 12. GOLDEN ANK SECTION -->
+            <!-- ========================================== -->
+            <div th:if="${currentSection == 'golden-ank'}">
+                <div class="section-box-admin">
+                    <div class="section-title-admin">
+                        <i class="fa-solid fa-coins text-warning"></i> Today Golden Ank Control
+                    </div>
+                    <form th:action="@{/admin/update-golden-ank}" method="post" class="p-3 border rounded bg-light">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Golden Ank (2 Digits)</label>
+                            <input type="text" name="value" class="form-control form-control-lg fw-bold text-warning bg-dark" th:value="${goldenAnk != null ? goldenAnk.value : '00'}" required style="max-width: 200px;">
+                        </div>
+                        <button type="submit" class="btn btn-dark fw-bold"><i class="fa-solid fa-save me-1"></i> Update Golden Ank</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- 13. FREE ANK SECTION -->
+            <!-- ========================================== -->
+            <div th:if="${currentSection == 'free-ank'}">
+                <div class="section-box-admin">
+                    <div class="section-title-admin">
+                        <i class="fa-solid fa-gift text-success"></i> Free Fix Ank Updates
+                    </div>
+                    <form th:action="@{/admin/update-free-ank-grid}" method="post" class="p-3 border rounded bg-light">
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-4">
+                                <label class="form-label fw-bold">Puna Bazar Final Ank</label>
+                                <input type="text" name="punaVal" class="form-control" th:value="${punaFinal}" placeholder="e.g. 5">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-bold">Kalyan Final Ank</label>
+                                <input type="text" name="kalyanVal" class="form-control" th:value="${kalyanFinal}" placeholder="e.g. 8">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-bold">Main Bazar Final Ank</label>
+                                <input type="text" name="mainVal" class="form-control" th:value="${mainFinal}" placeholder="e.g. 3">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-dark fw-bold"><i class="fa-solid fa-save me-1"></i> Save Free Fix Anks</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- 14. CHANGE PASSWORD SECTION -->
+            <!-- ========================================== -->
+            <div th:if="${currentSection == 'change-password'}">
+                <div class="section-box-admin">
+                    <div class="section-title-admin">
+                        <i class="fa-solid fa-key text-secondary"></i> Admin Change Password
+                    </div>
+                    <form th:action="@{/admin/change-password}" method="post" class="p-3 border rounded bg-light" style="max-width: 450px;">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">New Password</label>
+                            <input type="password" name="newPassword" class="form-control" required placeholder="Enter new password">
+                        </div>
+                        <button type="submit" class="btn btn-dark fw-bold"><i class="fa-solid fa-lock me-1"></i> Update Password</button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+<!-- Bootstrap JS & jQuery -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+
+<script>
+    function switchEditMarketPanel(selectedId) {
+        document.querySelectorAll('.market-edit-panel').forEach(panel => panel.style.display = 'none');
+        const targetPanel = document.getElementById('market-edit-panel-' + selectedId);
+        if (targetPanel) {
+            targetPanel.style.display = 'block';
+        }
+    }
+
+    async function submitAdminDeposit() {
+        const mobile = document.getElementById('adminDepositMobile').value.trim();
+        const amount = parseFloat(document.getElementById('adminDepositAmount').value);
+
+        if (!mobile || !amount || amount <= 0) {
+            alert("Please enter a valid mobile number and deposit amount.");
+            return;
+        }
+
+        try {
+            const res = await fetch('/api/v1/wallet/deposit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ mobile: mobile, amount: amount })
+            });
+            const data = await res.json();
+            if (data.status === "SUCCESS") {
+                alert(data.message);
+                window.location.reload();
+            } else {
+                alert(data.message || "Failed to add funds");
+            }
+        } catch (e) {
+            alert("Error depositing funds: " + e.message);
+        }
+    }
+</script>
+</body>
+</html>

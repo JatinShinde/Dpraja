@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Bidding Portal - SPDPBOSS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --bg-card: rgba(30, 41, 59, 0.7);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --primary: #6366f1;
+            --primary-glow: rgba(99, 102, 241, 0.4);
+            --accent-gold: #f59e0b;
+            --accent-green: #10b981;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --radius-lg: 16px;
+            --radius-md: 12px;
+            --radius-sm: 8px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Outfit', 'Inter', sans-serif; }
+
+        body {
+            background: radial-gradient(circle at top left, #1e1b4b, #0f172a 50%, #020617);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding-bottom: 40px;
+        }
+
+        .header-nav {
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 14px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: #fff; }
+
+        .brand-logo {
+            width: 42px; height: 42px;
+            background: linear-gradient(135deg, #f59e0b, #ec4899);
+            border-radius: 12px; display: flex; align-items: center; justify-content: center;
+            font-weight: 800; font-size: 20px; box-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
+        }
+
+        .brand-title {
+            font-size: 20px; font-weight: 700; letter-spacing: 0.5px;
+            background: linear-gradient(to right, #ffffff, #cbd5e1);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+
+        .user-panel { display: flex; align-items: center; gap: 16px; }
+
+        .mobile-input-group { position: relative; display: flex; align-items: center; }
+        .mobile-input-group i { position: absolute; left: 14px; color: var(--text-muted); }
+
+        .mobile-input {
+            background: rgba(30, 41, 59, 0.8); border: 1px solid var(--border-color);
+            padding: 10px 14px 10px 38px; border-radius: var(--radius-md);
+            color: #fff; font-size: 14px; font-weight: 600; width: 170px; transition: all 0.3s ease;
+        }
+
+        .wallet-badge {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(16, 185, 129, 0.05));
+            border: 1px solid rgba(16, 185, 129, 0.4); padding: 8px 16px;
+            border-radius: var(--radius-md); display: flex; align-items: center; gap: 10px;
+        }
+
+        .btn-deposit {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white; border: none; padding: 10px 18px; border-radius: var(--radius-md);
+            font-weight: 600; font-size: 14px; cursor: pointer; display: flex; align-items: center; gap: 8px;
+        }
+
+        .container { max-width: 1100px; margin: 30px auto; padding: 0 20px; }
+
+        .grid-layout { display: grid; grid-template-columns: 1.2fr 1fr; gap: 24px; }
+
+        @media (max-width: 850px) {
+            .grid-layout { grid-template-columns: 1fr; }
+            .header-nav { flex-direction: column; gap: 12px; padding: 12px; }
+        }
+
+        .card {
+            background: var(--bg-card); backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color); border-radius: var(--radius-lg);
+            padding: 24px; box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+        }
+
+        .card-header {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border-color);
+        }
+
+        .card-title { font-size: 18px; font-weight: 700; display: flex; align-items: center; gap: 10px; color: #f1f5f9; }
+
+        .form-group { margin-bottom: 18px; }
+
+        .form-label {
+            display: block; font-size: 13px; font-weight: 600; color: var(--text-muted);
+            margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;
+        }
+
+        .select-input, .text-input {
+            width: 100%; background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-color);
+            border-radius: var(--radius-md); padding: 12px 16px; color: #fff; font-size: 15px; font-weight: 500;
+        }
+
+        .chips-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+
+        .chip-btn {
+            background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-color);
+            border-radius: var(--radius-md); padding: 12px; color: var(--text-muted);
+            font-weight: 600; font-size: 14px; cursor: pointer; text-align: center;
+        }
+
+        .chip-btn.active {
+            background: linear-gradient(135deg, var(--primary), #4f46e5); color: #fff; border-color: transparent;
+        }
+
+        .quick-amounts { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+
+        .q-amt-btn {
+            background: rgba(51, 65, 85, 0.5); border: 1px solid var(--border-color); color: #cbd5e1;
+            padding: 6px 12px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 600; cursor: pointer;
+        }
+
+        .payout-box {
+            background: rgba(245, 158, 11, 0.1); border: 1px dashed rgba(245, 158, 11, 0.4);
+            border-radius: var(--radius-md); padding: 12px 16px; margin: 16px 0;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+
+        .btn-place-bid {
+            width: 100%; background: linear-gradient(135deg, #6366f1, #4f46e5); color: white;
+            border: none; padding: 14px; border-radius: var(--radius-md); font-size: 16px; font-weight: 700;
+            cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;
+        }
+
+        .history-table-container { max-height: 420px; overflow-y: auto; border-radius: var(--radius-md); border: 1px solid var(--border-color); }
+
+        table.history-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13px; }
+        table.history-table th { background: rgba(15, 23, 42, 0.9); padding: 12px; color: var(--text-muted); font-weight: 600; }
+        table.history-table td { padding: 12px; border-bottom: 1px solid var(--border-color); color: #e2e8f0; }
+
+        .badge { padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+        .badge-pending { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); }
+        .badge-won { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); }
+        .badge-lost { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); }
+
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); display: none;
+            align-items: center; justify-content: center; z-index: 999;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal-card { background: #1e293b; border: 1px solid var(--border-color); border-radius: var(--radius-lg); width: 90%; max-width: 420px; padding: 24px; }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header class="header-nav">
+        <a th:href="@{/bidding}" class="brand">
+            <div class="brand-logo">B</div>
+            <div class="brand-title">CUSTOMER BIDDING PORTAL</div>
+        </a>
+
+        <div class="user-panel">
+            <div class="mobile-input-group">
+                <i class="fa-solid fa-phone"></i>
+                <input type="text" id="userMobile" class="mobile-input" placeholder="Mobile Number" value="9876543210" onchange="loadUserWalletAndHistory()">
+            </div>
+
+            <div class="wallet-badge">
+                <i class="fa-solid fa-wallet" style="color: var(--accent-green);"></i>
+                <div>
+                    <div style="font-size: 10px; color: var(--text-muted); text-transform: uppercase;">Wallet Balance</div>
+                    <div style="font-size: 16px; font-weight: 700; color: #34d399;" id="walletBalance">₹0.00</div>
+                </div>
+            </div>
+
+            <button class="btn-deposit" onclick="openDepositModal()">
+                <i class="fa-solid fa-plus-circle"></i> Add Funds
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <div class="grid-layout">
+
+            <!-- Bidding Panel -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fa-solid fa-gamepad" style="color: var(--primary);"></i> Place New Bid
+                    </div>
+                </div>
+
+                <form id="bidForm" onsubmit="handlePlaceBid(event)">
+                    <div class="form-group">
+                        <label class="form-label">1. Select Market Game</label>
+                        <select id="gameName" class="select-input" required>
+                            <option th:each="g : ${allResults}" th:value="${g.gameName}" th:text="${g.gameName}">SRIDEVI</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">2. Select Game Session</label>
+                        <div class="chips-grid">
+                            <div class="chip-btn active" id="sessionOpen" onclick="setSession('OPEN')">
+                                <i class="fa-solid fa-sun"></i> OPEN
+                            </div>
+                            <div class="chip-btn" id="sessionClose" onclick="setSession('CLOSE')">
+                                <i class="fa-solid fa-moon"></i> CLOSE
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">3. Select Bid Type</label>
+                        <select id="bidType" class="select-input" onchange="updatePayoutEstimate()" required>
+                            <option value="SINGLE">Single Ank (0-9) — [9.5x]</option>
+                            <option value="JODI">Jodi (00-99) — [90x]</option>
+                            <option value="SINGLE_PANNA">Single Panna (e.g. 123) — [140x]</option>
+                            <option value="DOUBLE_PANNA">Double Panna (e.g. 112) — [280x]</option>
+                            <option value="TRIPLE_PANNA">Triple Panna (e.g. 111) — [600x]</option>
+                        </select>
+                    </div>
+
+                    <div class="grid-layout" style="grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 0;">
+                        <div class="form-group">
+                            <label class="form-label">4. Target Number</label>
+                            <input type="text" id="bidNumber" class="text-input" placeholder="e.g. 5 or 45" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">5. Amount (₹)</label>
+                            <input type="number" id="bidAmount" class="text-input" min="10" value="100" oninput="updatePayoutEstimate()" required>
+                        </div>
+                    </div>
+
+                    <div class="quick-amounts">
+                        <button type="button" class="q-amt-btn" onclick="addAmount(10)">+₹10</button>
+                        <button type="button" class="q-amt-btn" onclick="addAmount(50)">+₹50</button>
+                        <button type="button" class="q-amt-btn" onclick="addAmount(100)">+₹100</button>
+                        <button type="button" class="q-amt-btn" onclick="addAmount(500)">+₹500</button>
+                        <button type="button" class="q-amt-btn" onclick="addAmount(1000)">+₹1000</button>
+                    </div>
+
+                    <div class="payout-box">
+                        <span style="font-size: 14px; color: #fcd34d; font-weight: 500;"><i class="fa-solid fa-trophy"></i> Estimated Winnings:</span>
+                        <span style="font-size: 18px; font-weight: 800; color: var(--accent-gold);" id="projectedWin">₹950.00</span>
+                    </div>
+
+                    <button type="submit" class="btn-place-bid" id="submitBidBtn">
+                        <i class="fa-solid fa-paper-plane"></i> Place Bid Now
+                    </button>
+                </form>
+            </div>
+
+            <!-- User Bid History Panel -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fa-solid fa-clock-rotate-left"></i> My Bids History
+                    </div>
+                    <button onclick="loadUserWalletAndHistory()" style="background: none; border: none; color: var(--primary); cursor: pointer;">
+                        <i class="fa-solid fa-rotate"></i> Refresh
+                    </button>
+                </div>
+
+                <div class="history-table-container">
+                    <table class="history-table">
+                        <thead>
+                            <tr>
+                                <th>Game</th>
+                                <th>Session</th>
+                                <th>Type / #</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyTableBody">
+                            <tr>
+                                <td colspan="5" style="text-align: center; color: var(--text-muted); padding: 30px;">Loading history...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Deposit Funds Modal -->
+    <div class="modal-overlay" id="depositModal">
+        <div class="modal-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3 style="font-size: 18px; font-weight: 700;"><i class="fa-solid fa-wallet" style="color: var(--accent-green);"></i> Add Funds to Wallet</h3>
+                <i class="fa-solid fa-xmark" style="cursor: pointer; font-size: 20px;" onclick="closeDepositModal()"></i>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Select Deposit Amount</label>
+                <div class="quick-amounts" style="margin-bottom: 14px;">
+                    <button type="button" class="q-amt-btn" onclick="setDepositAmount(100)">₹100</button>
+                    <button type="button" class="q-amt-btn" onclick="setDepositAmount(500)">₹500</button>
+                    <button type="button" class="q-amt-btn" onclick="setDepositAmount(1000)">₹1000</button>
+                    <button type="button" class="q-amt-btn" onclick="setDepositAmount(2000)">₹2000</button>
+                </div>
+                <input type="number" id="depositAmountInput" class="text-input" placeholder="Enter amount (₹)" value="500">
+            </div>
+
+            <button class="btn-deposit" style="width: 100%; justify-content: center; padding: 12px; margin-top: 10px;" onclick="submitDeposit()">
+                <i class="fa-solid fa-check-circle"></i> Confirm Deposit
+            </button>
+        </div>
+    </div>
+
+    <script th:inline="javascript">
+        let currentSession = "OPEN";
+        const multipliers = { "SINGLE": 9.5, "JODI": 90, "SINGLE_PANNA": 140, "DOUBLE_PANNA": 280, "TRIPLE_PANNA": 600 };
+
+        function setSession(session) {
+            currentSession = session;
+            document.getElementById('sessionOpen').classList.toggle('active', session === 'OPEN');
+            document.getElementById('sessionClose').classList.toggle('active', session === 'CLOSE');
+        }
+
+        function addAmount(val) {
+            const input = document.getElementById('bidAmount');
+            let current = parseInt(input.value) || 0;
+            input.value = current + val;
+            updatePayoutEstimate();
+        }
+
+        function updatePayoutEstimate() {
+            const type = document.getElementById('bidType').value;
+            const amount = parseFloat(document.getElementById('bidAmount').value) || 0;
+            const mult = multipliers[type] || 9.5;
+            document.getElementById('projectedWin').innerText = "₹" + (amount * mult).toFixed(2);
+        }
+
+        async function loadUserWalletAndHistory() {
+            const mobile = document.getElementById('userMobile').value.trim();
+            if (!mobile) return;
+
+            try {
+                const wRes = await fetch(`/api/v1/wallet/balance?mobile=${encodeURIComponent(mobile)}`);
+                const wData = await wRes.json();
+                if (wData.status === "SUCCESS") {
+                    document.getElementById('walletBalance').innerText = `₹${parseFloat(wData.balance).toFixed(2)}`;
+                }
+
+                const hRes = await fetch(`/api/v1/bids/history?mobile=${encodeURIComponent(mobile)}`);
+                const hData = await hRes.json();
+                const tbody = document.getElementById('historyTableBody');
+
+                if (Array.isArray(hData) && hData.length > 0) {
+                    tbody.innerHTML = hData.map(b => {
+                        let badgeClass = b.status === 'WON' ? 'badge-won' : (b.status === 'LOST' ? 'badge-lost' : 'badge-pending');
+                        let payoutDisplay = b.status === 'WON' ? `<br/><span style="color:#34d399; font-weight:700;">+₹${b.payoutAmount ? b.payoutAmount.toFixed(2) : 0}</span>` : '';
+                        return `
+                            <tr>
+                                <td><strong>${b.gameName}</strong></td>
+                                <td>${b.gameSession}</td>
+                                <td>${b.bidType}<br/><span style="color:var(--accent-gold); font-weight:700;">#${b.bidNumber}</span></td>
+                                <td>₹${b.amount}</td>
+                                <td><span class="badge ${badgeClass}">${b.status}</span>${payoutDisplay}</td>
+                            </tr>
+                        `;
+                    }).join('');
+                } else {
+                    tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 30px;">No bids placed yet.</td></tr>`;
+                }
+            } catch (err) { console.error(err); }
+        }
+
+        async function handlePlaceBid(event) {
+            event.preventDefault();
+            const mobile = document.getElementById('userMobile').value.trim();
+            const gameName = document.getElementById('gameName').value;
+            const bidType = document.getElementById('bidType').value;
+            const bidNumber = document.getElementById('bidNumber').value.trim();
+            const amount = parseInt(document.getElementById('bidAmount').value);
+            const today = new Date().toISOString().split('T')[0];
+
+            try {
+                const res = await fetch('/api/v1/bids/placeBid', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ mobile: mobile, gameName: gameName, bidDate: today, gameSession: currentSession, bidType: bidType, bidNumber: bidNumber, amount: amount })
+                });
+                const data = await res.json();
+                if (data.status === "SUCCESS") {
+                    alert(`Bid Placed Successfully! (Bid #${data.bidId})`);
+                    loadUserWalletAndHistory();
+                } else {
+                    alert(data.message || "Failed to place bid");
+                }
+            } catch (e) { alert("Error placing bid."); }
+        }
+
+        function openDepositModal() { document.getElementById('depositModal').classList.add('active'); }
+        function closeDepositModal() { document.getElementById('depositModal').classList.remove('active'); }
+        function setDepositAmount(amt) { document.getElementById('depositAmountInput').value = amt; }
+
+        async function submitDeposit() {
+            const mobile = document.getElementById('userMobile').value.trim();
+            const amount = parseFloat(document.getElementById('depositAmountInput').value);
+
+            if (!amount || amount <= 0) return alert("Please enter deposit amount");
+            try {
+                const res = await fetch('/api/v1/wallet/deposit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ mobile: mobile, amount: amount })
+                });
+                const data = await res.json();
+                if (data.status === "SUCCESS") {
+                    alert(data.message);
+                    closeDepositModal();
+                    loadUserWalletAndHistory();
+                } else { alert(data.message); }
+            } catch (e) { alert("Error processing deposit"); }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            updatePayoutEstimate();
+            loadUserWalletAndHistory();
+        });
+    </script>
+</body>
+</html>

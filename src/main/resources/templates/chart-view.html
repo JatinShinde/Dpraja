@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${gameName} + ' Jodi Chart'"></title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .chart-header { background: #010203; color: #FFD700; padding: 20px; text-align: center; border-bottom: 4px solid #FFD700; }
+        .panel-num { color: #007bff; font-weight: bold; }
+        .jodi-num { font-weight: bold; background-color: #f8f9fa; }
+    </style>
+</head>
+<body class="bg-light">
+
+    <div class="chart-header">
+        <h1 th:text="${gameName} + ' PANEL CHART'">GAME CHART</h1>
+        <a href="/" class="btn btn-outline-warning btn-sm">Back to Home</a>
+    </div>
+
+    <div class="container mt-4">
+        <div class="table-responsive shadow rounded">
+            <table class="table table-bordered table-sm text-center bg-white">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Date</th>
+                        <th>Open Panel</th>
+                        <th>Jodi</th>
+                        <th>Close Panel</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="record : ${allRecords}">
+                        <td th:text="${record.date}">24-02-2026</td>
+                        <td class="panel-num" th:text="${record.openPanel}">123</td>
+                        <td class="jodi-num" th:text="${record.jodi}">45</td>
+                        <td class="panel-num" th:text="${record.closePanel}">678</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

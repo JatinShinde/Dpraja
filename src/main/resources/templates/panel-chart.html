@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>DPRAJA.COM | [[${gameName}]]</title>
+    <style>
+        body { background-color: #FDFBF7; font-family: sans-serif; margin: 0; text-align: center; }
+        .brand { background: #1E293B; color: #fff; padding: 15px; font-weight: 900; font-size: 22px; }
+        .title-bar { background: #1E293B; color: #fff; padding: 10px; font-weight: bold; width: 98%; margin: 10px auto; }
+        table { width: 98%; margin: 0 auto; border-collapse: collapse; background: #FFFFFF; }
+        th, td { border: 1px solid #CBD5E1; padding: 5px; text-align: center; height: 60px; vertical-align: middle; }
+        th { background: #F7F4EC; color: #1E293B; font-size: 14px; font-weight: bold; }
+        .date-col { background: #F7F4EC; color: #1E293B; font-weight: bold; font-size: 11px; line-height: 1.3; }
+        
+        /* THE PANEL CELL LAYOUT */
+        .panel-cell {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            font-weight: bold;
+        }
+        
+        .stacked-digits {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 11px;
+            line-height: 1.1;
+            color: #334155;
+            font-weight: bold;
+            min-width: 14px;
+        }
+        
+        .stacked-digits span {
+            display: block;
+            text-align: center;
+        }
+        
+        .jodi-display {
+            font-size: 20px;
+            font-weight: 900;
+            color: #1E293B;
+            min-width: 24px;
+            text-align: center;
+        }
+        
+        .jodi-display.red-jodi {
+            color: #B91C1C !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="brand">DPRAJA.COM</div>
+    <div class="title-bar">[[${gameName}]] PANEL CHART</div>
+
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 15%;">Date</th>
+                <th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="week : ${weeks}">
+                <td class="date-col">
+                    <span th:text="${#temporals.format(week.key, 'dd/MM/yyyy')}"></span><br>to<br>
+                    <span th:text="${#temporals.format(week.key.plusDays(6), 'dd/MM/yyyy')}"></span>
+                </td>
+                
+                <td th:each="dayOffset : ${#numbers.sequence(0, 6)}">
+                    <div th:with="targetDate=${week.key.plusDays(dayOffset)}, dayName=${#temporals.format(week.key.plusDays(dayOffset), 'E')}">
+                        <!-- If closed, show red double slash -->
+                        <span th:if="${!activeDays.contains(dayName)}" style="color: #B91C1C; font-size: 20px; font-weight: bold;">-</span>
+                        
+                        <!-- If open, check results -->
+                        <div th:if="${activeDays.contains(dayName)}">
+                            <div class="panel-cell" th:each="record : ${week.value}" th:if="${#temporals.format(record.resultDate, 'yyyy-MM-dd') == #temporals.format(targetDate, 'yyyy-MM-dd')}">
+                                
+                                <!-- Left stacked digits (Open Panel) -->
+                                <div class="stacked-digits">
+                                    <span th:if="${record.openPanel != null and record.openPanel.length() == 3}" th:text="${#strings.substring(record.openPanel, 0, 1)}"></span>
+                                    <span th:if="${record.openPanel != null and record.openPanel.length() == 3}" th:text="${#strings.substring(record.openPanel, 1, 2)}"></span>
+                                    <span th:if="${record.openPanel != null and record.openPanel.length() == 3}" th:text="${#strings.substring(record.openPanel, 2, 3)}"></span>
+                                    <span th:if="${record.openPanel == null or record.openPanel.length() != 3}">-</span>
+                                </div>
+                                
+                                <!-- Middle Jodi -->
+                                <div class="jodi-display" th:classappend="${record.isRedJodi() ? 'red-jodi' : ''}" th:text="${record.jodi ?: '--'}"></div>
+                                
+                                <!-- Right stacked digits (Close Panel) -->
+                                <div class="stacked-digits">
+                                    <span th:if="${record.closePanel != null and record.closePanel.length() == 3}" th:text="${#strings.substring(record.closePanel, 0, 1)}"></span>
+                                    <span th:if="${record.closePanel != null and record.closePanel.length() == 3}" th:text="${#strings.substring(record.closePanel, 1, 2)}"></span>
+                                    <span th:if="${record.closePanel != null and record.closePanel.length() == 3}" th:text="${#strings.substring(record.closePanel, 2, 3)}"></span>
+                                    <span th:if="${record.closePanel == null or record.closePanel.length() != 3}">-</span>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

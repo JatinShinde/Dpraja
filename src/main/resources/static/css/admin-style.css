@@ -1,0 +1,176 @@
+/* ==========================================================================
+   Base & Body Styles
+   ========================================================================== */
+body {
+    background-color: #2c343c;
+    color: #ffffff;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* ==========================================================================
+   Navbar & Layout Styles
+   ========================================================================== */
+.navbar-custom {
+    background-color: #343c44;
+    padding: 10px 30px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #444;
+}
+
+.nav-menu { display: flex; gap: 10px; font-size: 12px; }
+
+.nav-link-custom {
+    color: #ffffff; text-decoration: none; font-size: 13px; padding: 5px;
+    border-bottom: 2px solid transparent; transition: all 0.3s ease;
+}
+
+.nav-link-custom.active { border-bottom: 2px solid #9c27b0; color: #9c27b0; }
+
+.form-wrapper { max-width: 95%; margin: 20px auto; }
+.section-box { background: #343c44; padding: 20px; border-radius: 8px; margin-top: 20px; }
+
+/* ==========================================================================
+   Form & Table Elements
+   ========================================================================== */
+.form-header h3 { color: #ffffff; margin-bottom: 25px; padding-left: 10px; border-left: 4px solid #9c27b0; }
+
+.dark-input {
+    width: 100%; background-color: #1f2229; border: 1px solid #3c444c;
+    color: #a0a5b1; padding: 15px; border-radius: 5px; margin-bottom: 15px;
+}
+
+.input-pro {
+    background-color: #ffffff; color: #000; border: none; padding: 5px;
+    width: 100%; text-align: center; border-radius: 4px;
+}
+
+.update-btn-custom {
+    background-color: #1e2530; color: #ffffff; border: 1px solid #3c444c;
+    padding: 12px 30px; font-weight: bold; border-radius: 5px; cursor: pointer;
+    width: 100%; max-width: 300px; margin: 20px auto 0; display: block;
+}
+
+/* ==========================================================================
+   Advanced Market Grid (Admin Panel)
+   ========================================================================== */
+.market-grid-wrapper { overflow-x: auto; }
+
+.market-grid-header, .market-grid-row {
+    display: grid;
+    grid-template-columns: 40px 150px 100px 100px 60px 110px 50px 60px 250px 50px;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    min-width: 1100px;
+}
+
+.market-grid-header {
+    color: #a0a5b1; font-weight: bold; font-size: 12px;
+    border-bottom: 2px solid #3c444c; margin-bottom: 10px;
+}
+
+.market-grid-row {
+    background-color: #2b2e38; border-radius: 8px;
+    margin-bottom: 10px; border: 1px solid #3c444c;
+}
+
+.ml-input { width: 100%; padding: 5px; font-size: 12px; background-color: #ffffff; border: none; border-radius: 4px; }
+.ml-color-input { width: 30px; height: 30px; padding: 0; border: none; cursor: pointer; }
+.ml-checkboxes { display: flex; flex-wrap: wrap; gap: 5px; font-size: 10px; color: #ffffff; }
+
+/* COMPACT ROW LAYOUT */
+.market-individual-row {
+    padding: 5px 10px;
+    border-bottom: 1px solid #ccc;
+    display: flex;
+    flex-direction: column; /* Stacks Title on top of the Row */
+    align-items: center;
+    font-family: Arial, sans-serif;
+    line-height: 1.2;
+}
+
+.market-game-title {
+    font-size: 15px;
+    font-weight: 800;
+    color: #000080;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+}
+
+.time-input {
+    font-size: 16px !important;      /* Makes text larger */
+    font-weight: bold;               /* Makes it stand out */
+    padding: 8px !important;         /* Gives it breathing room */
+    width: 110px !important;         /* Ensures the full time is visible */
+    text-align: center;              /* Looks better centered */
+    background-color: #2c3e50;       /* Dark background */
+    color: white;                    /* Text color */
+    border: 1px solid #555;
+    border-radius: 4px;
+}
+
+/* Apply this to your main card container class (e.g., .market-box or .card) */
+.market-box {
+    margin-bottom: 0 !important; /* Remove individual margins */
+    padding: 10px;
+    display: block;
+}
+
+/* Ensure the parent container has NO extra spacing */
+.market-container {
+    display: flex;
+    flex-direction: column; /* Stacks them vertically */
+    gap: 20px;              /* This forces exactly 20px between EVERY card */
+    padding: 0;
+    margin: 0;
+}
+
+/* New: Flex container for Buttons + Result */
+.market-flex-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px; /* Space between buttons and result */
+    margin: 2px 0;
+}
+
+.market-result-pill {
+    font-size: 16px;
+    font-weight: 900;
+    color: #4b0082;
+}
+
+/* Compact Buttons */
+.btn-side-action {
+    background: #3f51b5;
+    color: #fff !important;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-weight: 700;
+    font-size: 10px;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+.market-time-lbl {
+    font-size: 11px;
+    font-weight: 700;
+    color: #000;
+}
+
+.loading-pulse {
+    font-size: 12px;
+    font-weight: 900;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.3; }
+    100% { opacity: 1; }
+}
+
+
+.btn-outline-light { color: #ffffff; border: 1px solid #ffffff; }
+.btn-outline-danger { color: #ff4444; border: 1px solid #ff4444; }
