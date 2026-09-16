@@ -841,25 +841,61 @@
             <div th:if="${currentSection == 'free-ank'}">
                 <div class="section-box-admin">
                     <div class="section-title-admin">
-                        <i class="fa-solid fa-gift text-success"></i> Free Fix Ank Updates
+                        <i class="fa-solid fa-gift text-success"></i> Today Final Ank & Free Fix Ank Control
                     </div>
-                    <form th:action="@{/admin/update-free-ank-grid}" method="post" class="p-3 border rounded bg-light">
-                        <div class="row g-3 mb-3">
-                            <div class="col-md-4">
-                                <label class="form-label fw-bold">Puna Bazar Final Ank</label>
-                                <input type="text" name="punaVal" class="form-control" th:value="${punaFinal}" placeholder="e.g. 5">
+                    
+                    <!-- 1. Today Final Ank Section -->
+                    <div class="p-3 border rounded bg-light mb-4">
+                        <h6 class="fw-bold text-dark border-bottom pb-2 mb-3">
+                            <i class="fa-solid fa-star text-danger me-1"></i> Today Final Ank (Top Banner)
+                        </h6>
+                        <form th:action="@{/admin/update-today-final}" method="post">
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-4">
+                                    <label class="form-label fw-bold">PUNA Today Final</label>
+                                    <input type="text" name="punaVal" class="form-control" th:value="${punaFinal}" placeholder="e.g. 2">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label fw-bold">KALYAN Today Final</label>
+                                    <input type="text" name="kalyanVal" class="form-control" th:value="${kalyanFinal}" placeholder="e.g. 4">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label fw-bold">MAIN Today Final</label>
+                                    <input type="text" name="mainVal" class="form-control" th:value="${mainFinal}" placeholder="e.g. 5">
+                                </div>
                             </div>
-                            <div class="col-md-4">
-                                <label class="form-label fw-bold">Kalyan Final Ank</label>
-                                <input type="text" name="kalyanVal" class="form-control" th:value="${kalyanFinal}" placeholder="e.g. 8">
+                            <button type="submit" class="btn btn-dark fw-bold btn-sm"><i class="fa-solid fa-save me-1"></i> Save Today Final Ank</button>
+                        </form>
+                    </div>
+
+                    <!-- 2. Free Fix Ank Grid Section -->
+                    <div class="p-3 border rounded bg-light">
+                        <h6 class="fw-bold text-dark border-bottom pb-2 mb-3">
+                            <i class="fa-solid fa-fire text-warning me-1"></i> Free Fix Ank Grid (Middle Section)
+                        </h6>
+                        <form th:action="@{/admin/update-free-ank-grid}" method="post">
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-3">
+                                    <label class="form-label fw-bold">Free Ank Date</label>
+                                    <input type="text" name="freeAnkDate" class="form-control" th:value="${freeAnkDate}" placeholder="e.g. 16-09-2026">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label fw-bold">PUNABAZAR Free Ank</label>
+                                    <input type="text" name="punaVal" class="form-control" th:value="${freePuna}" placeholder="e.g. 2">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label fw-bold">KALYAN Free Ank</label>
+                                    <input type="text" name="kalyanVal" class="form-control" th:value="${freeKalyan}" placeholder="e.g. 3">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label fw-bold">MAINBAZAR Free Ank</label>
+                                    <input type="text" name="mainVal" class="form-control" th:value="${freeMain}" placeholder="e.g. 5">
+                                </div>
                             </div>
-                            <div class="col-md-4">
-                                <label class="form-label fw-bold">Main Bazar Final Ank</label>
-                                <input type="text" name="mainVal" class="form-control" th:value="${mainFinal}" placeholder="e.g. 3">
-                            </div>
-                        </div>
-                        <button type="submit" class="btn btn-dark fw-bold"><i class="fa-solid fa-save me-1"></i> Save Free Fix Anks</button>
-                    </form>
+                            <button type="submit" class="btn btn-dark fw-bold btn-sm"><i class="fa-solid fa-save me-1"></i> Save Free Fix Ank Grid</button>
+                        </form>
+                    </div>
+
                 </div>
             </div>
 

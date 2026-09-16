@@ -86,6 +86,7 @@ public class MainController {
 				.collect(Collectors.toList());
 		model.addAttribute("liveResults", liveResults);
 		model.addAttribute("allFreeAnks", freeAnkRepository.findAll());
+		model.addAttribute("freeAnkDate", todayFinalRepository.findById(16L).map(TodayFinal::getContent).orElse(""));
 		model.addAttribute("currentDate", java.time.LocalDate.now());
 
 		// 2. Add them to the model so HTML can see them
@@ -213,9 +214,14 @@ public class MainController {
 		model.addAttribute("contactEmailRecord", contactEmailRecord);
 
 		model.addAttribute("allFreeAnks", freeAnkRepository.findAll());
+		model.addAttribute("freeAnkDate", todayFinalRepository.findById(16L).map(TodayFinal::getContent).orElse(""));
 		model.addAttribute("punaFinal", todayFinalRepository.findById(1L).map(TodayFinal::getContent).orElse(""));
 		model.addAttribute("kalyanFinal", todayFinalRepository.findById(2L).map(TodayFinal::getContent).orElse(""));
 		model.addAttribute("mainFinal", todayFinalRepository.findById(3L).map(TodayFinal::getContent).orElse(""));
+
+		model.addAttribute("freePuna", freeAnkRepository.findByName("PunaBazar").map(FreeAnk::getFinalAnk).orElse(""));
+		model.addAttribute("freeKalyan", freeAnkRepository.findByName("Kalyan").map(FreeAnk::getFinalAnk).orElse(""));
+		model.addAttribute("freeMain", freeAnkRepository.findByName("MainBazar").map(FreeAnk::getFinalAnk).orElse(""));
 
 		WeeklyChart weeklyChart = weeklyChartRepository.findById(1L).orElse(new WeeklyChart());
 		model.addAttribute("weeklyChart", weeklyChart);
@@ -663,15 +669,42 @@ public class MainController {
 		return weeksMap;
 	}
 
-	@PostMapping("/admin/update-free-ank-grid")
-	public String updateFreeAnkGrid(@RequestParam String punaVal, @RequestParam String kalyanVal,
+	@PostMapping("/admin/update-today-final")
+	public String updateTodayFinal(@RequestParam String punaVal, @RequestParam String kalyanVal,
 			@RequestParam String mainVal) {
+
+		TodayFinal puna = todayFinalRepository.findById(1L).orElse(new TodayFinal(1L, punaVal));
+		puna.setContent(punaVal.trim());
+		todayFinalRepository.save(puna);
+
+		TodayFinal kalyan = todayFinalRepository.findById(2L).orElse(new TodayFinal(2L, kalyanVal));
+		kalyan.setContent(kalyanVal.trim());
+		todayFinalRepository.save(kalyan);
+
+		TodayFinal main = todayFinalRepository.findById(3L).orElse(new TodayFinal(3L, mainVal));
+		main.setContent(mainVal.trim());
+		todayFinalRepository.save(main);
+
+		return "redirect:/admin?section=free-ank&success";
+	}
+
+	@PostMapping("/admin/update-free-ank-grid")
+	public String updateFreeAnkGrid(
+			@RequestParam(value = "freeAnkDate", required = false) String freeAnkDate,
+			@RequestParam String punaVal, @RequestParam String kalyanVal,
+			@RequestParam String mainVal) {
+
+		if (freeAnkDate != null) {
+			TodayFinal dateRecord = todayFinalRepository.findById(16L).orElse(new TodayFinal(16L, ""));
+			dateRecord.setContent(freeAnkDate.trim());
+			todayFinalRepository.save(dateRecord);
+		}
 
 		updateAnkValue("PunaBazar", punaVal);
 		updateAnkValue("Kalyan", kalyanVal);
 		updateAnkValue("MainBazar", mainVal);
 
-		return "redirect:/admin?section=free-ank";
+		return "redirect:/admin?section=free-ank&success";
 	}
 
 	private void updateAnkValue(String name, String value) {
