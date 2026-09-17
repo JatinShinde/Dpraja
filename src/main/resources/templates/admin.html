@@ -875,19 +875,15 @@
                         </h6>
                         <form th:action="@{/admin/update-free-ank-grid}" method="post">
                             <div class="row g-3 mb-3">
-                                <div class="col-md-3">
-                                    <label class="form-label fw-bold">Free Ank Date</label>
-                                    <input type="text" name="freeAnkDate" class="form-control" th:value="${freeAnkDate}" placeholder="e.g. 16-09-2026">
-                                </div>
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <label class="form-label fw-bold">PUNABAZAR Free Ank</label>
                                     <input type="text" name="punaVal" class="form-control" th:value="${freePuna}" placeholder="e.g. 2">
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <label class="form-label fw-bold">KALYAN Free Ank</label>
                                     <input type="text" name="kalyanVal" class="form-control" th:value="${freeKalyan}" placeholder="e.g. 3">
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <label class="form-label fw-bold">MAINBAZAR Free Ank</label>
                                     <input type="text" name="mainVal" class="form-control" th:value="${freeMain}" placeholder="e.g. 5">
                                 </div>

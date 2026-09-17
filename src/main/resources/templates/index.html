@@ -334,7 +334,7 @@
     <!-- FREE ANK SECTION -->
     <div class="tight-box" style="background: linear-gradient(90deg, #B91C1C, #D97706); padding: 6px; border-radius: 8px; text-align: center; margin-top: 1px !important; margin-bottom: 0px !important;">
         <h3 style="margin:0; font-weight:900; color:white; font-size: 14px;">Free Ank</h3>
-        <div style="font-size: 10px; font-weight:bold; color:white;">** Date : <span th:text="${freeAnkDate != null and !freeAnkDate.isEmpty() ? freeAnkDate : #temporals.format(currentDate, 'dd-MM-yyyy')}"></span> **</div>
+        <div style="font-size: 10px; font-weight:bold; color:white;">** Date : <span th:text="${#temporals.format(currentDate, 'dd-MM-yyyy')}"></span> **</div>
     </div>
 
     <div class="tight-box" style="display: flex; justify-content: center; gap: 5px; margin-top: 1px !important; margin-bottom: 0px !important;">
