@@ -331,18 +331,6 @@
         </a>
     </div>
 
-    <!-- FREE ANK SECTION -->
-    <div class="tight-box" style="background: linear-gradient(90deg, #B91C1C, #D97706); padding: 6px; border-radius: 8px; text-align: center; margin-top: 1px !important; margin-bottom: 0px !important;">
-        <h3 style="margin:0; font-weight:900; color:white; font-size: 14px;">Free Ank</h3>
-        <div style="font-size: 10px; font-weight:bold; color:white;">** Date : <span th:text="${#temporals.format(currentDate, 'dd-MM-yyyy')}"></span> **</div>
-    </div>
-
-    <div class="tight-box" style="display: flex; justify-content: center; gap: 5px; margin-top: 1px !important; margin-bottom: 0px !important;">
-        <div th:each="ank : ${allFreeAnks}" style="border: 2px solid #B91C1C; border-radius: 6px; background: #FFFFFF; width: 32%; text-align: center; overflow: hidden;">
-            <div style="background: #1E293B; color: white; font-size: 9px; font-weight: 900; padding: 2px 0; text-transform: uppercase;" th:text="${ank.name}">Market</div>
-            <div style="color: #B91C1C; font-weight: 900; font-size: 14px; padding: 5px 0;" th:text="${ank.finalAnk}">0-0-0</div>
-        </div>
-    </div>
     
     <!-- DAILY GAME ZONE SECTION -->
     <div class="tight-box" style="background: #F7F4EC; border: 1px solid #CBD5E1; border-radius: 12px; padding: 15px 10px; margin-top: 1px !important; margin-bottom: 0px !important; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
@@ -352,7 +340,7 @@
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
             <a href="/all-market-free-fix" style="text-decoration: none; background: #FFFFFF; border: 1.5px solid #1E293B; box-shadow: 0 2px 6px rgba(0,0,0,0.05); border-radius: 8px; padding: 12px 5px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; transition: 0.2s;">
-                <div style="color: #1E293B; font-weight: 900; font-size: 15px; text-transform: uppercase; letter-spacing: 0.5px;">❖ All Market Free Fix Game ❖</div>
+                <div style="color: #1E293B; font-weight: 900; font-size: 15px; text-transform: uppercase; letter-spacing: 0.5px;">❖ All Market Free Guessing ❖</div>
             </a>
             <a href="/matka-jodi-count" style="text-decoration: none; background: #FFFFFF; border: 1.5px solid #1E293B; box-shadow: 0 2px 6px rgba(0,0,0,0.05); border-radius: 8px; padding: 12px 5px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; transition: 0.2s;">
                 <div style="color: #1E293B; font-weight: 900; font-size: 15px; text-transform: uppercase; letter-spacing: 0.5px;">❖ Matka Jodi Count Chart ❖</div>
@@ -364,7 +352,7 @@
                 <div style="color: #1E293B; font-weight: 900; font-size: 15px; text-transform: uppercase; letter-spacing: 0.5px;">❖ Matka Jodi Family Chart ❖</div>
             </a>
             <a href="/penal-count-chart" style="text-decoration: none; background: #FFFFFF; border: 1.5px solid #1E293B; box-shadow: 0 2px 6px rgba(0,0,0,0.05); border-radius: 8px; padding: 12px 5px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; transition: 0.2s;">
-                <div style="color: #1E293B; font-weight: 900; font-size: 15px; text-transform: uppercase; letter-spacing: 0.5px;">❖ Penal Count Chart ❖</div>
+                <div style="color: #1E293B; font-weight: 900; font-size: 15px; text-transform: uppercase; letter-spacing: 0.5px;">❖ Matka Panna Family Chart ❖</div>
             </a>
             <a href="/penal-total-chart" style="text-decoration: none; background: #FFFFFF; border: 1.5px solid #1E293B; box-shadow: 0 2px 6px rgba(0,0,0,0.05); border-radius: 8px; padding: 12px 5px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; transition: 0.2s;">
                 <div style="color: #1E293B; font-weight: 900; font-size: 15px; text-transform: uppercase; letter-spacing: 0.5px;">❖ Penal Total Chart ❖</div>

@@ -52,6 +52,8 @@ public class MainController {
 	private BidRepository bidRepository;
 	@Autowired
 	private UserWalletRepository userWalletRepository;
+	@Autowired
+	private com.spdpboss.repository.FreeFixMarketRepository freeFixMarketRepository;
 
 	private final String UPLOAD_DIR = "uploads/";
 
@@ -225,6 +227,14 @@ public class MainController {
 
 		WeeklyChart weeklyChart = weeklyChartRepository.findById(1L).orElse(new WeeklyChart());
 		model.addAttribute("weeklyChart", weeklyChart);
+
+		TodayFinal freeFixRecord = todayFinalRepository.findById(17L).orElseGet(() -> {
+			TodayFinal d = new TodayFinal(17L, "");
+			todayFinalRepository.save(d);
+			return d;
+		});
+		model.addAttribute("freeFixGameRecord", freeFixRecord);
+		model.addAttribute("allFreeFixMarkets", freeFixMarketRepository.findAllByOrderByIdAsc());
 
 		return "admin";
 	}
@@ -790,8 +800,76 @@ public class MainController {
 		return "redirect:/admin?section=weekly-update&success";
 	}
 
+	@PostMapping("/admin/update-free-fix-game")
+	public String updateFreeFixGame(@RequestParam String content) {
+		TodayFinal tf = todayFinalRepository.findById(17L).orElse(new TodayFinal(17L, ""));
+		tf.setContent(content != null ? content.trim() : "");
+		todayFinalRepository.save(tf);
+		return "redirect:/admin?section=free-fix-game&success";
+	}
+
+	@GetMapping({"/admin/save-free-fix-market", "/admin/add-free-fix-market"})
+	public String handleFreeFixMarketGetFallback() {
+		return "redirect:/admin?section=free-fix-game";
+	}
+
+	@PostMapping("/admin/save-free-fix-market")
+	public String saveFreeFixMarket(
+			@RequestParam("id") Long id,
+			@RequestParam(value = "marketName", required = false) String marketName,
+			@RequestParam(value = "ank", required = false) String ank,
+			@RequestParam(value = "openPanna", required = false) String openPanna,
+			@RequestParam(value = "jodi", required = false) String jodi,
+			@RequestParam(value = "extraAnk", required = false) String extraAnk) {
+
+		com.spdpboss.model.FreeFixMarket ffm = freeFixMarketRepository.findById(id).orElse(null);
+		if (ffm != null) {
+			if (marketName != null && !marketName.trim().isEmpty()) {
+				ffm.setMarketName(marketName.trim().toUpperCase());
+			}
+			ffm.setAnk(ank != null ? ank.trim() : "");
+			ffm.setOpenPanna(openPanna != null ? openPanna.trim() : "");
+			ffm.setJodi(jodi != null ? jodi.trim() : "");
+			ffm.setExtraAnk(extraAnk != null ? extraAnk.trim() : "");
+			freeFixMarketRepository.save(ffm);
+		}
+		return "redirect:/admin?section=free-fix-game&selectedMarketId=" + id + "&success";
+	}
+
+	@PostMapping("/admin/add-free-fix-market")
+	public String addFreeFixMarket(
+			@RequestParam(value = "marketName", required = false) String marketName,
+			@RequestParam(value = "ank", required = false) String ank,
+			@RequestParam(value = "openPanna", required = false) String openPanna,
+			@RequestParam(value = "jodi", required = false) String jodi,
+			@RequestParam(value = "extraAnk", required = false) String extraAnk) {
+
+		if (marketName == null || marketName.trim().isEmpty()) {
+			return "redirect:/admin?section=free-fix-game";
+		}
+
+		com.spdpboss.model.FreeFixMarket ffm = new com.spdpboss.model.FreeFixMarket();
+		ffm.setMarketName(marketName.trim().toUpperCase());
+		ffm.setAnk(ank != null ? ank.trim() : "");
+		ffm.setOpenPanna(openPanna != null ? openPanna.trim() : "");
+		ffm.setJodi(jodi != null ? jodi.trim() : "");
+		ffm.setExtraAnk(extraAnk != null ? extraAnk.trim() : "");
+		com.spdpboss.model.FreeFixMarket saved = freeFixMarketRepository.save(ffm);
+		return "redirect:/admin?section=free-fix-game&selectedMarketId=" + saved.getId() + "&success";
+	}
+
+	@PostMapping("/admin/delete-free-fix-market/{id}")
+	public String deleteFreeFixMarket(@PathVariable Long id) {
+		freeFixMarketRepository.deleteById(id);
+		return "redirect:/admin?section=free-fix-game&success";
+	}
+
 	@GetMapping("/all-market-free-fix")
-	public String allMarketFreeFix() {
+	public String allMarketFreeFix(Model model) {
+		TodayFinal freeFixRecord = todayFinalRepository.findById(17L).orElse(new TodayFinal(17L, ""));
+		model.addAttribute("freeFixContent", freeFixRecord.getContent());
+		model.addAttribute("freeFixMarkets", freeFixMarketRepository.findAllByOrderByIdAsc());
+		model.addAttribute("currentDate", LocalDate.now());
 		return "all-market-free-fix";
 	}
 
