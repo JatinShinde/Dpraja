@@ -603,20 +603,23 @@ public class MainController {
 
 	@GetMapping("/jodi-chart")
 	public String showJodiChart(
-			@RequestParam String name,
+			@RequestParam(value = "name", required = false, defaultValue = "") String name,
 			@RequestParam(value = "edit", required = false, defaultValue = "false") boolean edit,
 			Model model) {
-		Map<LocalDate, List<GameHistory>> weeks = buildWeeklyMap(name);
+		String safeName = (name != null) ? name.trim() : "";
+		Map<LocalDate, List<GameHistory>> weeks = buildWeeklyMap(safeName);
 
-		Optional<Result> gameOpt = resultRepository.findByGameNameIgnoreCase(name.trim());
+		Optional<Result> gameOpt = safeName.isEmpty() ? Optional.empty() : resultRepository.findByGameNameIgnoreCase(safeName);
 		List<String> activeDays = new ArrayList<>();
 		String daysStr = null;
 		if (gameOpt.isPresent()) {
 			Result game = gameOpt.get();
-			if (game.getMarketDays() != null && !game.getMarketDays().trim().isEmpty()) {
-				daysStr = game.getMarketDays();
-			} else if (game.getDaysOfWeek() != null && !game.getDaysOfWeek().trim().isEmpty()) {
-				daysStr = game.getDaysOfWeek();
+			if (game != null) {
+				if (game.getMarketDays() != null && !game.getMarketDays().trim().isEmpty()) {
+					daysStr = game.getMarketDays();
+				} else if (game.getDaysOfWeek() != null && !game.getDaysOfWeek().trim().isEmpty()) {
+					daysStr = game.getDaysOfWeek();
+				}
 			}
 		}
 		if (daysStr != null && !daysStr.trim().isEmpty()) {
@@ -626,7 +629,7 @@ public class MainController {
 		}
 
 		model.addAttribute("weeks", weeks);
-		model.addAttribute("gameName", name);
+		model.addAttribute("gameName", safeName);
 		model.addAttribute("activeDays", activeDays);
 		model.addAttribute("isEditMode", edit);
 		model.addAttribute("currentDate", LocalDate.now(ZoneId.of("Asia/Kolkata")).toString());
@@ -635,20 +638,23 @@ public class MainController {
 
 	@GetMapping("/panel-chart")
 	public String showPanelChart(
-			@RequestParam String name,
+			@RequestParam(value = "name", required = false, defaultValue = "") String name,
 			@RequestParam(value = "edit", required = false, defaultValue = "false") boolean edit,
 			Model model) {
-		Map<LocalDate, List<GameHistory>> weeks = buildWeeklyMap(name);
+		String safeName = (name != null) ? name.trim() : "";
+		Map<LocalDate, List<GameHistory>> weeks = buildWeeklyMap(safeName);
 
-		Optional<Result> gameOpt = resultRepository.findByGameNameIgnoreCase(name.trim());
+		Optional<Result> gameOpt = safeName.isEmpty() ? Optional.empty() : resultRepository.findByGameNameIgnoreCase(safeName);
 		List<String> activeDays = new ArrayList<>();
 		String daysStr = null;
 		if (gameOpt.isPresent()) {
 			Result game = gameOpt.get();
-			if (game.getMarketDays() != null && !game.getMarketDays().trim().isEmpty()) {
-				daysStr = game.getMarketDays();
-			} else if (game.getDaysOfWeek() != null && !game.getDaysOfWeek().trim().isEmpty()) {
-				daysStr = game.getDaysOfWeek();
+			if (game != null) {
+				if (game.getMarketDays() != null && !game.getMarketDays().trim().isEmpty()) {
+					daysStr = game.getMarketDays();
+				} else if (game.getDaysOfWeek() != null && !game.getDaysOfWeek().trim().isEmpty()) {
+					daysStr = game.getDaysOfWeek();
+				}
 			}
 		}
 		if (daysStr != null && !daysStr.trim().isEmpty()) {
@@ -658,7 +664,7 @@ public class MainController {
 		}
 
 		model.addAttribute("weeks", weeks);
-		model.addAttribute("gameName", name);
+		model.addAttribute("gameName", safeName);
 		model.addAttribute("activeDays", activeDays);
 		model.addAttribute("isEditMode", edit);
 		model.addAttribute("currentDate", LocalDate.now(ZoneId.of("Asia/Kolkata")).toString());
@@ -737,7 +743,7 @@ public class MainController {
 
 	private Map<LocalDate, List<GameHistory>> buildWeeklyMap(String name) {
 		String normName = (name != null) ? name.trim().toUpperCase() : "";
-		List<GameHistory> historyList = historyRepository.findByGameNameIgnoreCaseOrderByResultDateDesc(normName);
+		List<GameHistory> historyList = normName.isEmpty() ? new ArrayList<>() : historyRepository.findByGameNameIgnoreCaseOrderByResultDateDesc(normName);
 
 		// Group existing records by Monday of their week
 		Map<LocalDate, List<GameHistory>> weeksMap = historyList.stream()
@@ -752,7 +758,11 @@ public class MainController {
 		LocalDate startMonday;
 		if (!weeksMap.isEmpty()) {
 			LocalDate earliestRecordedMonday = weeksMap.keySet().iterator().next();
-			startMonday = earliestRecordedMonday;
+			if (earliestRecordedMonday != null && !earliestRecordedMonday.isAfter(currentMonday)) {
+				startMonday = earliestRecordedMonday;
+			} else {
+				startMonday = currentMonday.minusWeeks(10);
+			}
 		} else {
 			startMonday = currentMonday.minusWeeks(10);
 		}
