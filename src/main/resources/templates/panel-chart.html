@@ -47,35 +47,11 @@
         .jodi-display.red-jodi {
             color: #B91C1C !important;
         }
-
-        .edit-banner { background: #B91C1C; color: #fff; padding: 12px; margin: 10px auto; width: 98%; border-radius: 6px; box-sizing: border-box; }
-        .edit-form { display: flex; justify-content: center; gap: 10px; align-items: center; margin-top: 8px; flex-wrap: wrap; }
-        .edit-form input { padding: 6px 10px; border-radius: 4px; border: 1px solid #ccc; font-weight: bold; }
-        .edit-form button { background: #1E293B; color: white; padding: 6px 15px; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
     <div class="brand">DPRAJA.COM</div>
     <div class="title-bar">[[${gameName}]] PANEL CHART</div>
-
-    <!-- ADMIN EDIT MODE BAR -->
-    <div th:if="${isEditMode}" class="edit-banner">
-        <div style="font-weight: bold; font-size: 16px;">✏️ ADMIN EDIT MODE - EDIT PANEL CHART</div>
-        <div th:if="${successMsg}" style="color: #4ADE80; font-weight: bold; margin-top: 4px;" th:text="${successMsg}"></div>
-        <div th:if="${errorMsg}" style="color: #F87171; font-weight: bold; margin-top: 4px;" th:text="${errorMsg}"></div>
-        <form th:action="@{/admin/update-panel-history}" method="post" class="edit-form">
-            <input type="hidden" name="gameName" th:value="${gameName}">
-            <label style="color: white; font-size: 14px;">Date:</label>
-            <input type="date" id="panelResultDate" name="resultDate" required th:value="${currentDate}">
-            <label style="color: white; font-size: 14px;">Open Pana:</label>
-            <input type="text" id="openPanaInput" name="openPanel" placeholder="e.g. 128" style="width: 70px;">
-            <label style="color: white; font-size: 14px;">Jodi:</label>
-            <input type="text" id="panelJodiInput" name="jodi" placeholder="e.g. 58" style="width: 60px;">
-            <label style="color: white; font-size: 14px;">Close Pana:</label>
-            <input type="text" id="closePanaInput" name="closePanel" placeholder="e.g. 350" style="width: 70px;">
-            <button type="submit">Save Panel</button>
-        </form>
-    </div>
 
     <table>
         <thead>
@@ -98,9 +74,7 @@
                         
                         <!-- If open, check results -->
                         <div th:if="${activeDays.contains(dayName)}">
-                            <div class="panel-cell" th:each="record : ${week.value}" th:if="${record.resultDate != null and record.resultDate.equals(targetDate)}"
-                                 th:attr="onclick=${isEditMode} ? 'setPanelEdit(''' + ${targetDate} + ''', ''' + ${record.openPanel} + ''', ''' + ${record.jodi} + ''', ''' + ${record.closePanel} + ''')' : null"
-                                 th:style="${isEditMode} ? 'cursor: pointer;' : ''">
+                            <div class="panel-cell" th:each="record : ${week.value}" th:if="${record.resultDate != null and record.resultDate.equals(targetDate)}">
                                 
                                 <!-- Left stacked digits (Open Panel) -->
                                 <div class="stacked-digits">
@@ -128,15 +102,5 @@
             </tr>
         </tbody>
     </table>
-
-    <script th:if="${isEditMode}">
-        function setPanelEdit(dateStr, openPana, jodiVal, closePana) {
-            document.getElementById('panelResultDate').value = dateStr;
-            document.getElementById('openPanaInput').value = (openPana && openPana !== 'null') ? openPana : '';
-            document.getElementById('panelJodiInput').value = (jodiVal && jodiVal !== 'null') ? jodiVal : '';
-            document.getElementById('closePanaInput').value = (closePana && closePana !== 'null') ? closePana : '';
-            document.getElementById('openPanaInput').focus();
-        }
-    </script>
 </body>
 </html>
