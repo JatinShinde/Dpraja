@@ -66,7 +66,7 @@
         <form th:action="@{/admin/update-panel-history}" method="post" class="edit-form">
             <input type="hidden" name="gameName" th:value="${gameName}">
             <label style="color: white; font-size: 14px;">Date:</label>
-            <input type="date" id="panelResultDate" name="resultDate" required th:value="${#temporals.format(currentDate, 'yyyy-MM-dd')}">
+            <input type="date" id="panelResultDate" name="resultDate" required th:value="${currentDate}">
             <label style="color: white; font-size: 14px;">Open Pana:</label>
             <input type="text" id="openPanaInput" name="openPanel" placeholder="e.g. 128" style="width: 70px;">
             <label style="color: white; font-size: 14px;">Jodi:</label>

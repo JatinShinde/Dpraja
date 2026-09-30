@@ -29,7 +29,7 @@
         <form th:action="@{/admin/update-jodi-history}" method="post" class="edit-form">
             <input type="hidden" name="gameName" th:value="${gameName}">
             <label style="color: white; font-size: 14px;">Date:</label>
-            <input type="date" id="jodiResultDate" name="resultDate" required th:value="${#temporals.format(currentDate, 'yyyy-MM-dd')}">
+            <input type="date" id="jodiResultDate" name="resultDate" required th:value="${currentDate}">
             <label style="color: white; font-size: 14px;">Jodi:</label>
             <input type="text" id="jodiValInput" name="jodi" placeholder="e.g. 58" style="width: 80px;" required>
             <button type="submit">Save Jodi</button>

@@ -629,7 +629,7 @@ public class MainController {
 		model.addAttribute("gameName", name);
 		model.addAttribute("activeDays", activeDays);
 		model.addAttribute("isEditMode", edit);
-		model.addAttribute("currentDate", LocalDate.now(ZoneId.of("Asia/Kolkata")));
+		model.addAttribute("currentDate", LocalDate.now(ZoneId.of("Asia/Kolkata")).toString());
 		return "jodi-chart";
 	}
 
@@ -661,7 +661,7 @@ public class MainController {
 		model.addAttribute("gameName", name);
 		model.addAttribute("activeDays", activeDays);
 		model.addAttribute("isEditMode", edit);
-		model.addAttribute("currentDate", LocalDate.now(ZoneId.of("Asia/Kolkata")));
+		model.addAttribute("currentDate", LocalDate.now(ZoneId.of("Asia/Kolkata")).toString());
 
 		return "panel-chart";
 	}
@@ -693,7 +693,9 @@ public class MainController {
 			redirectAttributes.addFlashAttribute("errorMsg", "Failed to update Jodi: " + e.getMessage());
 		}
 
-		return "redirect:/jodi-chart?name=" + gameName + "&edit=true";
+		String encodedName = gameName;
+		try { encodedName = java.net.URLEncoder.encode(gameName.trim(), "UTF-8"); } catch (Exception ignored) {}
+		return "redirect:/jodi-chart?name=" + encodedName + "&edit=true";
 	}
 
 	@PostMapping("/admin/update-panel-history")
@@ -728,7 +730,9 @@ public class MainController {
 			redirectAttributes.addFlashAttribute("errorMsg", "Failed to update Panel: " + e.getMessage());
 		}
 
-		return "redirect:/panel-chart?name=" + gameName + "&edit=true";
+		String encodedName = gameName;
+		try { encodedName = java.net.URLEncoder.encode(gameName.trim(), "UTF-8"); } catch (Exception ignored) {}
+		return "redirect:/panel-chart?name=" + encodedName + "&edit=true";
 	}
 
 	private Map<LocalDate, List<GameHistory>> buildWeeklyMap(String name) {
