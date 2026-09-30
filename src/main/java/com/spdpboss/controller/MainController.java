@@ -741,6 +741,7 @@ public class MainController {
 
 		// Group existing records by Monday of their week
 		Map<LocalDate, List<GameHistory>> weeksMap = historyList.stream()
+				.filter(r -> r != null && r.getResultDate() != null)
 				.collect(Collectors.groupingBy(
 						r -> r.getResultDate().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)),
 						TreeMap::new,

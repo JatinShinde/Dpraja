@@ -50,17 +50,17 @@
                     <span th:text="${#temporals.format(week.key.plusDays(6), 'dd/MM/yyyy')}"></span>
                 </td>
                 <td th:each="dayOffset : ${#numbers.sequence(0, 6)}">
-                    <div th:with="targetDate=${week.key.plusDays(dayOffset)}, dayName=${#temporals.format(week.key.plusDays(dayOffset), 'E')}">
+                    <div th:with="targetDate=${week.key.plusDays(dayOffset)}, dayName=${#strings.capitalize(#strings.toLowerCase(#strings.substring(targetDate.dayOfWeek.name(), 0, 3)))}">
                         <!-- If closed, show red double slash -->
                         <span th:if="${!activeDays.contains(dayName)}" style="color: #B91C1C; font-size: 18px; font-weight: bold;">-</span>
                         
                         <!-- If open, check results -->
                         <div th:if="${activeDays.contains(dayName)}" style="display:inline;"
-                             th:attr="onclick=${isEditMode} ? 'setJodiEdit(''' + ${#temporals.format(targetDate, 'yyyy-MM-dd')} + ''')' : null"
+                             th:attr="onclick=${isEditMode} ? 'setJodiEdit(''' + ${targetDate} + ''')' : null"
                              th:style="${isEditMode} ? 'cursor: pointer;' : ''">
                             <span class="jodi-val" 
                                   th:each="record : ${week.value}"
-                                  th:if="${#temporals.format(record.resultDate, 'yyyy-MM-dd') == #temporals.format(targetDate, 'yyyy-MM-dd')}" 
+                                  th:if="${record.resultDate != null and record.resultDate.equals(targetDate)}" 
                                   th:classappend="${record.isRedJodi() ? 'red-jodi' : ''}"
                                   th:text="${record.jodi}"
                                   th:attr="data-jodi=${record.jodi}"></span>
