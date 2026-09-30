@@ -756,14 +756,15 @@ public class MainController {
 						Collectors.toList()));
 
 		LocalDate currentMonday = LocalDate.now(ZoneId.of("Asia/Kolkata")).with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+		LocalDate maxPastMonday = currentMonday.minusWeeks(100);
 
 		LocalDate startMonday;
 		if (!weeksMap.isEmpty()) {
 			LocalDate earliestRecordedMonday = weeksMap.keySet().iterator().next();
-			if (earliestRecordedMonday != null && !earliestRecordedMonday.isAfter(currentMonday)) {
+			if (earliestRecordedMonday != null && !earliestRecordedMonday.isBefore(maxPastMonday) && !earliestRecordedMonday.isAfter(currentMonday)) {
 				startMonday = earliestRecordedMonday;
 			} else {
-				startMonday = currentMonday.minusWeeks(10);
+				startMonday = maxPastMonday;
 			}
 		} else {
 			startMonday = currentMonday.minusWeeks(10);
@@ -774,6 +775,8 @@ public class MainController {
 			weeksMap.putIfAbsent(curr, new ArrayList<>());
 			curr = curr.plusWeeks(1);
 		}
+
+		weeksMap.keySet().removeIf(key -> key == null || key.isBefore(startMonday) || key.isAfter(currentMonday));
 
 		return weeksMap;
 	}
