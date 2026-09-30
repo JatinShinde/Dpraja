@@ -631,6 +631,7 @@ public class MainController {
 		model.addAttribute("weeks", weeks);
 		model.addAttribute("gameName", safeName);
 		model.addAttribute("activeDays", activeDays);
+		model.addAttribute("dayNames", Arrays.asList("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"));
 		model.addAttribute("isEditMode", edit);
 		model.addAttribute("currentDate", LocalDate.now(ZoneId.of("Asia/Kolkata")).toString());
 		return "jodi-chart";
@@ -666,6 +667,7 @@ public class MainController {
 		model.addAttribute("weeks", weeks);
 		model.addAttribute("gameName", safeName);
 		model.addAttribute("activeDays", activeDays);
+		model.addAttribute("dayNames", Arrays.asList("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"));
 		model.addAttribute("isEditMode", edit);
 		model.addAttribute("currentDate", LocalDate.now(ZoneId.of("Asia/Kolkata")).toString());
 
