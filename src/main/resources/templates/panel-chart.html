@@ -87,8 +87,8 @@
         <tbody>
             <tr th:each="week : ${weeks}">
                 <td class="date-col">
-                    <span th:text="${#temporals.format(week.key, 'dd/MM/yyyy')}"></span><br>to<br>
-                    <span th:text="${#temporals.format(week.key.plusDays(6), 'dd/MM/yyyy')}"></span>
+                    <span th:text="${week.key.format(T(java.time.format.DateTimeFormatter).ofPattern('dd/MM/yyyy'))}"></span><br>to<br>
+                    <span th:text="${week.key.plusDays(6).format(T(java.time.format.DateTimeFormatter).ofPattern('dd/MM/yyyy'))}"></span>
                 </td>
                 
                 <td th:each="dayOffset : ${#numbers.sequence(0, 6)}">
