@@ -754,12 +754,22 @@
                     <div class="section-title-admin">
                         <i class="fa-solid fa-clock-rotate-left text-primary"></i> Historical Chart Result Updates
                     </div>
-                    <p class="text-muted">Select a market to update past chart history records:</p>
+                    <p class="text-muted">Select a market to view Jodi/Panel chart or edit past result records:</p>
                     <div class="list-group">
-                        <a th:each="g : ${allResults}" th:href="@{'/jodi-chart?name=' + ${g.gameName}}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                            <span class="fw-bold" th:text="${g.gameName}">KALYAN</span>
-                            <span class="badge bg-dark rounded-pill">View Chart →</span>
-                        </a>
+                        <div th:each="g : ${allResults}" class="list-group-item list-group-item-action d-flex flex-wrap justify-content-between align-items-center py-2">
+                            <span class="fw-bold fs-6 text-dark" th:text="${g.gameName}">KALYAN</span>
+                            <div class="d-flex gap-2 align-items-center mt-2 mt-sm-0">
+                                <a th:href="@{'/jodi-chart?name=' + ${g.gameName}}" target="_blank" class="btn btn-sm btn-outline-primary fw-bold">
+                                    <i class="fa-solid fa-table-cells me-1"></i> Jodi Chart
+                                </a>
+                                <a th:href="@{'/panel-chart?name=' + ${g.gameName}}" target="_blank" class="btn btn-sm btn-outline-dark fw-bold">
+                                    <i class="fa-solid fa-list-ol me-1"></i> Panel Chart
+                                </a>
+                                <a th:href="@{'/admin?section=market-edit&id=' + ${g.id}}" class="btn btn-sm btn-danger fw-bold">
+                                    <i class="fa-solid fa-pen-to-square me-1"></i> Edit Chart
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1033,6 +1043,18 @@
             targetPanel.style.display = 'block';
         }
     }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const editId = urlParams.get('id');
+        if (editId) {
+            const selectElem = document.getElementById('marketEditSelect');
+            if (selectElem) {
+                selectElem.value = editId;
+                switchEditMarketPanel(editId);
+            }
+        }
+    });
 
     function switchFreeFixMarketPanel(selectedId) {
         document.querySelectorAll('.free-fix-market-panel').forEach(panel => panel.style.display = 'none');

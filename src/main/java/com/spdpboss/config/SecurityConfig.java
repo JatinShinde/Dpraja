@@ -1,5 +1,7 @@
 package com.spdpboss.config;
 
+import com.spdpboss.model.TodayFinal;
+import com.spdpboss.repository.TodayFinalRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -7,7 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -39,15 +41,23 @@ public class SecurityConfig {
 	}
 
     @Bean
-    public UserDetailsService userDetailsService() {
-        // Username: admin | Password: admin123
-        @SuppressWarnings("deprecation")
-        UserDetails user = User.withDefaultPasswordEncoder()
-                .username("admin")
-                .password("Raje@0909")
-                .roles("ADMIN")
-                .build();
+    public UserDetailsService userDetailsService(TodayFinalRepository todayFinalRepository) {
+        return username -> {
+            if ("admin".equalsIgnoreCase(username)) {
+                String pwd = todayFinalRepository.findById(17L)
+                        .map(TodayFinal::getContent)
+                        .filter(c -> c != null && !c.trim().isEmpty())
+                        .orElse("Raje@0909");
 
-        return new InMemoryUserDetailsManager(user);
+                @SuppressWarnings("deprecation")
+                UserDetails user = User.withDefaultPasswordEncoder()
+                        .username("admin")
+                        .password(pwd)
+                        .roles("ADMIN")
+                        .build();
+                return user;
+            }
+            throw new UsernameNotFoundException("User not found: " + username);
+        };
     }
 }

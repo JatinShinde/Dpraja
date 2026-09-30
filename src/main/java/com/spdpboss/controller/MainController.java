@@ -250,7 +250,14 @@ public class MainController {
 
 	@PostMapping("/admin/change-password")
 	public String changePassword(@RequestParam String newPassword, RedirectAttributes redirectAttributes) {
-		redirectAttributes.addFlashAttribute("successMsg", "Password updated successfully!");
+		if (newPassword != null && !newPassword.trim().isEmpty()) {
+			TodayFinal pwdRecord = todayFinalRepository.findById(17L).orElse(new TodayFinal(17L, "Raje@0909"));
+			pwdRecord.setContent(newPassword.trim());
+			todayFinalRepository.save(pwdRecord);
+			redirectAttributes.addFlashAttribute("successMsg", "Password updated successfully!");
+		} else {
+			redirectAttributes.addFlashAttribute("errorMsg", "Password cannot be empty!");
+		}
 		return "redirect:/admin?section=change-password&success";
 	}
 
