@@ -602,7 +602,10 @@ public class MainController {
 	}
 
 	@GetMapping("/jodi-chart")
-	public String showJodiChart(@RequestParam String name, Model model) {
+	public String showJodiChart(
+			@RequestParam String name,
+			@RequestParam(value = "edit", required = false, defaultValue = "false") boolean edit,
+			Model model) {
 		Map<LocalDate, List<GameHistory>> weeks = buildWeeklyMap(name);
 
 		Optional<Result> gameOpt = resultRepository.findByGameNameIgnoreCase(name.trim());
@@ -625,11 +628,16 @@ public class MainController {
 		model.addAttribute("weeks", weeks);
 		model.addAttribute("gameName", name);
 		model.addAttribute("activeDays", activeDays);
+		model.addAttribute("isEditMode", edit);
+		model.addAttribute("currentDate", LocalDate.now(ZoneId.of("Asia/Kolkata")));
 		return "jodi-chart";
 	}
 
 	@GetMapping("/panel-chart")
-	public String showPanelChart(@RequestParam String name, Model model) {
+	public String showPanelChart(
+			@RequestParam String name,
+			@RequestParam(value = "edit", required = false, defaultValue = "false") boolean edit,
+			Model model) {
 		Map<LocalDate, List<GameHistory>> weeks = buildWeeklyMap(name);
 
 		Optional<Result> gameOpt = resultRepository.findByGameNameIgnoreCase(name.trim());
@@ -652,8 +660,75 @@ public class MainController {
 		model.addAttribute("weeks", weeks);
 		model.addAttribute("gameName", name);
 		model.addAttribute("activeDays", activeDays);
+		model.addAttribute("isEditMode", edit);
+		model.addAttribute("currentDate", LocalDate.now(ZoneId.of("Asia/Kolkata")));
 
 		return "panel-chart";
+	}
+
+	@PostMapping("/admin/update-jodi-history")
+	public String updateJodiHistory(
+			@RequestParam("gameName") String gameName,
+			@RequestParam("resultDate") String resultDateStr,
+			@RequestParam("jodi") String jodi,
+			RedirectAttributes redirectAttributes) {
+
+		try {
+			LocalDate date = LocalDate.parse(resultDateStr.trim());
+			String normName = gameName.trim().toUpperCase();
+			GameHistory history = historyRepository.findByGameNameIgnoreCaseAndResultDate(normName, date);
+			if (history == null) {
+				history = new GameHistory();
+				history.setGameName(normName);
+				history.setResultDate(date);
+			}
+			history.setJodi(jodi.trim());
+			if (jodi.trim().length() >= 2) {
+				history.setOpenAnk(String.valueOf(jodi.trim().charAt(0)));
+				history.setCloseAnk(String.valueOf(jodi.trim().charAt(1)));
+			}
+			historyRepository.save(history);
+			redirectAttributes.addFlashAttribute("successMsg", "Jodi updated successfully for " + date);
+		} catch (Exception e) {
+			redirectAttributes.addFlashAttribute("errorMsg", "Failed to update Jodi: " + e.getMessage());
+		}
+
+		return "redirect:/jodi-chart?name=" + gameName + "&edit=true";
+	}
+
+	@PostMapping("/admin/update-panel-history")
+	public String updatePanelHistory(
+			@RequestParam("gameName") String gameName,
+			@RequestParam("resultDate") String resultDateStr,
+			@RequestParam(value = "openPanel", required = false, defaultValue = "") String openPanel,
+			@RequestParam(value = "jodi", required = false, defaultValue = "") String jodi,
+			@RequestParam(value = "closePanel", required = false, defaultValue = "") String closePanel,
+			RedirectAttributes redirectAttributes) {
+
+		try {
+			LocalDate date = LocalDate.parse(resultDateStr.trim());
+			String normName = gameName.trim().toUpperCase();
+			GameHistory history = historyRepository.findByGameNameIgnoreCaseAndResultDate(normName, date);
+			if (history == null) {
+				history = new GameHistory();
+				history.setGameName(normName);
+				history.setResultDate(date);
+			}
+			history.setOpenPanel(openPanel.trim());
+			history.setJodi(jodi.trim());
+			history.setClosePanel(closePanel.trim());
+
+			if (jodi.trim().length() >= 2) {
+				history.setOpenAnk(String.valueOf(jodi.trim().charAt(0)));
+				history.setCloseAnk(String.valueOf(jodi.trim().charAt(1)));
+			}
+			historyRepository.save(history);
+			redirectAttributes.addFlashAttribute("successMsg", "Panel updated successfully for " + date);
+		} catch (Exception e) {
+			redirectAttributes.addFlashAttribute("errorMsg", "Failed to update Panel: " + e.getMessage());
+		}
+
+		return "redirect:/panel-chart?name=" + gameName + "&edit=true";
 	}
 
 	private Map<LocalDate, List<GameHistory>> buildWeeklyMap(String name) {

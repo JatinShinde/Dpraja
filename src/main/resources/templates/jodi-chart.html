@@ -11,11 +11,30 @@
         th { background: #F7F4EC; color: #1E293B; }
         .jodi-val { color: #1E293B; font-size: 18px; font-weight: bold; }
         .jodi-val.red-jodi { color: #B91C1C !important; }
+        .edit-banner { background: #B91C1C; color: #fff; padding: 12px; margin: 10px auto; width: 95%; border-radius: 6px; box-sizing: border-box; }
+        .edit-form { display: flex; justify-content: center; gap: 10px; align-items: center; margin-top: 8px; flex-wrap: wrap; }
+        .edit-form input { padding: 6px 10px; border-radius: 4px; border: 1px solid #ccc; font-weight: bold; }
+        .edit-form button { background: #1E293B; color: white; padding: 6px 15px; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
     <div class="brand">DPRAJA.COM</div>
     <div class="chart-title">[[${gameName}]] JODI CHART</div>
+
+    <!-- ADMIN EDIT MODE BAR -->
+    <div th:if="${isEditMode}" class="edit-banner">
+        <div style="font-weight: bold; font-size: 16px;">✏️ ADMIN EDIT MODE - EDIT JODI CHART</div>
+        <div th:if="${successMsg}" style="color: #4ADE80; font-weight: bold; margin-top: 4px;" th:text="${successMsg}"></div>
+        <div th:if="${errorMsg}" style="color: #F87171; font-weight: bold; margin-top: 4px;" th:text="${errorMsg}"></div>
+        <form th:action="@{/admin/update-jodi-history}" method="post" class="edit-form">
+            <input type="hidden" name="gameName" th:value="${gameName}">
+            <label style="color: white; font-size: 14px;">Date:</label>
+            <input type="date" id="jodiResultDate" name="resultDate" required th:value="${#temporals.format(currentDate, 'yyyy-MM-dd')}">
+            <label style="color: white; font-size: 14px;">Jodi:</label>
+            <input type="text" id="jodiValInput" name="jodi" placeholder="e.g. 58" style="width: 80px;" required>
+            <button type="submit">Save Jodi</button>
+        </form>
+    </div>
 
     <table>
         <thead>
@@ -36,17 +55,30 @@
                         <span th:if="${!activeDays.contains(dayName)}" style="color: #B91C1C; font-size: 18px; font-weight: bold;">-</span>
                         
                         <!-- If open, check results -->
-                        <div th:if="${activeDays.contains(dayName)}" style="display:inline;">
+                        <div th:if="${activeDays.contains(dayName)}" style="display:inline;"
+                             th:attr="onclick=${isEditMode} ? 'setJodiEdit(''' + ${#temporals.format(targetDate, 'yyyy-MM-dd')} + ''')' : null"
+                             th:style="${isEditMode} ? 'cursor: pointer;' : ''">
                             <span class="jodi-val" 
                                   th:each="record : ${week.value}"
                                   th:if="${#temporals.format(record.resultDate, 'yyyy-MM-dd') == #temporals.format(targetDate, 'yyyy-MM-dd')}" 
                                   th:classappend="${record.isRedJodi() ? 'red-jodi' : ''}"
-                                  th:text="${record.jodi}"></span>
+                                  th:text="${record.jodi}"
+                                  th:attr="data-jodi=${record.jodi}"></span>
                         </div>
                     </div>
                 </td>
             </tr>
         </tbody>
     </table>
+
+    <script th:if="${isEditMode}">
+        function setJodiEdit(dateStr) {
+            document.getElementById('jodiResultDate').value = dateStr;
+            const clickedCell = event.currentTarget;
+            const valSpan = clickedCell.querySelector('.jodi-val');
+            document.getElementById('jodiValInput').value = valSpan ? valSpan.innerText.trim() : '';
+            document.getElementById('jodiValInput').focus();
+        }
+    </script>
 </body>
 </html>
