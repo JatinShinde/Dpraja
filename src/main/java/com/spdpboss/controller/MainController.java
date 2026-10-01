@@ -608,8 +608,6 @@ public class MainController {
 			Model model) {
 		try {
 			String safeName = (name != null) ? name.trim() : "";
-			List<ChartWeek> weeks = buildWeeklyMap(safeName);
-
 			Optional<Result> gameOpt = safeName.isEmpty() ? Optional.empty() : resultRepository.findByGameNameIgnoreCase(safeName);
 			List<String> activeDays = new ArrayList<>();
 			String daysStr = null;
@@ -629,10 +627,10 @@ public class MainController {
 				activeDays = Arrays.asList("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat");
 			}
 
+			List<ChartWeek> weeks = buildWeeklyMap(safeName, activeDays);
+
 			model.addAttribute("weeks", weeks != null ? weeks : new ArrayList<>());
 			model.addAttribute("gameName", safeName);
-			model.addAttribute("activeDays", activeDays);
-			model.addAttribute("dayNames", Arrays.asList("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"));
 			model.addAttribute("isEditMode", edit);
 			model.addAttribute("currentDate", LocalDate.now(ZoneId.of("Asia/Kolkata")).toString());
 		} catch (Exception e) {
@@ -640,8 +638,6 @@ public class MainController {
 			e.printStackTrace();
 			model.addAttribute("weeks", new ArrayList<>());
 			model.addAttribute("gameName", name != null ? name : "");
-			model.addAttribute("activeDays", Arrays.asList("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"));
-			model.addAttribute("dayNames", Arrays.asList("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"));
 			model.addAttribute("isEditMode", edit);
 			model.addAttribute("currentDate", LocalDate.now(ZoneId.of("Asia/Kolkata")).toString());
 		}
@@ -655,8 +651,6 @@ public class MainController {
 			Model model) {
 		try {
 			String safeName = (name != null) ? name.trim() : "";
-			List<ChartWeek> weeks = buildWeeklyMap(safeName);
-
 			Optional<Result> gameOpt = safeName.isEmpty() ? Optional.empty() : resultRepository.findByGameNameIgnoreCase(safeName);
 			List<String> activeDays = new ArrayList<>();
 			String daysStr = null;
@@ -676,10 +670,10 @@ public class MainController {
 				activeDays = Arrays.asList("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat");
 			}
 
+			List<ChartWeek> weeks = buildWeeklyMap(safeName, activeDays);
+
 			model.addAttribute("weeks", weeks != null ? weeks : new ArrayList<>());
 			model.addAttribute("gameName", safeName);
-			model.addAttribute("activeDays", activeDays);
-			model.addAttribute("dayNames", Arrays.asList("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"));
 			model.addAttribute("isEditMode", edit);
 			model.addAttribute("currentDate", LocalDate.now(ZoneId.of("Asia/Kolkata")).toString());
 		} catch (Exception e) {
@@ -687,8 +681,6 @@ public class MainController {
 			e.printStackTrace();
 			model.addAttribute("weeks", new ArrayList<>());
 			model.addAttribute("gameName", name != null ? name : "");
-			model.addAttribute("activeDays", Arrays.asList("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"));
-			model.addAttribute("dayNames", Arrays.asList("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"));
 			model.addAttribute("isEditMode", edit);
 			model.addAttribute("currentDate", LocalDate.now(ZoneId.of("Asia/Kolkata")).toString());
 		}
@@ -765,7 +757,7 @@ public class MainController {
 		return "redirect:/panel-chart?name=" + encodedName + "&edit=true";
 	}
 
-	private List<ChartWeek> buildWeeklyMap(String name) {
+	private List<ChartWeek> buildWeeklyMap(String name, List<String> activeDays) {
 		try {
 			String normName = (name != null) ? name.trim().toUpperCase() : "";
 			List<GameHistory> historyList = normName.isEmpty() ? new ArrayList<>() : historyRepository.findByGameNameIgnoreCaseOrderByResultDateDesc(normName);
@@ -773,44 +765,47 @@ public class MainController {
 				historyList = new ArrayList<>();
 			}
 
-			// Group existing records by Monday of their week
-			Map<LocalDate, List<GameHistory>> weeksMap = historyList.stream()
-					.filter(r -> r != null && r.getResultDate() != null)
-					.collect(Collectors.groupingBy(
-							r -> r.getResultDate().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)),
-							TreeMap::new,
-							Collectors.toList()));
+			Map<LocalDate, GameHistory> historyByDate = new HashMap<>();
+			for (GameHistory h : historyList) {
+				if (h != null && h.getResultDate() != null) {
+					historyByDate.put(h.getResultDate(), h);
+				}
+			}
 
 			LocalDate currentMonday = LocalDate.now(ZoneId.of("Asia/Kolkata")).with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
 			LocalDate maxPastMonday = currentMonday.minusWeeks(100);
 
-			LocalDate startMonday;
-			if (!weeksMap.isEmpty()) {
-				LocalDate earliestRecordedMonday = weeksMap.keySet().iterator().next();
-				if (earliestRecordedMonday != null && !earliestRecordedMonday.isBefore(maxPastMonday) && !earliestRecordedMonday.isAfter(currentMonday)) {
-					startMonday = earliestRecordedMonday;
-				} else {
+			LocalDate startMonday = currentMonday.minusWeeks(10);
+			if (!historyByDate.isEmpty()) {
+				LocalDate earliest = historyByDate.keySet().stream().min(LocalDate::compareTo).orElse(currentMonday);
+				LocalDate earliestMonday = earliest.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+				if (!earliestMonday.isBefore(maxPastMonday) && !earliestMonday.isAfter(currentMonday)) {
+					startMonday = earliestMonday;
+				} else if (earliestMonday.isBefore(maxPastMonday)) {
 					startMonday = maxPastMonday;
 				}
-			} else {
-				startMonday = currentMonday.minusWeeks(10);
 			}
+
+			String[] dayNames = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
+			DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+			List<ChartWeek> resultWeeks = new ArrayList<>();
 
 			LocalDate curr = startMonday;
 			while (!curr.isAfter(currentMonday)) {
-				weeksMap.putIfAbsent(curr, new ArrayList<>());
+				LocalDate sun = curr.plusDays(6);
+				String rangeStr = curr.format(fmt) + " to " + sun.format(fmt);
+
+				List<DayCell> weekDays = new ArrayList<>();
+				for (int i = 0; i < 7; i++) {
+					LocalDate d = curr.plusDays(i);
+					String dName = dayNames[i];
+					boolean isActive = (activeDays != null) && activeDays.contains(dName);
+					GameHistory rec = historyByDate.get(d);
+					weekDays.add(new DayCell(d, dName, isActive, rec));
+				}
+
+				resultWeeks.add(new ChartWeek(curr, rangeStr, weekDays));
 				curr = curr.plusWeeks(1);
-			}
-
-			weeksMap.keySet().removeIf(key -> key == null || key.isBefore(startMonday) || key.isAfter(currentMonday));
-
-			DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-			List<ChartWeek> resultWeeks = new ArrayList<>();
-			for (Map.Entry<LocalDate, List<GameHistory>> entry : weeksMap.entrySet()) {
-				LocalDate m = entry.getKey();
-				LocalDate sun = m.plusDays(6);
-				String rangeStr = m.format(fmt) + " to " + sun.format(fmt);
-				resultWeeks.add(new ChartWeek(m, rangeStr, entry.getValue()));
 			}
 
 			return resultWeeks;

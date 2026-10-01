@@ -64,35 +64,33 @@
             <tr th:each="week : ${weeks}">
                 <td class="date-col" th:text="${week.dateRangeStr}"></td>
                 
-                <td th:each="dayOffset : ${#numbers.sequence(0, 6)}">
-                    <div th:with="targetDate=${week.startDate.plusDays(dayOffset)}, dayName=${dayNames[dayOffset]}">
-                        <!-- If closed, show red double slash -->
-                        <span th:if="${activeDays != null and !activeDays.contains(dayName)}" style="color: #B91C1C; font-size: 20px; font-weight: bold;">-</span>
-                        
-                        <!-- If open, check results -->
-                        <div th:if="${activeDays != null and activeDays.contains(dayName)}">
-                            <div class="panel-cell" th:each="record : ${week.records}" th:if="${record != null and record.resultDate != null and record.resultDate.equals(targetDate)}">
-                                
-                                <!-- Left stacked digits (Open Panel) -->
-                                <div class="stacked-digits">
-                                    <span th:if="${record.openPanel != null and record.openPanel.length() == 3}" th:text="${record.openPanel.substring(0, 1)}"></span>
-                                    <span th:if="${record.openPanel != null and record.openPanel.length() == 3}" th:text="${record.openPanel.substring(1, 2)}"></span>
-                                    <span th:if="${record.openPanel != null and record.openPanel.length() == 3}" th:text="${record.openPanel.substring(2, 3)}"></span>
-                                    <span th:if="${record.openPanel == null or record.openPanel.length() != 3}">-</span>
-                                </div>
-                                
-                                <!-- Middle Jodi -->
-                                <div class="jodi-display" th:classappend="${record.redJodi ? 'red-jodi' : ''}" th:text="${record.jodi ?: '--'}"></div>
-                                
-                                <!-- Right stacked digits (Close Panel) -->
-                                <div class="stacked-digits">
-                                    <span th:if="${record.closePanel != null and record.closePanel.length() == 3}" th:text="${record.closePanel.substring(0, 1)}"></span>
-                                    <span th:if="${record.closePanel != null and record.closePanel.length() == 3}" th:text="${record.closePanel.substring(1, 2)}"></span>
-                                    <span th:if="${record.closePanel != null and record.closePanel.length() == 3}" th:text="${record.closePanel.substring(2, 3)}"></span>
-                                    <span th:if="${record.closePanel == null or record.closePanel.length() != 3}">-</span>
-                                </div>
-                                
+                <td th:each="cell : ${week.days}">
+                    <!-- If closed, show red double slash -->
+                    <span th:if="${!cell.active}" style="color: #B91C1C; font-size: 20px; font-weight: bold;">-</span>
+                    
+                    <!-- If open, check results -->
+                    <div th:if="${cell.active}">
+                        <div class="panel-cell" th:if="${cell.record != null}">
+                            
+                            <!-- Left stacked digits (Open Panel) -->
+                            <div class="stacked-digits">
+                                <span th:if="${cell.record.openPanel != null and cell.record.openPanel.length() == 3}" th:text="${cell.record.openPanel.substring(0, 1)}"></span>
+                                <span th:if="${cell.record.openPanel != null and cell.record.openPanel.length() == 3}" th:text="${cell.record.openPanel.substring(1, 2)}"></span>
+                                <span th:if="${cell.record.openPanel != null and cell.record.openPanel.length() == 3}" th:text="${cell.record.openPanel.substring(2, 3)}"></span>
+                                <span th:if="${cell.record.openPanel == null or cell.record.openPanel.length() != 3}">-</span>
                             </div>
+                            
+                            <!-- Middle Jodi -->
+                            <div class="jodi-display" th:classappend="${cell.record.redJodi ? 'red-jodi' : ''}" th:text="${cell.record.jodi ?: '--'}"></div>
+                            
+                            <!-- Right stacked digits (Close Panel) -->
+                            <div class="stacked-digits">
+                                <span th:if="${cell.record.closePanel != null and cell.record.closePanel.length() == 3}" th:text="${cell.record.closePanel.substring(0, 1)}"></span>
+                                <span th:if="${cell.record.closePanel != null and cell.record.closePanel.length() == 3}" th:text="${cell.record.closePanel.substring(1, 2)}"></span>
+                                <span th:if="${cell.record.closePanel != null and cell.record.closePanel.length() == 3}" th:text="${cell.record.closePanel.substring(2, 3)}"></span>
+                                <span th:if="${cell.record.closePanel == null or cell.record.closePanel.length() != 3}">-</span>
+                            </div>
+                            
                         </div>
                     </div>
                 </td>

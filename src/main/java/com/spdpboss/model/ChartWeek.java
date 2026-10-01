@@ -1,19 +1,20 @@
 package com.spdpboss.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ChartWeek {
     private LocalDate startDate;
     private String dateRangeStr;
-    private List<GameHistory> records;
+    private List<DayCell> days = new ArrayList<>();
 
     public ChartWeek() {}
 
-    public ChartWeek(LocalDate startDate, String dateRangeStr, List<GameHistory> records) {
+    public ChartWeek(LocalDate startDate, String dateRangeStr, List<DayCell> days) {
         this.startDate = startDate;
         this.dateRangeStr = dateRangeStr;
-        this.records = records;
+        this.days = days != null ? days : new ArrayList<>();
     }
 
     public LocalDate getStartDate() {
@@ -32,11 +33,11 @@ public class ChartWeek {
         this.dateRangeStr = dateRangeStr;
     }
 
-    public List<GameHistory> getRecords() {
-        return records;
+    public List<DayCell> getDays() {
+        return days;
     }
 
-    public void setRecords(List<GameHistory> records) {
-        this.records = records;
+    public void setDays(List<DayCell> days) {
+        this.days = days;
     }
 }
