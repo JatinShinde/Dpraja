@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "game_history")
+@Table(name = "game_history", uniqueConstraints = {
+    @UniqueConstraint(name = "uk_game_history_market_date", columnNames = {"game_name", "result_date"})
+})
 public class GameHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

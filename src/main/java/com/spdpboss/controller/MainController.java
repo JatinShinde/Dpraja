@@ -344,7 +344,7 @@ public class MainController {
 					: LocalDate.now(ZoneId.of("Asia/Kolkata"));
 
 			// 1. Update GameHistory (for web frontend template)
-			GameHistory gameHistory = historyRepository.findByGameNameAndResultDate(gameName, dateObj);
+			GameHistory gameHistory = historyRepository.findFirstByGameNameIgnoreCaseAndResultDate(gameName, dateObj);
 			if (gameHistory == null) {
 				gameHistory = new GameHistory();
 				gameHistory.setGameName(gameName);
@@ -358,7 +358,7 @@ public class MainController {
 			historyRepository.save(gameHistory);
 
 			// 2. Update GameRecord (for mobile app API)
-			GameRecord record = gameRecordRepository.findByGameNameAndDate(gameName, dateObj);
+			GameRecord record = gameRecordRepository.findFirstByGameNameIgnoreCaseAndDate(gameName, dateObj);
 			if (record == null) {
 				record = new GameRecord();
 				record.setGameName(gameName);
@@ -540,7 +540,9 @@ public class MainController {
 
 			String normGameName = game.getGameName().toUpperCase().trim();
 			LocalDate todayIST = LocalDate.now(ZoneId.of("Asia/Kolkata"));
-			GameHistory gameHistory = historyRepository.findByGameNameAndResultDate(normGameName, todayIST);
+
+			// 1. Update GameHistory
+			GameHistory gameHistory = historyRepository.findFirstByGameNameIgnoreCaseAndResultDate(normGameName, todayIST);
 			if (gameHistory == null) {
 				gameHistory = new GameHistory();
 				gameHistory.setGameName(normGameName);
@@ -552,6 +554,31 @@ public class MainController {
 			gameHistory.setClosePanel(game.getClosePanel());
 			gameHistory.setJodi(game.getJodi());
 			historyRepository.save(gameHistory);
+
+			// 2. Update GameRecord
+			GameRecord record = gameRecordRepository.findFirstByGameNameIgnoreCaseAndDate(normGameName, todayIST);
+			if (record == null) {
+				record = new GameRecord();
+				record.setGameName(normGameName);
+				record.setDate(todayIST);
+			}
+			record.setOpenPanel(game.getOpenPanel());
+			record.setClosePanel(game.getClosePanel());
+			record.setJodi(game.getJodi());
+
+			String oP = game.getOpenPanel();
+			if (oP != null && oP.length() == 3) {
+				record.setOpen1(oP.substring(0, 1));
+				record.setOpen2(oP.substring(1, 2));
+				record.setOpen3(oP.substring(2, 3));
+			}
+			String cP = game.getClosePanel();
+			if (cP != null && cP.length() == 3) {
+				record.setClose1(cP.substring(0, 1));
+				record.setClose2(cP.substring(1, 2));
+				record.setClose3(cP.substring(2, 3));
+			}
+			gameRecordRepository.save(record);
 		}
 
 		return "redirect:/admin?section=" + redirectSection + "&selectedId=" + id + "&success";
@@ -601,6 +628,45 @@ public class MainController {
 		return "redirect:/login";
 	}
 
+	private Set<String> parseActiveDays(String daysStr) {
+		Set<String> activeDays = new HashSet<>();
+		if (daysStr == null || daysStr.trim().isEmpty()) {
+			activeDays.addAll(Arrays.asList("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"));
+			return activeDays;
+		}
+		String s = daysStr.trim().toUpperCase();
+		if (s.contains("DAILY") || s.contains("ALL") || s.contains("7 DAYS") || s.contains("EVERYDAY")) {
+			activeDays.addAll(Arrays.asList("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"));
+			return activeDays;
+		}
+		if (s.contains("MON TO SAT") || s.contains("MON-SAT") || s.contains("MONDAY TO SATURDAY")) {
+			activeDays.addAll(Arrays.asList("Mon", "Tue", "Wed", "Thu", "Fri", "Sat"));
+			return activeDays;
+		}
+		if (s.contains("MON TO FRI") || s.contains("MON-FRI") || s.contains("MONDAY TO FRIDAY")) {
+			activeDays.addAll(Arrays.asList("Mon", "Tue", "Wed", "Thu", "Fri"));
+			return activeDays;
+		}
+
+		String[] tokens = s.split("[,\\s]+");
+		for (String tok : tokens) {
+			String t = tok.trim();
+			if (t.isEmpty()) continue;
+			if (t.startsWith("MON") || t.equals("1")) activeDays.add("Mon");
+			else if (t.startsWith("TUE") || t.equals("2")) activeDays.add("Tue");
+			else if (t.startsWith("WED") || t.equals("3")) activeDays.add("Wed");
+			else if (t.startsWith("THU") || t.equals("4")) activeDays.add("Thu");
+			else if (t.startsWith("FRI") || t.equals("5")) activeDays.add("Fri");
+			else if (t.startsWith("SAT") || t.equals("6")) activeDays.add("Sat");
+			else if (t.startsWith("SUN") || t.equals("7") || t.equals("0")) activeDays.add("Sun");
+		}
+
+		if (activeDays.isEmpty()) {
+			activeDays.addAll(Arrays.asList("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"));
+		}
+		return activeDays;
+	}
+
 	@GetMapping("/jodi-chart")
 	public String showJodiChart(
 			@RequestParam(value = "name", required = false, defaultValue = "") String name,
@@ -609,7 +675,6 @@ public class MainController {
 		try {
 			String safeName = (name != null) ? name.trim() : "";
 			Optional<Result> gameOpt = safeName.isEmpty() ? Optional.empty() : resultRepository.findFirstByGameNameIgnoreCase(safeName);
-			List<String> activeDays = new ArrayList<>();
 			String daysStr = null;
 			if (gameOpt.isPresent()) {
 				Result game = gameOpt.get();
@@ -621,12 +686,7 @@ public class MainController {
 					}
 				}
 			}
-			if (daysStr != null && !daysStr.trim().isEmpty()) {
-				activeDays = Arrays.stream(daysStr.split(",")).map(String::trim).collect(Collectors.toList());
-			} else {
-				activeDays = Arrays.asList("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat");
-			}
-
+			Set<String> activeDays = parseActiveDays(daysStr);
 			List<ChartWeek> weeks = buildWeeklyMap(safeName, activeDays);
 
 			model.addAttribute("weeks", weeks != null ? weeks : new ArrayList<>());
@@ -652,7 +712,6 @@ public class MainController {
 		try {
 			String safeName = (name != null) ? name.trim() : "";
 			Optional<Result> gameOpt = safeName.isEmpty() ? Optional.empty() : resultRepository.findFirstByGameNameIgnoreCase(safeName);
-			List<String> activeDays = new ArrayList<>();
 			String daysStr = null;
 			if (gameOpt.isPresent()) {
 				Result game = gameOpt.get();
@@ -664,12 +723,7 @@ public class MainController {
 					}
 				}
 			}
-			if (daysStr != null && !daysStr.trim().isEmpty()) {
-				activeDays = Arrays.stream(daysStr.split(",")).map(String::trim).collect(Collectors.toList());
-			} else {
-				activeDays = Arrays.asList("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat");
-			}
-
+			Set<String> activeDays = parseActiveDays(daysStr);
 			List<ChartWeek> weeks = buildWeeklyMap(safeName, activeDays);
 
 			model.addAttribute("weeks", weeks != null ? weeks : new ArrayList<>());
@@ -698,7 +752,9 @@ public class MainController {
 		try {
 			LocalDate date = LocalDate.parse(resultDateStr.trim());
 			String normName = gameName.trim().toUpperCase();
-			GameHistory history = historyRepository.findByGameNameIgnoreCaseAndResultDate(normName, date);
+
+			// 1. Update GameHistory
+			GameHistory history = historyRepository.findFirstByGameNameIgnoreCaseAndResultDate(normName, date);
 			if (history == null) {
 				history = new GameHistory();
 				history.setGameName(normName);
@@ -710,6 +766,17 @@ public class MainController {
 				history.setCloseAnk(String.valueOf(jodi.trim().charAt(1)));
 			}
 			historyRepository.save(history);
+
+			// 2. Synchronize GameRecord
+			GameRecord record = gameRecordRepository.findFirstByGameNameIgnoreCaseAndDate(normName, date);
+			if (record == null) {
+				record = new GameRecord();
+				record.setGameName(normName);
+				record.setDate(date);
+			}
+			record.setJodi(jodi.trim());
+			gameRecordRepository.save(record);
+
 			redirectAttributes.addFlashAttribute("successMsg", "Jodi updated successfully for " + date);
 		} catch (Exception e) {
 			redirectAttributes.addFlashAttribute("errorMsg", "Failed to update Jodi: " + e.getMessage());
@@ -732,7 +799,9 @@ public class MainController {
 		try {
 			LocalDate date = LocalDate.parse(resultDateStr.trim());
 			String normName = gameName.trim().toUpperCase();
-			GameHistory history = historyRepository.findByGameNameIgnoreCaseAndResultDate(normName, date);
+
+			// 1. Update GameHistory
+			GameHistory history = historyRepository.findFirstByGameNameIgnoreCaseAndResultDate(normName, date);
 			if (history == null) {
 				history = new GameHistory();
 				history.setGameName(normName);
@@ -747,6 +816,32 @@ public class MainController {
 				history.setCloseAnk(String.valueOf(jodi.trim().charAt(1)));
 			}
 			historyRepository.save(history);
+
+			// 2. Synchronize GameRecord
+			GameRecord record = gameRecordRepository.findFirstByGameNameIgnoreCaseAndDate(normName, date);
+			if (record == null) {
+				record = new GameRecord();
+				record.setGameName(normName);
+				record.setDate(date);
+			}
+			record.setOpenPanel(openPanel.trim());
+			record.setJodi(jodi.trim());
+			record.setClosePanel(closePanel.trim());
+
+			String oP = openPanel.trim();
+			if (oP.length() == 3) {
+				record.setOpen1(oP.substring(0, 1));
+				record.setOpen2(oP.substring(1, 2));
+				record.setOpen3(oP.substring(2, 3));
+			}
+			String cP = closePanel.trim();
+			if (cP.length() == 3) {
+				record.setClose1(cP.substring(0, 1));
+				record.setClose2(cP.substring(1, 2));
+				record.setClose3(cP.substring(2, 3));
+			}
+			gameRecordRepository.save(record);
+
 			redirectAttributes.addFlashAttribute("successMsg", "Panel updated successfully for " + date);
 		} catch (Exception e) {
 			redirectAttributes.addFlashAttribute("errorMsg", "Failed to update Panel: " + e.getMessage());
@@ -757,7 +852,7 @@ public class MainController {
 		return "redirect:/panel-chart?name=" + encodedName + "&edit=true";
 	}
 
-	private List<ChartWeek> buildWeeklyMap(String name, List<String> activeDays) {
+	private List<ChartWeek> buildWeeklyMap(String name, Set<String> activeDays) {
 		try {
 			String normName = (name != null) ? name.trim().toUpperCase() : "";
 			List<GameHistory> historyList = normName.isEmpty() ? new ArrayList<>() : historyRepository.findByGameNameIgnoreCaseOrderByResultDateDesc(normName);
@@ -768,17 +863,21 @@ public class MainController {
 			Map<LocalDate, GameHistory> historyByDate = new HashMap<>();
 			for (GameHistory h : historyList) {
 				if (h != null && h.getResultDate() != null) {
-					historyByDate.put(h.getResultDate(), h);
+					LocalDate d = h.getResultDate();
+					if (!historyByDate.containsKey(d) ||
+						(h.getJodi() != null && !h.getJodi().trim().isEmpty() && !h.getJodi().equals("**"))) {
+						historyByDate.put(d, h);
+					}
 				}
 			}
 
 			LocalDate currentMonday = LocalDate.now(ZoneId.of("Asia/Kolkata")).with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
-			LocalDate maxPastMonday = currentMonday.minusWeeks(100);
+			LocalDate maxPastMonday = currentMonday.minusWeeks(150);
 
 			LocalDate startMonday = currentMonday.minusWeeks(10);
 			if (!historyByDate.isEmpty()) {
-				LocalDate earliest = historyByDate.keySet().stream().min(LocalDate::compareTo).orElse(currentMonday);
-				LocalDate earliestMonday = earliest.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+				LocalDate earliestDate = historyByDate.keySet().stream().min(LocalDate::compareTo).get();
+				LocalDate earliestMonday = earliestDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
 				if (!earliestMonday.isBefore(maxPastMonday) && !earliestMonday.isAfter(currentMonday)) {
 					startMonday = earliestMonday;
 				} else if (earliestMonday.isBefore(maxPastMonday)) {

@@ -8,5 +8,7 @@ import java.util.List;
 public interface GameRecordRepository extends JpaRepository<GameRecord, Long> {
     List<GameRecord> findByGameNameOrderByDateDesc(String gameName);
     GameRecord findByGameNameAndDate(String gameName, LocalDate date);
+    GameRecord findFirstByGameNameAndDate(String gameName, LocalDate date);
+    GameRecord findFirstByGameNameIgnoreCaseAndDate(String gameName, LocalDate date);
     List<GameRecord> findAllByGameNameAndDate(String gameName, LocalDate date);
 }
