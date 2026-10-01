@@ -108,7 +108,7 @@
         .market-list-container {
             margin: 1px auto 0px auto !important;
             width: 98%;
-            max-width: 100%;
+            max-width: 100%; 
         }
 
         .marquee-container {
@@ -253,7 +253,7 @@
         <div style="font-size: 28px; font-weight: 900; color: #B91C1C; line-height: 1; margin-top: 2px;" th:text="${goldenAnkValue}">5-4-7-0</div>
     </div>
 
-    <!-- LIVE RESULTS SECTION -->
+    <!-- LIVE RESULTS SECTION (TOP BANNER: CLEAN WITHOUT STARS) -->
     <div class="tight-box" style="background: #FFFFFF; border-radius: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); overflow: hidden; border: 2px solid #B91C1C; margin-top: 1px !important;">
         <div style="background: #B91C1C; color: #FFFFFF; padding: 6px; font-weight: 900; text-align: center; text-transform: uppercase; font-size: 22px; display: flex; align-items: center; justify-content: center; gap: 8px;">
             <span class="live-pulse" style="margin-right: 0;"></span> ⚡ FASTEST LIVE UPDATES ⚡
@@ -268,7 +268,7 @@
                     <span style="animation: blink 1.5s infinite;">Loading...</span>
                 </div>
                 
-                <!-- 2. Open result declared, but Close result not declared (Hide all trailing stars) -->
+                <!-- 2. Open result declared, but Close not declared: Show only openPanel-openAnk (e.g. 113-5) -->
                 <div th:if="${!#strings.isEmpty(game.openPanel) and !game.openPanel.contains('*') and (#strings.isEmpty(game.closePanel) or game.closePanel == '-' or game.closePanel.contains('*'))}">
                     <span th:text="${game.openPanel}"></span><span th:if="${!#strings.isEmpty(game.openAnk) and !game.openAnk.contains('*')}" th:text="'-' + ${game.openAnk}"></span><span th:if="${(#strings.isEmpty(game.openAnk) or game.openAnk.contains('*')) and !#strings.isEmpty(game.jodi) and !game.jodi.startsWith('*')}" th:text="'-' + ${#strings.substring(game.jodi, 0, 1)}"></span>
                 </div>
@@ -308,9 +308,10 @@
                    JODI
                 </a>
                 
+                <!-- Main market pill: Preserves open-jodi*-*** until close is declared -->
                 <div th:data-market="${#strings.toUpperCase(game.gameName)}" 
                      style="display: inline-block; font-family: 'Arial', sans-serif; font-weight: bold; color: #B91C1C; font-size: 24px; line-height: 1; letter-spacing: 1px; border: 1.5px solid #1E293B; border-radius: 50px; padding: 6px 20px; background: #FFFFFF;">
-                    <span th:text="${(game.openPanel ?: '***') + '-' + (game.jodi ?: '**') + '-' + (game.closePanel ?: '***')}"></span>
+                    <span th:text="${(!#strings.isEmpty(game.openPanel) and game.openPanel != '-' and !game.openPanel.contains('*')) ? ((#strings.isEmpty(game.closePanel) or game.closePanel == '-' or game.closePanel.contains('*')) ? (game.openPanel + '-' + (!#strings.isEmpty(game.jodi) ? (#strings.length(game.jodi) == 1 ? game.jodi + '*' : game.jodi) : (!#strings.isEmpty(game.openAnk) ? game.openAnk + '*' : '**')) + '-***') : (game.openPanel + '-' + (game.jodi ?: '**') + '-' + game.closePanel)) : ((game.openPanel ?: '***') + '-' + (game.jodi ?: '**') + '-' + (game.closePanel ?: '***'))}"></span>
                 </div>
                 
                 <a th:href="@{'/panel-chart?name=' + ${game.gameName}}" 
@@ -570,17 +571,39 @@
         const API_KEY = "key_2c8841af9a924861"; 
         const API_ENDPOINT = `https://result-hub-api.onrender.com/api/v1/live?apiKey=${API_KEY}`;
 
-        function formatResult(str) {
+        // Cleaner for Top Live Card: Returns only open result digits without trailing stars (e.g. "113-5")
+        function formatLiveCard(str) {
             if (!str || str.trim() === "" || str.trim() === "-" || str.trim() === "***-**-***" || str.trim().toLowerCase() === "loading...") {
                 return "Loading...";
             }
-            let s = str.trim();
-
-            // Strips trailing stars, hyphens, and whitespace: e.g. "113-5* - ***" -> "113-5"
-            s = s.replace(/[\s\-\*]+$/, "");
-
+            let s = str.trim().replace(/[\s\-\*]+$/, "");
             if (s === "" || s === "-" || s === "***" || s === "***-**") {
                 return "Loading...";
+            }
+            return s;
+        }
+
+        // Formatter for Satta Matka Result Table: Guarantees 399-1*-*** when close is pending
+        function formatMarketResult(str) {
+            if (!str || str.trim() === "" || str.trim() === "-" || str.trim().toLowerCase() === "loading...") {
+                return "***-**-***";
+            }
+            let s = str.trim();
+            // Full complete result (e.g. 113-52-129)
+            if (/^\d{3}-\d{2}-\d{3}$/.test(s)) {
+                return s;
+            }
+
+            let parts = s.split("-");
+            if (parts.length >= 2) {
+                let openP = parts[0].trim();
+                let jodi = parts[1].trim().replace(/\*/g, "");
+                let closeP = parts.length > 2 ? parts[2].trim() : "***";
+
+                if (openP && openP !== "***" && (!closeP || closeP === "***" || closeP === "-" || closeP.includes("*"))) {
+                    let jodiDisplay = jodi.length === 1 ? (jodi + "*") : (jodi || "**");
+                    return openP + "-" + jodiDisplay + "-***";
+                }
             }
             return s;
         }
@@ -601,24 +624,21 @@
                     const raw = (item.resultDisplay || "").trim();
                     const hasOpenResult = raw && !raw.startsWith("***") && raw !== "-" && raw !== "***-**-***" && raw.toLowerCase() !== "loading...";
 
+                    // Update Top Live Card (Clean without stars)
                     const liveTargets = document.querySelectorAll(`[data-live-market="${item.marketName}"]`);
                     liveTargets.forEach(el => {
                         if (!hasOpenResult) {
                             el.innerHTML = '<span style="animation: blink 1.5s infinite;">Loading...</span>';
                         } else {
-                            el.textContent = formatResult(raw);
+                            el.textContent = formatLiveCard(raw);
                         }
                     });
 
+                    // Update Satta Matka Result Table (Keeps open-jodi*-*** placeholder)
                     if (raw && raw !== "-" && raw !== "***-**-***" && raw.toLowerCase() !== "loading...") {
                         const marketTargets = document.querySelectorAll(`[data-market="${item.marketName}"]`);
                         marketTargets.forEach(el => {
-                            const currentText = el.textContent ? el.textContent.trim() : "";
-                            const formatted = formatResult(raw);
-                            if (formatted.startsWith("***-*") && currentText && !currentText.startsWith("***-*") && currentText !== "Loading...") {
-                                return;
-                            }
-                            el.textContent = formatted;
+                            el.textContent = formatMarketResult(raw);
                         });
                     }
                 });
