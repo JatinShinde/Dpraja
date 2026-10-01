@@ -263,14 +263,19 @@
             <div style="color: #1E293B; font-family: 'Arial', sans-serif; font-weight: bold; font-style: italic; text-transform: uppercase; text-align: center; font-size: 26px; margin-bottom: 0px; line-height: 1; letter-spacing: 0.5px;" th:text="${game.gameName}"></div>
             
             <div th:data-live-market="${#strings.toUpperCase(game.gameName)}" style="text-align: center; margin-bottom: 4px; margin-top: 4px; font-family: 'Arial', sans-serif; font-weight: bold; color: #B91C1C; font-size: 24px; line-height: 1; letter-spacing: 1px;">
-                <div th:if="${#strings.isEmpty(game.openPanel) or game.openPanel == '-' or game.openPanel == '***'}">
+                <!-- 1. Open result not yet available -->
+                <div th:if="${#strings.isEmpty(game.openPanel) or game.openPanel == '-' or game.openPanel.contains('*')}">
                     <span style="animation: blink 1.5s infinite;">Loading...</span>
                 </div>
-                <div th:if="${!#strings.isEmpty(game.openPanel) and game.openPanel != '-' and game.openPanel != '***' and (#strings.isEmpty(game.closePanel) or game.closePanel == '-' or game.closePanel == '***')}">
-                    <span th:text="${game.openPanel}"></span><span th:if="${!#strings.isEmpty(game.openAnk)}" th:text="'-' + ${game.openAnk}"></span><span th:if="${#strings.isEmpty(game.openAnk) and !#strings.isEmpty(game.jodi)}" th:text="'-' + ${#strings.substring(game.jodi, 0, (game.jodi.length() > 1 ? 1 : game.jodi.length()))}"></span>
+                
+                <!-- 2. Open result declared, but Close result not declared (Hide all trailing stars) -->
+                <div th:if="${!#strings.isEmpty(game.openPanel) and !game.openPanel.contains('*') and (#strings.isEmpty(game.closePanel) or game.closePanel == '-' or game.closePanel.contains('*'))}">
+                    <span th:text="${game.openPanel}"></span><span th:if="${!#strings.isEmpty(game.openAnk) and !game.openAnk.contains('*')}" th:text="'-' + ${game.openAnk}"></span><span th:if="${(#strings.isEmpty(game.openAnk) or game.openAnk.contains('*')) and !#strings.isEmpty(game.jodi) and !game.jodi.startsWith('*')}" th:text="'-' + ${#strings.substring(game.jodi, 0, 1)}"></span>
                 </div>
-                <div th:if="${!#strings.isEmpty(game.closePanel) and game.closePanel != '-' and game.closePanel != '***'}">
-                    <span th:text="${game.openPanel} + '-' + ${game.jodi} + '-' + ${game.closePanel}"></span>
+
+                <!-- 3. Full result declared (Open and Close) -->
+                <div th:if="${!#strings.isEmpty(game.closePanel) and !game.closePanel.contains('*') and game.closePanel != '-'}">
+                    <span th:text="${game.openPanel + '-' + (game.jodi != null ? #strings.replace(game.jodi, '*', '') : '') + '-' + game.closePanel}"></span>
                 </div>
             </div>
 
@@ -297,7 +302,6 @@
             
             <div th:text="${game.gameName}" style="text-align: center; font-family:'Arial', sans-serif; font-weight: bold; font-style: italic; text-transform: uppercase; color: #1E293B; font-size: 24px; margin-bottom: 6px; line-height: 1; letter-spacing: 0.5px;"></div>
             
-            <!-- Restored original 15px side-anchored pill ears -->
             <div style="display: flex; justify-content: space-between; align-items: center; padding: 0; margin-bottom: 1px;">
                 <a th:href="@{'/jodi-chart?name=' + ${game.gameName}}" 
                    style="background: #1E293B; color: white; padding: 6px 14px; border-radius: 0 15px 15px 0; text-decoration: none; font-size: 13px; font-weight: bold; margin-left: -15px; display: inline-block;">
@@ -571,12 +575,11 @@
                 return "Loading...";
             }
             let s = str.trim();
-            if (s.endsWith("-***")) {
-                s = s.substring(0, s.length - 4);
-            } else if (s.endsWith("-*")) {
-                s = s.substring(0, s.length - 2);
-            }
-            if (s === "" || s === "-" || s === "***") {
+
+            // Strips trailing stars, hyphens, and whitespace: e.g. "113-5* - ***" -> "113-5"
+            s = s.replace(/[\s\-\*]+$/, "");
+
+            if (s === "" || s === "-" || s === "***" || s === "***-**") {
                 return "Loading...";
             }
             return s;
