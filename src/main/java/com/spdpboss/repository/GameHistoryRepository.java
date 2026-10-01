@@ -9,6 +9,7 @@ public interface GameHistoryRepository extends JpaRepository<GameHistory, Long> 
     // Find specific result(s) for a game on a specific day
     GameHistory findByGameNameAndResultDate(String gameName, LocalDate resultDate);
     GameHistory findByGameNameIgnoreCaseAndResultDate(String gameName, LocalDate resultDate);
+    GameHistory findFirstByGameNameIgnoreCaseAndResultDate(String gameName, LocalDate resultDate);
     List<GameHistory> findAllByGameNameIgnoreCaseAndResultDate(String gameName, LocalDate resultDate);
     
     // Fetch whole chart for a game

@@ -608,7 +608,7 @@ public class MainController {
 			Model model) {
 		try {
 			String safeName = (name != null) ? name.trim() : "";
-			Optional<Result> gameOpt = safeName.isEmpty() ? Optional.empty() : resultRepository.findByGameNameIgnoreCase(safeName);
+			Optional<Result> gameOpt = safeName.isEmpty() ? Optional.empty() : resultRepository.findFirstByGameNameIgnoreCase(safeName);
 			List<String> activeDays = new ArrayList<>();
 			String daysStr = null;
 			if (gameOpt.isPresent()) {
@@ -651,7 +651,7 @@ public class MainController {
 			Model model) {
 		try {
 			String safeName = (name != null) ? name.trim() : "";
-			Optional<Result> gameOpt = safeName.isEmpty() ? Optional.empty() : resultRepository.findByGameNameIgnoreCase(safeName);
+			Optional<Result> gameOpt = safeName.isEmpty() ? Optional.empty() : resultRepository.findFirstByGameNameIgnoreCase(safeName);
 			List<String> activeDays = new ArrayList<>();
 			String daysStr = null;
 			if (gameOpt.isPresent()) {

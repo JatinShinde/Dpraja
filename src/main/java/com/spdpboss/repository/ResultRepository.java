@@ -13,6 +13,7 @@ public interface ResultRepository extends JpaRepository<Result, Long> {
      */
 	Optional<Result> findByGameName(String gameName);
 	Optional<Result> findByGameNameIgnoreCase(String gameName);
+	Optional<Result> findFirstByGameNameIgnoreCase(String gameName);
 
 	/**
      * Returns all results sorted by serial_no in ascending order.
