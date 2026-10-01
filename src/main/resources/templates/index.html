@@ -98,11 +98,17 @@
         .loading-spinner { font-size: 12px; font-weight: 900; animation: blink 1.5s infinite; }
         @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
 
-        /* Unified max width for compact mobile & desktop layout */
-        .tight-box, .market-list-container { 
-            margin: 6px auto !important; 
-            width: 95%; 
-            max-width: 680px !important; 
+        /* Full stretch layout for both Laptop and Mobile */
+        .tight-box { 
+            margin: 1px auto !important; 
+            width: 98%; 
+            max-width: 100%; 
+        }
+
+        .market-list-container {
+            margin: 1px auto 0px auto !important;
+            width: 98%;
+            max-width: 100%;
         }
 
         .marquee-container {
@@ -141,10 +147,6 @@
         }
 
         @media (max-width: 600px) {
-            .tight-box, .market-list-container {
-                width: 98% !important;
-                margin: 4px auto !important;
-            }
             #topNoticeBoardContainer {
                 padding: 8px 6px !important;
                 border-width: 1.5px !important;
@@ -220,7 +222,7 @@
     </header>
 
     <!-- TODAY FINAL ANK -->
-    <div class="tight-box" style="background: #FFFFFF; padding: 8px 10px; border-radius: 12px; border: 2.5px solid #B91C1C; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); text-align: center;">
+    <div class="tight-box" style="background: #FFFFFF; padding: 8px 10px; border-radius: 12px; border: 2.5px solid #B91C1C; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); text-align: center; margin-top: 1px !important;">
         <div id="liveDateDisplay" style="color: #475569; font-size: 12px; font-weight: bold; margin-bottom: 0px; line-height: 1; letter-spacing: 1px;"></div>
         <h2 style="color: #1E293B; font-weight: 900; font-size: 22px; text-transform: uppercase; margin-top: 2px; margin-bottom: 8px; line-height: 1.1; letter-spacing: 1.5px;">❖ ● Today Final Ank ● ❖</h2>
         <div style="display: flex; justify-content: center; gap: 15px;">
@@ -246,22 +248,21 @@
     </script>
 
     <!-- GOLDEN ANK -->
-    <div class="tight-box" style="background: linear-gradient(to bottom, #FDF5E6, #F5E6C8); padding: 6px 10px; border-radius: 12px; text-align: center; border: 2px solid #D97706; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);">
+    <div class="tight-box" style="background: linear-gradient(to bottom, #FDF5E6, #F5E6C8); padding: 6px 10px; border-radius: 12px; text-align: center; border: 2px solid #D97706; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); margin-top: 1px !important;">
         <div style="font-weight: 900; font-size: 22px; text-transform: uppercase; margin-bottom: 0px; line-height: 1.1; letter-spacing: 1.5px; color: #1E293B;">✨ Golden Ank ✨</div>
         <div style="font-size: 28px; font-weight: 900; color: #B91C1C; line-height: 1; margin-top: 2px;" th:text="${goldenAnkValue}">5-4-7-0</div>
     </div>
 
     <!-- LIVE RESULTS SECTION -->
-    <div class="tight-box" style="background: #FFFFFF; border-radius: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); overflow: hidden; border: 2px solid #B91C1C;">
-        
-        <div style="background: #B91C1C; color: #FFFFFF; padding: 6px; font-weight: 900; text-align: center; text-transform: uppercase; font-size: 20px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+    <div class="tight-box" style="background: #FFFFFF; border-radius: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); overflow: hidden; border: 2px solid #B91C1C; margin-top: 1px !important;">
+        <div style="background: #B91C1C; color: #FFFFFF; padding: 6px; font-weight: 900; text-align: center; text-transform: uppercase; font-size: 22px; display: flex; align-items: center; justify-content: center; gap: 8px;">
             <span class="live-pulse" style="margin-right: 0;"></span> ⚡ FASTEST LIVE UPDATES ⚡
         </div>        
         
         <div th:each="game, iterStat : ${liveResults}" th:if="${game != null}" style="padding-top: 5px; padding-bottom: 5px;">
-            <div style="color: #1E293B; font-family: 'Arial', sans-serif; font-weight: bold; font-style: italic; text-transform: uppercase; text-align: center; font-size: 22px; margin-bottom: 0px; line-height: 1; letter-spacing: 0.5px;" th:text="${game.gameName}"></div>
+            <div style="color: #1E293B; font-family: 'Arial', sans-serif; font-weight: bold; font-style: italic; text-transform: uppercase; text-align: center; font-size: 26px; margin-bottom: 0px; line-height: 1; letter-spacing: 0.5px;" th:text="${game.gameName}"></div>
             
-            <div th:data-live-market="${#strings.toUpperCase(game.gameName)}" style="text-align: center; margin-bottom: 4px; margin-top: 4px; font-family: 'Arial', sans-serif; font-weight: bold; color: #B91C1C; font-size: 22px; line-height: 1; letter-spacing: 1px;">
+            <div th:data-live-market="${#strings.toUpperCase(game.gameName)}" style="text-align: center; margin-bottom: 4px; margin-top: 4px; font-family: 'Arial', sans-serif; font-weight: bold; color: #B91C1C; font-size: 24px; line-height: 1; letter-spacing: 1px;">
                 <div th:if="${#strings.isEmpty(game.openPanel) or game.openPanel == '-' or game.openPanel == '***'}">
                     <span style="animation: blink 1.5s infinite;">Loading...</span>
                 </div>
@@ -280,115 +281,122 @@
     </div>
 
     <!-- TOP NOTICE BOARD -->
-    <div th:if="${!topNoticeHidden}" id="topNoticeBoardContainer" class="tight-box" style="background: #FFFFFF; border-radius: 12px; border: 2.5px solid #1E293B; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); text-align: center;">
+    <div th:if="${!topNoticeHidden}" id="topNoticeBoardContainer" class="tight-box" style="background: #FFFFFF; border-radius: 12px; border: 2.5px solid #1E293B; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); text-align: center; margin-top: 1px !important; margin-bottom: 0px !important;">
         <div class="notice-title" style="color: #1E293B; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px;">📢 NOTICE BOARD 📢</div>
         <div class="notice-body" style="color: #334155; font-weight: bold; white-space: pre-wrap; text-align: center; word-wrap: break-word; padding: 0 10px;" th:text="${topNoticeContent}">No new notice.</div>
     </div>
 
-    <!-- MARKET LIST WITH COMPACT THREE-COLUMN STRUCTURE -->
-    <div class="market-list-container" style="border-radius: 20px; border: 2px solid #B91C1C; box-shadow: 0 4px 12px rgba(0,0,0,0.08); overflow: hidden; background: #FFFFFF;">
-        <div style="background: #B91C1C; color: #FFFFFF; padding: 6px; font-weight: 900; text-align: center; text-transform: uppercase; font-size: 20px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+    <!-- MARKET LIST WITH ORIGINAL EDGE-ATTACHED JODI & PANEL BADGES -->
+    <div class="market-list-container" style="border-radius: 25px; border: 2px solid #B91C1C; box-shadow: 0 4px 12px rgba(0,0,0,0.08); overflow: hidden; background: #FFFFFF;">
+        <div style="background: #B91C1C; color: #FFFFFF; padding: 6px; font-weight: 900; text-align: center; text-transform: uppercase; font-size: 22px; display: flex; align-items: center; justify-content: center; gap: 8px;">
             <span class="live-pulse" style="margin-right: 0;"></span> SATTA MATKA RESULT
         </div>
         
         <div th:each="game, gameStat : ${allResults}" th:if="${game != null}" 
-             th:style="'padding: 12px 10px 0px 10px; background-color: ' + (${game.marketColor != null and game.marketColor != '' and game.marketColor != '#1a7e7a'} ? ${game.marketColor} : '#F7F4EC') + ';'">
+             th:style="'padding: 15px 15px 0px 15px; background-color: ' + (${game.marketColor != null and game.marketColor != '' and game.marketColor != '#1a7e7a'} ? ${game.marketColor} : '#F7F4EC') + ';'">
             
-            <div th:text="${game.gameName}" style="text-align: center; font-family:'Arial', sans-serif; font-weight: bold; font-style: italic; text-transform: uppercase; color: #1E293B; font-size: 20px; margin-bottom: 4px; line-height: 1; letter-spacing: 0.5px;"></div>
+            <div th:text="${game.gameName}" style="text-align: center; font-family:'Arial', sans-serif; font-weight: bold; font-style: italic; text-transform: uppercase; color: #1E293B; font-size: 24px; margin-bottom: 6px; line-height: 1; letter-spacing: 0.5px;"></div>
             
-            <!-- Standard 3-Column Balanced Row -->
-            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 5px; margin-bottom: 2px;">
-                <a th:href="@{'/jodi-chart?name=' + ${game.gameName}}" style="background: #1E293B; color: white; padding: 5px 12px; border-radius: 6px; text-decoration: none; font-size: 12px; font-weight: bold; display: inline-block;">JODI</a>
+            <!-- Restored original 15px side-anchored pill ears -->
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0; margin-bottom: 1px;">
+                <a th:href="@{'/jodi-chart?name=' + ${game.gameName}}" 
+                   style="background: #1E293B; color: white; padding: 6px 14px; border-radius: 0 15px 15px 0; text-decoration: none; font-size: 13px; font-weight: bold; margin-left: -15px; display: inline-block;">
+                   JODI
+                </a>
                 
-                <div th:data-market="${#strings.toUpperCase(game.gameName)}" style="display: inline-block; font-family: 'Arial', sans-serif; font-weight: bold; color: #B91C1C; font-size: 20px; line-height: 1; letter-spacing: 1px; border: 1.5px solid #1E293B; border-radius: 50px; padding: 4px 16px; background: #FFFFFF;">
+                <div th:data-market="${#strings.toUpperCase(game.gameName)}" 
+                     style="display: inline-block; font-family: 'Arial', sans-serif; font-weight: bold; color: #B91C1C; font-size: 24px; line-height: 1; letter-spacing: 1px; border: 1.5px solid #1E293B; border-radius: 50px; padding: 6px 20px; background: #FFFFFF;">
                     <span th:text="${(game.openPanel ?: '***') + '-' + (game.jodi ?: '**') + '-' + (game.closePanel ?: '***')}"></span>
                 </div>
                 
-                <a th:href="@{'/panel-chart?name=' + ${game.gameName}}" style="background: #1E293B; color: white; padding: 5px 12px; border-radius: 6px; text-decoration: none; font-size: 12px; font-weight: bold; display: inline-block;">PANEL</a>
+                <a th:href="@{'/panel-chart?name=' + ${game.gameName}}" 
+                   style="background: #1E293B; color: white; padding: 6px 14px; border-radius: 15px 0 0 15px; text-decoration: none; font-size: 13px; font-weight: bold; margin-right: -15px; display: inline-block;">
+                   PANEL
+                </a>
             </div>
             
-            <div style="margin-top: 2px; margin-bottom: 2px; display: flex; justify-content: center;">
-                <div style="display: flex; justify-content: center; gap: 20px; text-align: center; font-family: 'Arial', sans-serif; font-size: 13px; font-weight: bold; color: #475569; opacity: 0.9; white-space: nowrap; line-height: 1;">
+            <div style="margin-top: 1px; margin-bottom: 1px; display: flex; justify-content: center;">
+                <div style="display: flex; justify-content: center; gap: 30px; text-align: center; font-family: 'Arial', sans-serif; font-size: 14px; font-weight: bold; color: #475569; opacity: 0.9; white-space: nowrap; line-height: 1;">
                     <div style="white-space: nowrap;" th:text="${game.openTime ?: '00:00'}"></div>
                     <div style="white-space: nowrap;" th:text="${game.closeTime ?: '00:00'}"></div>
                 </div>
             </div>
             
-            <div th:if="${!gameStat.last}" style="height: 8px; border: 1.5px solid #CBD5E1; border-top: none; border-radius: 0 0 15px 15px; margin: 2px 0px 0px 0px;"></div>
-            <div th:if="${gameStat.last}" style="height: 10px;"></div>
+            <div th:if="${!gameStat.last}" style="height: 8px; border: 1.5px solid #CBD5E1; border-top: none; border-radius: 0 0 15px 15px; margin: 1px 0px 0px 0px;"></div>
+            <div th:if="${gameStat.last}" style="height: 15px;"></div>
         </div>
     </div>
 
     <!-- MIDDLE NOTICE BOARD -->
-    <div th:if="${!middleNoticeHidden}" class="tight-box" style="background: #FFFFFF; border: 1px solid #CBD5E1; padding: 12px 10px; border-radius: 10px; text-align: center;">
+    <div th:if="${!middleNoticeHidden}" class="tight-box" style="background: #FFFFFF; border: 1px solid #CBD5E1; padding: 12px 10px; border-radius: 10px; text-align: center; margin-top: 1px !important; margin-bottom: 0px !important;">
         <div style="color: #1E293B; font-size: 14px; font-weight: bold; line-height: 1.6; white-space: pre-wrap; word-wrap: break-word; padding: 0 10px;" th:text="${middleNoticeContent}">For Advertisement & Inquiries: dpraja1@hotmail.com</div>
     </div>
 
     <!-- CONTACT US BUTTON -->
-    <div class="tight-box" style="text-align: center; background: transparent; border: none; padding: 0;">
+    <div class="tight-box" style="text-align: center; margin-top: 1px !important; margin-bottom: 0px !important; background: transparent; border: none; padding: 0;">
         <a th:href="'mailto:' + ${contactEmail != null ? contactEmail : 'dpraja1@hotmail.com'}" 
            th:data-email="${contactEmail != null ? contactEmail : 'dpraja1@hotmail.com'}"
            onclick="openContactEmail(event, this)" 
-           style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: linear-gradient(135deg, #1E293B, #0F172A); color: #FFFFFF; font-weight: 900; font-size: 15px; text-transform: uppercase; padding: 10px 24px; border-radius: 30px; text-decoration: none; border: 2px solid #B91C1C; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); width: 80%; max-width: 300px;">
+           style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: linear-gradient(135deg, #1E293B, #0F172A); color: #FFFFFF; font-weight: 900; font-size: 15px; text-transform: uppercase; padding: 12px 30px; border-radius: 30px; text-decoration: none; border: 2px solid #B91C1C; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); width: 80%; max-width: 320px;">
             ✉️ CONTACT US
         </a>
     </div>
 
     <!-- DAILY GAME ZONE SECTION -->
-    <div class="tight-box" style="background: #F7F4EC; border: 1px solid #CBD5E1; border-radius: 12px; padding: 12px 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
-        <div style="text-align: center; margin-bottom: 12px;">
-            <div style="color: #1E293B; font-weight: 900; font-size: 20px; letter-spacing: 2px; margin-bottom: 3px;">❖ ● DAILY GAME ZONE ● ❖</div>
+    <div class="tight-box" style="background: #F7F4EC; border: 1px solid #CBD5E1; border-radius: 12px; padding: 15px 10px; margin-top: 1px !important; margin-bottom: 0px !important; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+        <div style="text-align: center; margin-bottom: 15px;">
+            <div style="color: #1E293B; font-weight: 900; font-size: 22px; letter-spacing: 2px; margin-bottom: 3px;">❖ ● DAILY GAME ZONE ● ❖</div>
         </div>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-            <a href="/all-market-free-fix" style="text-decoration: none; background: #FFFFFF; border: 1.5px solid #1E293B; box-shadow: 0 2px 6px rgba(0,0,0,0.05); border-radius: 8px; padding: 10px 4px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
-                <div style="color: #1E293B; font-weight: 900; font-size: 14px; text-transform: uppercase;">❖ All Market Free Guessing ❖</div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <a href="/all-market-free-fix" style="text-decoration: none; background: #FFFFFF; border: 1.5px solid #1E293B; box-shadow: 0 2px 6px rgba(0,0,0,0.05); border-radius: 8px; padding: 12px 5px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+                <div style="color: #1E293B; font-weight: 900; font-size: 15px; text-transform: uppercase; letter-spacing: 0.5px;">❖ All Market Free Guessing ❖</div>
             </a>
-            <a href="/matka-jodi-count" style="text-decoration: none; background: #FFFFFF; border: 1.5px solid #1E293B; box-shadow: 0 2px 6px rgba(0,0,0,0.05); border-radius: 8px; padding: 10px 4px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
-                <div style="color: #1E293B; font-weight: 900; font-size: 14px; text-transform: uppercase;">❖ Matka Jodi Count Chart ❖</div>
+            <a href="/matka-jodi-count" style="text-decoration: none; background: #FFFFFF; border: 1.5px solid #1E293B; box-shadow: 0 2px 6px rgba(0,0,0,0.05); border-radius: 8px; padding: 12px 5px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+                <div style="color: #1E293B; font-weight: 900; font-size: 15px; text-transform: uppercase; letter-spacing: 0.5px;">❖ Matka Jodi Count Chart ❖</div>
             </a>
-            <a href="/dhanvarsha-daily-fix" style="text-decoration: none; background: #FFFFFF; border: 1.5px solid #1E293B; box-shadow: 0 2px 6px rgba(0,0,0,0.05); border-radius: 8px; padding: 10px 4px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
-                <div style="color: #1E293B; font-weight: 900; font-size: 14px; text-transform: uppercase;">❖ Daily Fix OTC ❖</div>
+            <a href="/dhanvarsha-daily-fix" style="text-decoration: none; background: #FFFFFF; border: 1.5px solid #1E293B; box-shadow: 0 2px 6px rgba(0,0,0,0.05); border-radius: 8px; padding: 12px 5px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+                <div style="color: #1E293B; font-weight: 900; font-size: 15px; text-transform: uppercase; letter-spacing: 0.5px;">❖ Daily Fix OTC ❖</div>
             </a>
-            <a href="/matka-jodi-family" style="text-decoration: none; background: #FFFFFF; border: 1.5px solid #1E293B; box-shadow: 0 2px 6px rgba(0,0,0,0.05); border-radius: 8px; padding: 10px 4px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
-                <div style="color: #1E293B; font-weight: 900; font-size: 14px; text-transform: uppercase;">❖ Matka Jodi Family Chart ❖</div>
+            <a href="/matka-jodi-family" style="text-decoration: none; background: #FFFFFF; border: 1.5px solid #1E293B; box-shadow: 0 2px 6px rgba(0,0,0,0.05); border-radius: 8px; padding: 12px 5px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+                <div style="color: #1E293B; font-weight: 900; font-size: 15px; text-transform: uppercase; letter-spacing: 0.5px;">❖ Matka Jodi Family Chart ❖</div>
             </a>
-            <a href="/penal-count-chart" style="text-decoration: none; background: #FFFFFF; border: 1.5px solid #1E293B; box-shadow: 0 2px 6px rgba(0,0,0,0.05); border-radius: 8px; padding: 10px 4px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
-                <div style="color: #1E293B; font-weight: 900; font-size: 14px; text-transform: uppercase;">❖ Matka Panna Family Chart ❖</div>
+            <a href="/penal-count-chart" style="text-decoration: none; background: #FFFFFF; border: 1.5px solid #1E293B; box-shadow: 0 2px 6px rgba(0,0,0,0.05); border-radius: 8px; padding: 12px 5px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+                <div style="color: #1E293B; font-weight: 900; font-size: 15px; text-transform: uppercase; letter-spacing: 0.5px;">❖ Matka Panna Family Chart ❖</div>
             </a>
-            <a href="/penal-total-chart" style="text-decoration: none; background: #FFFFFF; border: 1.5px solid #1E293B; box-shadow: 0 2px 6px rgba(0,0,0,0.05); border-radius: 8px; padding: 10px 4px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
-                <div style="color: #1E293B; font-weight: 900; font-size: 14px; text-transform: uppercase;">❖ Penal Total Chart ❖</div>
+            <a href="/penal-total-chart" style="text-decoration: none; background: #FFFFFF; border: 1.5px solid #1E293B; box-shadow: 0 2px 6px rgba(0,0,0,0.05); border-radius: 8px; padding: 12px 5px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+                <div style="color: #1E293B; font-weight: 900; font-size: 15px; text-transform: uppercase; letter-spacing: 0.5px;">❖ Penal Total Chart ❖</div>
             </a>
-            <a href="/all-220-card-list" style="text-decoration: none; background: #FFFFFF; border: 1.5px solid #1E293B; box-shadow: 0 2px 6px rgba(0,0,0,0.05); border-radius: 8px; padding: 10px 4px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
-                <div style="color: #1E293B; font-weight: 900; font-size: 14px; text-transform: uppercase;">❖ All 220 Card List ❖</div>
+            <a href="/all-220-card-list" style="text-decoration: none; background: #FFFFFF; border: 1.5px solid #1E293B; box-shadow: 0 2px 6px rgba(0,0,0,0.05); border-radius: 8px; padding: 12px 5px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+                <div style="color: #1E293B; font-weight: 900; font-size: 15px; text-transform: uppercase; letter-spacing: 0.5px;">❖ All 220 Card List ❖</div>
             </a>
-            <a href="/matka-final-number-trick" style="text-decoration: none; background: #FFFFFF; border: 1.5px solid #1E293B; box-shadow: 0 2px 6px rgba(0,0,0,0.05); border-radius: 8px; padding: 10px 4px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
-                <div style="color: #1E293B; font-weight: 900; font-size: 14px; text-transform: uppercase;">❖ Matka Final Number ❖</div>
+            <a href="/matka-final-number-trick" style="text-decoration: none; background: #FFFFFF; border: 1.5px solid #1E293B; box-shadow: 0 2px 6px rgba(0,0,0,0.05); border-radius: 8px; padding: 12px 5px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+                <div style="color: #1E293B; font-weight: 900; font-size: 15px; text-transform: uppercase; letter-spacing: 0.5px;">❖ Matka Final Number ❖</div>
             </a>
         </div>
     </div>
 
     <!-- UPLOADED PAPERS (CHART PAPERS) -->
-    <div class="tight-box" style="background: #F7F4EC; padding: 12px; border-radius: 12px; border: 1px solid #CBD5E1; margin-bottom: 12px;">
-        <div style="text-align: center; margin-bottom: 12px; margin-top: 2px;">
-            <div style="color: #1E293B; font-weight: 900; font-size: 20px; letter-spacing: 2px; text-transform: uppercase;">❖ ● Paper Chart ● ❖</div>
+    <div class="tight-box" style="background: #F7F4EC; padding: 15px; border-radius: 12px; border: 1px solid #CBD5E1; margin-bottom: 12px;">
+        <div style="text-align: center; margin-bottom: 15px; margin-top: 5px;">
+            <div style="color: #1E293B; font-weight: 900; font-size: 22px; letter-spacing: 2px; text-transform: uppercase;">❖ ● Paper Chart ● ❖</div>
         </div>
         
-        <div style="display: flex; justify-content: center; gap: 12px; margin-bottom: 12px;">
-            <div onclick="filterPapers('WEEKLY')" id="tabWeeklyPaper" style="flex: 1; max-width: 180px; background: #1E293B; color: white; border: 1.5px solid #1E293B; border-radius: 8px; padding: 10px 4px; font-weight: 900; font-size: 15px; text-transform: uppercase; text-align: center; cursor: pointer;">
+        <div style="display: flex; justify-content: center; gap: 15px; margin-bottom: 15px;">
+            <div onclick="filterPapers('WEEKLY')" id="tabWeeklyPaper" style="flex: 1; max-width: 200px; background: #1E293B; color: white; border: 1.5px solid #1E293B; border-radius: 8px; padding: 12px 5px; font-weight: 900; font-size: 16px; text-transform: uppercase; text-align: center; cursor: pointer;">
                 Weekly Paper
             </div>
-            <div onclick="filterPapers('DAILY')" id="tabDailyPaper" style="flex: 1; max-width: 180px; background: #B91C1C; color: white; border: 1.5px solid #B91C1C; border-radius: 8px; padding: 10px 4px; font-weight: 900; font-size: 15px; text-transform: uppercase; text-align: center; cursor: pointer;">
+            <div onclick="filterPapers('DAILY')" id="tabDailyPaper" style="flex: 1; max-width: 200px; background: #B91C1C; color: white; border: 1.5px solid #B91C1C; border-radius: 8px; padding: 12px 5px; font-weight: 900; font-size: 16px; text-transform: uppercase; text-align: center; cursor: pointer;">
                 Daily Paper
             </div>
         </div>
 
-        <div id="papersContainer" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
-            <div th:each="paper : ${papers}" class="paper-item" th:data-type="${paper.type}" style="display: none; text-align: center; background: #FFFFFF; padding: 8px; border-radius: 10px; border: 1.5px solid #CBD5E1; width: 46%; max-width: 260px; box-sizing: border-box;">
-                <p th:text="${paper.title}" style="color: #1E293B; font-weight: bold; font-size: 12px; margin: 0 0 6px 0; text-transform: uppercase; letter-spacing: 0.5px;"></p>
+        <div id="papersContainer" style="display: flex; flex-wrap: wrap; gap: 12px; justify-content: center;">
+            <div th:each="paper : ${papers}" class="paper-item" th:data-type="${paper.type}" style="display: none; text-align: center; background: #FFFFFF; padding: 10px; border-radius: 10px; border: 1.5px solid #CBD5E1; width: 45%; max-width: 280px; box-sizing: border-box;">
+                <p th:text="${paper.title}" style="color: #1E293B; font-weight: bold; font-size: 13px; margin: 0 0 8px 0; text-transform: uppercase; letter-spacing: 0.5px;"></p>
                 <img th:src="@{${#strings.startsWith(paper.imageUrl, '/') ? paper.imageUrl : '/' + paper.imageUrl}}" th:alt="${paper.title} + ' Satta Matka Chart Paper'" style="width: 100%; border-radius: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);" />
             </div>
-            <div id="noPapersMessage" style="display: none; color: #1E293B; font-style: italic; font-size: 14px; font-weight: bold; padding: 15px; text-align: center; width: 100%;">
+            <div id="noPapersMessage" style="display: none; color: #1E293B; font-style: italic; font-size: 15px; font-weight: bold; padding: 20px; text-align: center; width: 100%;">
                 No papers uploaded in this category.
             </div>
         </div>
@@ -396,55 +404,55 @@
 
     <!-- ALL MARKET WEEKLY OPEN TO CLOSE SECTION -->
     <div class="tight-box" style="background: #F7F4EC; padding: 10px; border-radius: 8px; margin-bottom: 10px; border: 1px solid #CBD5E1; text-align: center;">
-        <div style="color: #1E293B; font-weight: 900; font-size: 20px; text-transform: uppercase; margin-bottom: 2px; letter-spacing: 1px;">
+        <div style="color: #1E293B; font-weight: 900; font-size: 22px; text-transform: uppercase; margin-bottom: 2px; letter-spacing: 1px;">
             ✨ DPRAJA NET WEEKLY ✨<br>💎 ALL MARKET 💎
         </div>
 
-        <div id="weeklyRange" style="color: #B91C1C; font-size: 16px; font-weight: bold; margin-bottom: 10px; letter-spacing: 1px;"></div>
+        <div id="weeklyRange" style="color: #B91C1C; font-size: 18px; font-weight: bold; margin-bottom: 12px; letter-spacing: 1px;"></div>
 
         <div style="display: flex; justify-content: space-between; gap: 8px;">
             <div style="flex: 1;">
-                <div onclick="toggleWeekChart('ankChartContent')" style="background: #B91C1C; color: white; padding: 10px 4px; border-radius: 8px; cursor: pointer; font-weight: 900; font-size: 16px;">
+                <div onclick="toggleWeekChart('ankChartContent')" style="background: #B91C1C; color: white; padding: 12px 5px; border-radius: 8px; cursor: pointer; font-weight: 900; font-size: 20px;">
                     ANK CHART
                 </div>
             </div>
             <div style="flex: 1;">
-                <div onclick="toggleWeekChart('jodiChartContent')" style="background: #1E293B; color: white; padding: 10px 4px; border-radius: 8px; cursor: pointer; font-weight: 900; font-size: 16px;">
+                <div onclick="toggleWeekChart('jodiChartContent')" style="background: #1E293B; color: white; padding: 12px 5px; border-radius: 8px; cursor: pointer; font-weight: 900; font-size: 20px;">
                     JODI CHART
                 </div>
             </div>
             <div style="flex: 1;">
-                <div onclick="toggleWeekChart('pattiChartContent')" style="background: #D97706; color: white; padding: 10px 4px; border-radius: 8px; cursor: pointer; font-weight: 900; font-size: 16px;">
+                <div onclick="toggleWeekChart('pattiChartContent')" style="background: #D97706; color: white; padding: 12px 5px; border-radius: 8px; cursor: pointer; font-weight: 900; font-size: 20px;">
                     PATTI CHART
                 </div>
             </div>
         </div>
 
-        <div id="ankChartContent" style="display: none; background: #FFFFFF; color: #1E293B; margin-top: 10px; padding: 15px; border-radius: 8px; font-weight: bold; font-size: 16px; border: 2px solid #B91C1C; white-space: pre-wrap; text-align: center;" th:text="${weeklyChart.ankChart}"></div>
-        <div id="jodiChartContent" style="display: none; background: #FFFFFF; color: #1E293B; margin-top: 10px; padding: 15px; border-radius: 8px; font-weight: bold; font-size: 16px; border: 2px solid #1E293B; white-space: pre-wrap; text-align: center;" th:text="${weeklyChart.jodiChart}"></div>
-        <div id="pattiChartContent" style="display: none; background: #FFFFFF; color: #1E293B; margin-top: 10px; padding: 15px; border-radius: 8px; font-weight: bold; font-size: 16px; border: 2px solid #D97706; white-space: pre-wrap; text-align: center;" th:text="${weeklyChart.pattiChart}"></div>
+        <div id="ankChartContent" style="display: none; background: #FFFFFF; color: #1E293B; margin-top: 10px; padding: 15px; border-radius: 8px; font-weight: bold; font-size: 18px; border: 2px solid #B91C1C; white-space: pre-wrap; text-align: center;" th:text="${weeklyChart.ankChart}"></div>
+        <div id="jodiChartContent" style="display: none; background: #FFFFFF; color: #1E293B; margin-top: 10px; padding: 15px; border-radius: 8px; font-weight: bold; font-size: 18px; border: 2px solid #1E293B; white-space: pre-wrap; text-align: center;" th:text="${weeklyChart.jodiChart}"></div>
+        <div id="pattiChartContent" style="display: none; background: #FFFFFF; color: #1E293B; margin-top: 10px; padding: 15px; border-radius: 8px; font-weight: bold; font-size: 18px; border: 2px solid #D97706; white-space: pre-wrap; text-align: center;" th:text="${weeklyChart.pattiChart}"></div>
     </div>
 
     <!-- COMBINED CHARTS SECTION -->
-    <div class="tight-box" style="background: #F7F4EC; padding: 10px; border-radius: 8px; border: 1px solid #CBD5E1;">
-        <div style="color: #1E293B; font-family: 'Arial', sans-serif; font-weight: 900; font-size: 20px; text-transform: uppercase; text-align: center; margin-bottom: 10px; letter-spacing: 1px;">
+    <div class="tight-box" style="background: #F7F4EC; padding: 10px; border-radius: 8px; margin-top: 1px !important; margin-bottom: 0px !important; border: 1px solid #CBD5E1;">
+        <div style="color: #1E293B; font-family: 'Arial', sans-serif; font-weight: 900; font-size: 22px; text-transform: uppercase; text-align: center; margin-bottom: 15px; letter-spacing: 1px;">
             📊 ALL MARKET JODI AND PANEL CHART 📊
         </div>		
-        <div th:each="game : ${allResults}" style="display: flex; justify-content: space-between; align-items: center; padding: 6px 12px; margin: 4px 0; background: #FFFFFF; border-radius: 6px; border: 1px solid #CBD5E1;">
-            <a th:href="@{/jodi-chart(name=${game.gameName})}" style="background: #1E293B; color: white; padding: 4px 10px; border-radius: 4px; text-decoration: none; font-size: 12px; font-weight: bold;">JODI</a>
-            <div style="color: #1E293B; font-weight: bold; font-size: 16px; text-transform: uppercase; font-family: 'Arial', sans-serif; text-align: center; flex: 1; padding: 0 8px;" th:text="${game.gameName}"></div>
-            <a th:href="@{/panel-chart(name=${game.gameName})}" style="background: #1E293B; color: white; padding: 4px 10px; border-radius: 4px; text-decoration: none; font-size: 12px; font-weight: bold;">PANEL</a>
+        <div th:each="game : ${allResults}" style="display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 10px; padding: 6px 10px; margin: 4px 0; background: #FFFFFF; border-radius: 6px; border: 1px solid #CBD5E1;">
+            <a th:href="@{/jodi-chart(name=${game.gameName})}" style="background: #1E293B; color: white; padding: 4px 12px; border-radius: 15px; text-decoration: none; font-size: 13px; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">JODI</a>
+            <div style="color: #1E293B; font-weight: bold; font-size: 18px; text-transform: uppercase; font-family: 'Arial', sans-serif; text-align: center;" th:text="${game.gameName}"></div>
+            <a th:href="@{/panel-chart(name=${game.gameName})}" style="background: #1E293B; color: white; padding: 4px 12px; border-radius: 15px; text-decoration: none; font-size: 13px; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">PANEL</a>
         </div>
     </div>
 
     <!-- BOTTOM NOTICE BOARD -->
-    <div th:if="${!bottomNoticeHidden}" class="tight-box" style="background: #FFFFFF; padding: 12px 10px; border-radius: 12px; border: 2.5px solid #1E293B; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); text-align: center;">
-        <div style="color: #1E293B; font-weight: 900; font-size: 20px; text-transform: uppercase; margin-bottom: 6px; letter-spacing: 1.5px;">📢 NOTICE BOARD 📢</div>
+    <div th:if="${!bottomNoticeHidden}" class="tight-box" style="background: #FFFFFF; padding: 15px 10px; border-radius: 12px; border: 2.5px solid #1E293B; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); text-align: center; margin-top: 1px !important; margin-bottom: 0px !important;">
+        <div style="color: #1E293B; font-weight: 900; font-size: 22px; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 1.5px;">📢 NOTICE BOARD 📢</div>
         <div style="color: #334155; font-size: 14px; font-weight: bold; line-height: 1.6; white-space: pre-wrap; text-align: center; word-wrap: break-word; padding: 0 10px;" th:text="${bottomNoticeContent}">No new notice.</div>
     </div>
 
     <!-- FOOTER NAV -->
-    <div style="margin-top: 12px !important; margin-bottom: 12px !important; text-align: center; display: flex; justify-content: center; align-items: center; gap: 12px;">
+    <div style="margin-top: 8px !important; margin-bottom: 8px !important; text-align: center; display: flex; justify-content: center; align-items: center; gap: 12px;">
         <a href="/" class="btn btn-sm btn-danger fw-bold px-3">HOME</a>
         <a th:href="'mailto:' + ${contactEmail != null ? contactEmail : 'dpraja1@hotmail.com'}" 
            th:data-email="${contactEmail != null ? contactEmail : 'dpraja1@hotmail.com'}"
