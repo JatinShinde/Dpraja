@@ -607,7 +607,7 @@ public class MainController {
 			@RequestParam(value = "edit", required = false, defaultValue = "false") boolean edit,
 			Model model) {
 		String safeName = (name != null) ? name.trim() : "";
-		Map<LocalDate, List<GameHistory>> weeks = buildWeeklyMap(safeName);
+		List<ChartWeek> weeks = buildWeeklyMap(safeName);
 
 		Optional<Result> gameOpt = safeName.isEmpty() ? Optional.empty() : resultRepository.findByGameNameIgnoreCase(safeName);
 		List<String> activeDays = new ArrayList<>();
@@ -643,7 +643,7 @@ public class MainController {
 			@RequestParam(value = "edit", required = false, defaultValue = "false") boolean edit,
 			Model model) {
 		String safeName = (name != null) ? name.trim() : "";
-		Map<LocalDate, List<GameHistory>> weeks = buildWeeklyMap(safeName);
+		List<ChartWeek> weeks = buildWeeklyMap(safeName);
 
 		Optional<Result> gameOpt = safeName.isEmpty() ? Optional.empty() : resultRepository.findByGameNameIgnoreCase(safeName);
 		List<String> activeDays = new ArrayList<>();
@@ -743,7 +743,7 @@ public class MainController {
 		return "redirect:/panel-chart?name=" + encodedName + "&edit=true";
 	}
 
-	private Map<LocalDate, List<GameHistory>> buildWeeklyMap(String name) {
+	private List<ChartWeek> buildWeeklyMap(String name) {
 		String normName = (name != null) ? name.trim().toUpperCase() : "";
 		List<GameHistory> historyList = normName.isEmpty() ? new ArrayList<>() : historyRepository.findByGameNameIgnoreCaseOrderByResultDateDesc(normName);
 
@@ -778,7 +778,16 @@ public class MainController {
 
 		weeksMap.keySet().removeIf(key -> key == null || key.isBefore(startMonday) || key.isAfter(currentMonday));
 
-		return weeksMap;
+		DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		List<ChartWeek> resultWeeks = new ArrayList<>();
+		for (Map.Entry<LocalDate, List<GameHistory>> entry : weeksMap.entrySet()) {
+			LocalDate m = entry.getKey();
+			LocalDate sun = m.plusDays(6);
+			String rangeStr = m.format(fmt) + " to " + sun.format(fmt);
+			resultWeeks.add(new ChartWeek(m, rangeStr, entry.getValue()));
+		}
+
+		return resultWeeks;
 	}
 
 	@PostMapping("/admin/update-today-final")

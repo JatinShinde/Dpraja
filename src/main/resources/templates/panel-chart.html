@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>DPRAJA.COM | [[${gameName}]]</title>
+    <title th:text="'DPRAJA.COM | ' + ${gameName}">DPRAJA.COM</title>
     <style>
         body { background-color: #FDFBF7; font-family: sans-serif; margin: 0; text-align: center; }
         .brand { background: #1E293B; color: #fff; padding: 15px; font-weight: 900; font-size: 22px; }
@@ -51,7 +51,7 @@
 </head>
 <body>
     <div class="brand">DPRAJA.COM</div>
-    <div class="title-bar">[[${gameName}]] PANEL CHART</div>
+    <div class="title-bar" th:text="${gameName} + ' PANEL CHART'">PANEL CHART</div>
 
     <table>
         <thead>
@@ -62,19 +62,16 @@
         </thead>
         <tbody>
             <tr th:each="week : ${weeks}">
-                <td class="date-col">
-                    <span th:text="${(week.key.dayOfMonth < 10 ? '0' : '') + week.key.dayOfMonth + '/' + (week.key.monthValue < 10 ? '0' : '') + week.key.monthValue + '/' + week.key.year}"></span><br>to<br>
-                    <span th:text="${(week.key.plusDays(6).dayOfMonth < 10 ? '0' : '') + week.key.plusDays(6).dayOfMonth + '/' + (week.key.plusDays(6).monthValue < 10 ? '0' : '') + week.key.plusDays(6).monthValue + '/' + week.key.plusDays(6).year}"></span>
-                </td>
+                <td class="date-col" th:text="${week.dateRangeStr}"></td>
                 
                 <td th:each="dayOffset : ${#numbers.sequence(0, 6)}">
-                    <div th:with="targetDate=${week.key.plusDays(dayOffset)}, dayName=${dayNames[dayOffset]}">
+                    <div th:with="targetDate=${week.startDate.plusDays(dayOffset)}, dayName=${dayNames[dayOffset]}">
                         <!-- If closed, show red double slash -->
                         <span th:if="${activeDays != null and !activeDays.contains(dayName)}" style="color: #B91C1C; font-size: 20px; font-weight: bold;">-</span>
                         
                         <!-- If open, check results -->
                         <div th:if="${activeDays != null and activeDays.contains(dayName)}">
-                            <div class="panel-cell" th:each="record : ${week.value}" th:if="${record != null and record.resultDate != null and record.resultDate.equals(targetDate)}">
+                            <div class="panel-cell" th:each="record : ${week.records}" th:if="${record != null and record.resultDate != null and record.resultDate.equals(targetDate)}">
                                 
                                 <!-- Left stacked digits (Open Panel) -->
                                 <div class="stacked-digits">
