@@ -285,6 +285,19 @@
         <div th:if="${#lists.isEmpty(liveResults)}" style="padding: 15px; text-align: center; color: #1E293B; font-family: 'Arial', sans-serif; font-weight: bold; font-style: italic; font-size: 16px;">⏳ Waiting for live results...</div>
     </div>
 
+    <!-- PLAY ONLINE MATKA BANNER -->
+    <div class="tight-box" style="background: radial-gradient(circle, #0284c7 0%, #0369a1 50%, #0c4a6e 100%); border: 2.5px solid #38bdf8; border-radius: 20px; padding: 18px 12px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); text-align: center; margin-top: 1px !important; margin-bottom: 1px !important;">
+        <div style="color: #FFFFFF; font-family: 'Poppins', sans-serif; font-size: 17px; font-weight: 800; line-height: 1.5; text-shadow: 0 2px 4px rgba(0,0,0,0.4); margin-bottom: 14px; padding: 0 5px;">
+            अब मटका खेलना हुआ आसान ! घर बैठे मटका खेलो अब मोबाइल एप्लीकेशन पे और जीतो ढेर सारी धनराशि। अभी डाउनलोड करो।
+        </div>
+        
+        <div>
+            <a href="https://dpraja.net/" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: linear-gradient(90deg, #9333ea 0%, #dc2626 50%, #ea580c 100%); color: #FFFFFF; font-family: 'Poppins', sans-serif; font-size: 16px; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; text-decoration: none; padding: 10px 26px; border-radius: 50px; border: 2.5px solid #facc15; box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35); transition: transform 0.15s ease;">
+                PLAY ONLINE MATKA ⬅️
+            </a>
+        </div>
+    </div>
+
     <!-- TOP NOTICE BOARD -->
     <div th:if="${!topNoticeHidden}" id="topNoticeBoardContainer" class="tight-box" style="background: #FFFFFF; border-radius: 12px; border: 2.5px solid #1E293B; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); text-align: center; margin-top: 1px !important; margin-bottom: 0px !important;">
         <div class="notice-title" style="color: #1E293B; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px;">📢 NOTICE BOARD 📢</div>
@@ -476,15 +489,15 @@
         function filterPapers(type) {
             const items = document.querySelectorAll('.paper-item');
             const noMsg = document.getElementById('noPapersMessage');
-            const tabWeekly = document.getElementById('tabWeeklyPaper');
-            const tabDaily = document.getElementById('tabDailyPaper');
+            const tabWeeklyPaper = document.getElementById('tabWeeklyPaper');
+            const tabDailyPaper = document.getElementById('tabDailyPaper');
 
             if (currentActiveType === type) {
                 currentActiveType = null;
                 items.forEach(item => { item.style.display = 'none'; });
                 noMsg.style.display = 'none';
-                resetTabStyle(tabWeekly);
-                resetTabStyle(tabDaily);
+                resetTabStyle(tabWeeklyPaper);
+                resetTabStyle(tabDailyPaper);
                 return;
             }
 
@@ -503,11 +516,11 @@
             noMsg.style.display = (count === 0) ? 'block' : 'none';
 
             if (type === 'WEEKLY') {
-                setActiveStyle(tabWeekly);
-                resetTabStyle(tabDaily);
+                setActiveStyle(tabWeeklyPaper);
+                resetTabStyle(tabDailyPaper);
             } else {
-                setActiveStyle(tabDaily);
-                resetTabStyle(tabWeekly);
+                setActiveStyle(tabDailyPaper);
+                resetTabStyle(tabWeeklyPaper);
             }
         }
 
