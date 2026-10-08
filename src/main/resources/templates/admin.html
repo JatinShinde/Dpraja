@@ -113,6 +113,7 @@
             <a th:href="@{/admin?section=matka-result}" class="nav-link-custom" th:classappend="${currentSection == 'matka-result' ? 'active' : ''}">Matka Result</a>
             <a th:href="@{/admin?section=weekly-chart}" class="nav-link-custom" th:classappend="${currentSection == 'weekly-chart' || currentSection == 'weekly-update' ? 'active' : ''}">Weekly Prediction</a>
             <a th:href="@{/admin?section=daily-chart}" class="nav-link-custom" th:classappend="${currentSection == 'daily-chart' ? 'active' : ''}">Daily Chart</a>
+            <a th:href="@{/admin?section=weekly-paper}" class="nav-link-custom" th:classappend="${currentSection == 'weekly-paper' ? 'active' : ''}">Weekly Paper</a>
             <a th:href="@{/admin?section=chart-update}" class="nav-link-custom" th:classappend="${currentSection == 'chart-update' ? 'active' : ''}">Chart Update</a>
             <a th:href="@{/admin?section=page-update}" class="nav-link-custom" th:classappend="${currentSection == 'page-update' || currentSection == 'notice' ? 'active' : ''}">Page update</a>
             <a th:href="@{/admin?section=golden-ank}" class="nav-link-custom" th:classappend="${currentSection == 'golden-ank' ? 'active' : ''}">Golden Ank</a>
@@ -707,6 +708,46 @@
             </div>
 
             <!-- ========================================== -->
+            <!-- 8B. WEEKLY PAPER SECTION -->
+            <!-- ========================================== -->
+            <div th:if="${currentSection == 'weekly-paper'}">
+                <div class="section-box-admin">
+                    <div class="section-title-admin">
+                        <i class="fa-solid fa-newspaper text-primary"></i> Weekly Paper Chart Management
+                    </div>
+                    <form th:action="@{/admin/add-paper}" method="post" enctype="multipart/form-data" class="p-3 border rounded bg-light mb-4">
+                        <input type="hidden" name="type" value="WEEKLY">
+                        <div class="row g-3 align-items-center">
+                            <div class="col-md-5">
+                                <input type="text" name="title" class="form-control" placeholder="Weekly Paper Title (e.g. KALYAN WEEKLY CHART)" required>
+                            </div>
+                            <div class="col-md-5">
+                                <input type="file" name="file" class="form-control" required>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="submit" class="btn btn-dark w-100 fw-bold"><i class="fa-solid fa-upload"></i> Upload</button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="row g-3">
+                        <div class="col-md-4" th:each="p : ${allPapers}" th:if="${p.type == 'WEEKLY'}">
+                            <div class="card h-100 shadow-sm">
+                                <img th:src="${p.imageUrl}" class="card-img-top" style="max-height: 220px; object-fit: contain;">
+                                <div class="card-body text-center">
+                                    <h6 class="card-title fw-bold" th:text="${p.title}">Weekly Paper Title</h6>
+                                    <form th:action="@{/admin/delete-paper}" method="post" class="mt-2">
+                                        <input type="hidden" name="id" th:value="${p.id}">
+                                        <button type="submit" class="btn btn-sm btn-danger w-100"><i class="fa-solid fa-trash"></i> Delete Paper</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========================================== -->
             <!-- 9. SPECIAL WEEKLY SECTION -->
             <!-- ========================================== -->
             <div th:if="${currentSection == 'special-weekly'}">
@@ -875,15 +916,9 @@
                             <button type="submit" class="btn btn-dark fw-bold btn-sm"><i class="fa-solid fa-save me-1"></i> Save Today Final Ank</button>
                         </form>
                     </div>
-
-
-
                 </div>
             </div>
 
-            <!-- ========================================== -->
-            <!-- 13B. FREE FIX GAME SECTION -->
-            <!-- ========================================== -->
             <!-- ========================================== -->
             <!-- 13B. FREE FIX GAME SECTION -->
             <!-- ========================================== -->
@@ -1001,9 +1036,6 @@
                             </button>
                         </form>
                     </div>
-
-
-
                 </div>
             </div>
 
