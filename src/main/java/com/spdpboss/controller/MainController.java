@@ -1205,4 +1205,15 @@ public class MainController {
 	public String matkaFinalNumberTrick() {
 		return "matka-final-number-trick";
 	}
+	@GetMapping(value = "/robots.txt", produces = org.springframework.http.MediaType.TEXT_PLAIN_VALUE)
+	@ResponseBody
+	public String getRobotsTxt() {
+		return "User-agent: *\n" +
+		       "Allow: /\n" +
+		       "Disallow: /admin\n" +
+		       "Disallow: /admin/*\n" +
+		       "Disallow: /dashboard\n" +
+		       "\n" +
+		       "Sitemap: https://dpraja.com/sitemap.xml\n";
+	}
 }
