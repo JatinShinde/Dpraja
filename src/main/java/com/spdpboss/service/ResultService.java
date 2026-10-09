@@ -9,6 +9,8 @@ import com.spdpboss.repository.ChartDataRepository;
 import com.spdpboss.repository.GameRecordRepository;
 import com.spdpboss.repository.GameHistoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,6 +44,7 @@ public class ResultService {
      * This method is called by the AutoUpdateService.
      * It syncs results from the external site to your local DB.
      */
+    @CacheEvict(value = "allResultsCache", allEntries = true)
     @Transactional
     public void updateFromScraper(String gameName, String openPanel, String openAnk, String closeAnk,
             String closePanel) {
@@ -323,6 +326,7 @@ public class ResultService {
 
  // --- Live Result Methods (Today's Games) ---
 
+    @Cacheable(value = "allResultsCache")
     public List<Result> getAllResults() {
         return resultRepository.findAllByOrderBySerialNoAsc();
     }
@@ -331,6 +335,7 @@ public class ResultService {
         return resultRepository.findById(id).orElse(null);
     }
 
+    @CacheEvict(value = "allResultsCache", allEntries = true)
     public void saveResult(Result result) {
         resultRepository.save(result);
     }
@@ -349,6 +354,7 @@ public class ResultService {
         gameRecordRepository.save(record);
     }
 
+    @CacheEvict(value = "allResultsCache", allEntries = true)
     public void saveOrUpdateResult(String marketName, LocalDate resultDate, String openPana, String openAnk,
             String closeAnk, String closePana) {
         Optional<Result> gameOpt = resultRepository.findByGameName(marketName);

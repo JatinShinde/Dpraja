@@ -1,6 +1,7 @@
 package com.spdpboss.repository;
 
 import com.spdpboss.model.Result;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import java.util.List;
@@ -19,5 +20,6 @@ public interface ResultRepository extends JpaRepository<Result, Long> {
      * Returns all results sorted by serial_no in ascending order.
      * Use this in your controller to ensure markets appear in the correct sequence.
      */
+    @Cacheable(value = "allResultsCache")
     List<Result> findAllByOrderBySerialNoAsc();
 }

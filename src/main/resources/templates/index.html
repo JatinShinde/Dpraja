@@ -6,23 +6,39 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
     <!-- Primary SEO Meta Tags -->
-    <title>DP RAJA | Fastest Live Results, Today Final Ank & Market Updates</title>
-    <meta name="title" content="DP RAJA | Fastest Live Results, Today Final Ank & Market Updates">
-    <meta name="description" content="Check fastest DP Raja live results, today final ank, time bazar, kalyan, panel charts, and live market updates with instant verification.">
-    <meta name="keywords" content="dp raja, dpraja, final ank, time bazar, kalyan live, panel chart, jodi chart">
+    <title th:text="'DP RAJA | Satta Matka Fastest Live Results, Kalyan Matka Jodi & Panel Chart ' + ${#temporals.format(currentDate, 'dd-MM-yyyy')}">DP RAJA | Satta Matka Fastest Live Results, Kalyan Matka Jodi & Panel Chart</title>
+    <meta name="title" th:content="'DP RAJA | Satta Matka Fastest Live Results, Kalyan Matka Jodi & Panel Chart ' + ${#temporals.format(currentDate, 'dd-MM-yyyy')}">
+    <meta name="description" th:content="'DP Boss Raja: Get the fastest live Satta Matka results, Kalyan Matka open close, Jodi and Panel chart record today ' + ${#temporals.format(currentDate, 'dd MMMM yyyy')} + '. 100% Free Daily Fix Open.'">
+    <meta name="keywords" content="dp raja, dpboss, satta matka, kalyan matka, kalyan chart, panel chart, jodi chart, live matka result, satta matka result today">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://dpraja.com/">
+
+    <!-- Structured Data: Official Brand Entity & Sitelinks Search -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "DP RAJA",
+      "alternateName": ["DPBoss Raja", "DPRaja Satta Matka", "DP Raja Matka"],
+      "url": "https://dpraja.com/",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://dpraja.com/panel-chart?name={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
 
     <!-- Open Graph / WhatsApp / Social -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://dpraja.com/">
-    <meta property="og:title" content="DP RAJA | Fastest Live Results & Market Updates">
-    <meta property="og:description" content="Get instant live results, today final ank, and daily market updates on DP RAJA.">
+    <meta property="og:title" th:content="'DP RAJA | Satta Matka Fastest Live Results ' + ${#temporals.format(currentDate, 'dd-MM-yyyy')}">
+    <meta property="og:description" th:content="'DP Boss Raja: Get the fastest live Satta Matka results, Kalyan Matka open close, Jodi and Panel chart record today ' + ${#temporals.format(currentDate, 'dd MMMM yyyy')}">
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="DP RAJA | Fastest Live Results & Market Updates">
-    <meta name="twitter:description" content="Instant live results and daily market updates on DP RAJA.">
+    <meta name="twitter:title" th:content="'DP RAJA | Satta Matka Fastest Live Results ' + ${#temporals.format(currentDate, 'dd-MM-yyyy')}">
+    <meta name="twitter:description" th:content="'DP Boss Raja: Get the fastest live Satta Matka results, Kalyan Matka open close, Jodi and Panel chart record today ' + ${#temporals.format(currentDate, 'dd MMMM yyyy')}">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
@@ -147,6 +163,10 @@
         }
 
         @media (max-width: 600px) {
+            h1.site-brand {
+                font-size: 20px !important;
+                letter-spacing: 1px !important;
+            }
             #topNoticeBoardContainer {
                 padding: 8px 6px !important;
                 border-width: 1.5px !important;
@@ -215,7 +235,7 @@
     </div>
 
     <header>
-        <h1 class="site-brand">DPRAJA.COM</h1>
+        <h1 class="site-brand">DP RAJA - Fastest Live Satta Matka Results</h1>
         <div style="color: #CBD5E1; font-size: 11px; font-weight: bold; letter-spacing: 2px; text-transform: uppercase; margin-top: 3px;">
             ✨ Official Live Satta Matka Results Portal ✨
         </div>

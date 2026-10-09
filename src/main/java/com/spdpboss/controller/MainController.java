@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -266,6 +267,7 @@ public class MainController {
 		return "redirect:/admin?section=change-password&success";
 	}
 
+	@CacheEvict(value = "allResultsCache", allEntries = true)
 	@Transactional
 	@PostMapping("/admin/update-game-result")
 	public String updateGameResult(
@@ -437,6 +439,7 @@ public class MainController {
 	}
 
 	// 2. POST Mapping: Used to SAVE the form data
+	@CacheEvict(value = "allResultsCache", allEntries = true)
 	@PostMapping("/admin/create-game")
 	public String createNewGame(
 			@RequestParam("gameName") String gameName,
@@ -476,6 +479,7 @@ public class MainController {
 		return "redirect:/admin?section=market-list";
 	}
 
+	@CacheEvict(value = "allResultsCache", allEntries = true)
 	@PostMapping("/admin/update-market")
 	public String updateMarket(
 			@RequestParam("id") Long id,
