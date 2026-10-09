@@ -16,10 +16,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.util.UriUtils;
 
 import jakarta.annotation.PostConstruct;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.time.*;
 import java.time.temporal.TemporalAdjusters;
@@ -740,6 +745,63 @@ public class MainController {
 		}
 
 		return "panel-chart";
+	}
+
+	// =========================================================================
+	// SEO 301 PERMANENT REDIRECTS FOR LEGACY PHP ROUTES
+	// =========================================================================
+
+	@GetMapping({"/index.php", "/index.html"})
+	public ResponseEntity<Void> handleLegacyIndexRedirect() {
+		return ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY)
+				.header(HttpHeaders.LOCATION, "/")
+				.build();
+	}
+
+	@GetMapping("/panel-chart.php")
+	public ResponseEntity<Void> handleLegacyPanelChartRedirect(
+			@RequestParam(value = "name", required = false) String name,
+			@RequestParam(value = "q", required = false) String q) {
+		String marketName = null;
+		if (name != null && !name.trim().isEmpty()) {
+			marketName = name.trim();
+		} else if (q != null && !q.trim().isEmpty()) {
+			marketName = q.trim();
+		}
+
+		if (marketName != null && !marketName.isEmpty()) {
+			String encodedName = UriUtils.encodeQueryParam(marketName, StandardCharsets.UTF_8);
+			return ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY)
+					.header(HttpHeaders.LOCATION, "/panel-chart?name=" + encodedName)
+					.build();
+		}
+
+		return ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY)
+				.header(HttpHeaders.LOCATION, "/")
+				.build();
+	}
+
+	@GetMapping("/jodi-chart.php")
+	public ResponseEntity<Void> handleLegacyJodiChartRedirect(
+			@RequestParam(value = "name", required = false) String name,
+			@RequestParam(value = "q", required = false) String q) {
+		String marketName = null;
+		if (name != null && !name.trim().isEmpty()) {
+			marketName = name.trim();
+		} else if (q != null && !q.trim().isEmpty()) {
+			marketName = q.trim();
+		}
+
+		if (marketName != null && !marketName.isEmpty()) {
+			String encodedName = UriUtils.encodeQueryParam(marketName, StandardCharsets.UTF_8);
+			return ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY)
+					.header(HttpHeaders.LOCATION, "/jodi-chart?name=" + encodedName)
+					.build();
+		}
+
+		return ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY)
+				.header(HttpHeaders.LOCATION, "/")
+				.build();
 	}
 
 	@PostMapping("/admin/update-jodi-history")
